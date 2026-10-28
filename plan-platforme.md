@@ -37,6 +37,13 @@ preko planeta (drvo Jupiter, vatra Mars, zemlja Saturn, metal Venera, voda Merku
 
 ## Majstorski horoskop: sustavi po prioritetu
 
+**Brojčani kostur koji sve povezuje:** nije dovoljno da je sustav tropski; sustavi i obrasci spajaju se po zajedničkoj brojčanoj
+simbolici, a sustav ima to veći prioritet što više tog kostura dijeli:
+- **12 + 1**: dvanaest oko jednog središta (12 znakova i 12 kuća oko Sunca i čovjeka; 12 ploha Platonova dodekaedra i cjelina neba;
+  12 kineskih životinja i godina koja ih nosi; 13. lunacija u godini);
+- **5 elemenata**: vatra, zemlja, zrak, voda i eter (zapad), pet kineskih elemenata, pet vedskih (bhute), most po planetu;
+- **9 godina**: numerološka osobna godina, kinesko-japanskih devet zvijezda, i ostali devetostruki ciklusi koje nađemo.
+
 Dodajemo svaki horoskopski sustav koji pronađemo, redom: **najbliži** (računa se iz istog neba i iste tropske točke ili se točno
 preračunava) i **najpouzdaniji** (stari, provjerljivi izvori). Svaki novi sloj spaja se s ostalima preko preklapanja (planeti,
 elementi, ciklusi), a Rade iz knjiga gradi obrasce za njega.
