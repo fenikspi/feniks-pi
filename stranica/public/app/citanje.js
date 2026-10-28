@@ -52,7 +52,9 @@ var Citanje = (function (N) {
       '<p>' + ELEMENT.map(function (e, i) { return t('nat.el.' + e) + ' ' + el[i]; }).join(' · ') + '</p>' +
       '<p>' + t('nat.el.vlada', { el: t('nat.el.' + ELEMENT[e1]), opis: t('nat.elOpis.' + ELEMENT[e1]) }) + '</p>' +
       (el[e0] <= 1 ? '<p>' + t('nat.el.manjak', { el: t('nat.el.' + ELEMENT[e0]), opis: t('nat.elManjak.' + ELEMENT[e0]) }) + '</p>' : '') +
-      '<p>' + t('nat.kv.vlada', { kv: t('nat.kv.' + KVALITETA[q1]), opis: t('nat.kvOpis.' + KVALITETA[q1]) }) + '</p>');
+      '<p>' + t('nat.kv.vlada', { kv: t('nat.kv.' + KVALITETA[q1]), opis: t('nat.kvOpis.' + KVALITETA[q1]) }) + '</p>' +
+      // peti element: eter (Platon: dodekaedar, cjelina neba; vedski: akaša, nositelj Jupiter po Parašari)
+      '<p>' + t('nat.eter', { znak: Nebo.znak(o.jupiter.sign), kuca: k.kuce && o.jupiter.house ? t('nat.eterKuca', { n: o.jupiter.house, tema: I18n.niz('kuce', o.jupiter.house - 1) }) : '' }) + '</p>');
 
     // 3. najjači aspekti
     var glavni = k.aspekti.filter(function (a) { return ASPEKT[a.type]; }).slice(0, 6);

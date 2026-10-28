@@ -78,6 +78,12 @@
     'god.sr': function (p, t) { return '<b>Solarni povratak</b> ' + p.datum + ': ascendent godine u znaku ' + t('znakovi')[p.asc] + ' ' + p.glif + ' (' + t('znakTema')[p.asc] + ')' + (p.kuca ? '; Sunce godine sija u ' + p.kuca + '. kući: ' + t('kuce')[p.kuca - 1] : '') + '.'; },
     'god.prof': function (p, t) { return '<b>Profekcija:</b> u ' + (p.dob + 1) + '. godini života (' + p.dob + ' navršenih) aktivna je tvoja ' + p.kuca + '. kuća, ' + t('kuce')[p.kuca - 1] + ', u znaku ' + t('znakovi')[p.znak] + '. <b>Gospodar godine</b> je ' + t('planet.' + p.gospodar) + ' ' + p.glif + ': prati ' + (ZENSKI[p.gospodar] ? 'njene' : 'njegove') + ' tranzite, kroz njih ti godina govori.'; },
     'god.osobna': '<b>Lična godina {n}:</b> godina za {tema}.',
+    "god.kineska": "<b>Kineska godina</b> {znak} ({element}, {zivotinja}); tvoj znak rođenja je {natal}: {odnos} Devet zvezda: godina zvezde {zvijezda}, tvoja zvezda rođenja {natalZvijezda}.",
+    "god.kinOdnos.isto": "godina tvoje životinje, povratak na početak dvanaestogodišnjeg kruga.",
+    "god.kinOdnos.susjed": "susedni znak, godina malih pomaka.",
+    "god.kinOdnos.trigon": "skladan trougao (san he), godina podrške.",
+    "god.kinOdnos.kvadrat": "napet odnos, godina trenja iz kojeg raste snaga.",
+    "god.kinOdnos.opozicija": "suprotni znak (čung), godina promena i preokreta; ne forsiraj.",
     'god.naslov': 'Tvoja godina: {od} – {do}',
 
     /* --- interfejs --- */

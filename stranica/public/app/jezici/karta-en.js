@@ -57,6 +57,8 @@ I18n.dodaj('en', {
   'nat.kv.vlada': 'The modality is mostly <b>{kv}</b>: {opis}',
   'nat.kvOpis.kardinalna': 'you initiate and begin; your gift is the first step.', 'nat.kvOpis.fiksna': 'you persevere and preserve; your gift is loyalty and depth.',
   'nat.kvOpis.promjenjiva': 'you adapt and connect; your gift is transition and flow.',
+  "nat.eter": "<b>The fifth element, ether</b> (Plato's dodecahedron, the whole of the heavens; Vedic akasha, space) holds all the others. By the Vedic rule it is carried by Jupiter, in your chart in {znak}{kuca}: there your space widens and opens to meaning. A bridge of three systems: fire (Sun, Mars; Chinese fire) · earth (Mercury; Chinese earth) · water (Moon, Venus; Chinese water and metal) · air (Saturn) · ether (Jupiter; Chinese wood).",
+  "nat.eterKuca": ", in house {n} ({tema})",
   'nat.aspekti.naslov': 'Strongest aspects',
   'nat.tema.sun': 'awareness and will', 'nat.tema.moon': 'feelings and needs', 'nat.tema.mercury': 'thoughts and words', 'nat.tema.venus': 'love and values',
   'nat.tema.mars': 'desire and action', 'nat.tema.jupiter': 'growth and faith', 'nat.tema.saturn': 'boundaries and maturity', 'nat.tema.uranus': 'freedom and awakening',

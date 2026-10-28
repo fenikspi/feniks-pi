@@ -31,6 +31,10 @@ prelazi nebeski ekvator (0° Ovna). Datum se pomiče (19.–21. ožujka), ali je
 kuće po Placidusu, tranziti i ciklusi, a i kineski kalendar, čiji su solarni termini (jieqi) koraci od 15° iste tropske Sunčeve
 dužine (Lichun 315°, Chunfen 0°). Sideričke veličine (npr. 28 lunarnih kuća) samo se preračunavaju i prikazuju uz tropski temelj.
 
+**Pet elemenata:** vatra, zemlja, zrak, voda i **eter** (Platonov dodekaedar, cjelina neba; vedska akaša). Most sustava: vedski
+nositelji (Parašara): vatra Sunce i Mars, zemlja Merkur, voda Mjesec i Venera, zrak Saturn, eter Jupiter; kineskih pet elemenata
+preko planeta (drvo Jupiter, vatra Mars, zemlja Saturn, metal Venera, voda Merkur).
+
 ## Mreža simbola (obavezno)
 
 Sve tradicije povezuju se preko zajedničkih simbola. Agent čitač iz svake knjige izvlači obrasce; `~/Kosmogram/biblioteka/mreza_simbola.py`

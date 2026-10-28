@@ -75,6 +75,12 @@
     'god.sr': function (p, t) { return '<b>Sončev povratek</b> ' + p.datum + ': ascendent leta v znamenju ' + t('znakovi')[p.asc] + ' ' + p.glif + ' (' + t('znakTema')[p.asc] + ')' + (p.kuca ? '; Sonce leta sije v ' + p.kuca + '. hiši: ' + t('kuce')[p.kuca - 1] : '') + '.'; },
     'god.prof': function (p, t) { return '<b>Profekcija:</b> v ' + (p.dob + 1) + '. letu življenja (dopolnjenih let: ' + p.dob + ') je aktivna tvoja ' + p.kuca + '. hiša: ' + t('kuce')[p.kuca - 1] + ', v znamenju ' + t('znakovi')[p.znak] + '. <b>Gospodar leta</b> je ' + t('planet.' + p.gospodar) + ' ' + p.glif + ': spremljaj ' + (ZENSKI[p.gospodar] ? 'njene' : 'njegove') + ' tranzite, skozi njih ti govori leto.'; },
     'god.osobna': '<b>Osebno leto {n}:</b> leto za {tema}.',
+    "god.kineska": "<b>Kitajsko leto</b> {znak} ({element}, {zivotinja}); tvoje rojstno znamenje je {natal}: {odnos} Devet zvezd: leto zvezde {zvijezda}, tvoja rojstna zvezda {natalZvijezda}.",
+    "god.kinOdnos.isto": "leto tvoje živali, vrnitev na začetek dvanajstletnega kroga.",
+    "god.kinOdnos.susjed": "sosednje znamenje, leto majhnih premikov.",
+    "god.kinOdnos.trigon": "skladen trikotnik (san he), leto podpore.",
+    "god.kinOdnos.kvadrat": "napet odnos, leto trenja, iz katerega raste moč.",
+    "god.kinOdnos.opozicija": "nasprotno znamenje (chong), leto sprememb in preobratov; nič ne sili.",
     'god.naslov': 'Tvoje leto: {od} – {do}',
 
     /* --- vmesnik --- */
