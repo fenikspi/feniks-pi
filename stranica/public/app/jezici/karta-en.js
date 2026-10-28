@@ -95,7 +95,7 @@ I18n.dodaj('en', {
   },
   'nat.forma.naslov': 'Your natal chart: calculate it now', 'nat.forma.opis': 'Enter your date, time and place of birth. Everything is calculated in your browser; your data goes nowhere.',
   'nat.forma.ime': 'Name (optional)', 'nat.forma.datum': 'Date of birth', 'nat.forma.vrijeme': 'Time of birth', 'nat.forma.neznam': 'I don\'t know my birth time',
-  'nat.forma.mjesto': 'Place of birth', 'nat.forma.drugo': 'Other place (coordinates)…', 'nat.forma.lat': 'Latitude (e.g. 51.51)', 'nat.forma.lon': 'Longitude (e.g. -0.13)',
+  'nat.forma.mjestoPh': 'Type a city, e.g. London', 'nat.forma.mjesto': 'Place of birth', 'nat.forma.drugo': 'Other place (coordinates)…', 'nat.forma.lat': 'Latitude (e.g. 51.51)', 'nat.forma.lon': 'Longitude (e.g. -0.13)',
   'nat.forma.zona': 'Time zone', 'nat.forma.gumb': 'Calculate chart and deep reading', 'nat.forma.racunam': 'Calculating…', 'nat.forma.greska': 'Check the date, time and place.',
   'nat.polozaji': 'Positions', 'nat.kopiraj': 'Copy reading', 'nat.kopirano': 'Copied.', 'nat.podijeli': 'Share', 'nat.sPodacima': 'Include birth date, time and place when copying and sharing',
   'nat.dijeliTekst': 'My natal chart: {sazetak}. Calculate yours for free at Feniks π:', 'nat.uAplikaciju': 'Save it in the app and follow daily guidance'

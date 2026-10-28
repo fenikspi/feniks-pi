@@ -48,7 +48,14 @@
       tranzit: tr ? { t: tr.t, aspekt: tr.aspekt, n: tr.n, kuca: tr.kuca || null } : null };
     try { fetch(ADRESA, { method: 'POST', body: JSON.stringify(o), headers: { 'Content-Type': 'text/plain' }, credentials: 'omit', referrerPolicy: 'no-referrer', keepalive: true }).catch(function () {}); } catch (e) {}
   }
-  function mjesto() { var p = stanje.profil, m = p && p.zivi && MJESTA[p.zivi] || MJESTA.Zagreb; return { lat: m[0], lon: m[1] }; }
+  // mjesto za nebo: objekt {ime, lat, lon, zona} (novo) ili ime s kratkog popisa (stari profili)
+  function mjesto() {
+    var z = stanje.profil && stanje.profil.zivi;
+    if (z && typeof z === 'object') return { lat: z.lat, lon: z.lon };
+    var m = z && MJESTA[z] || MJESTA.Zagreb; return { lat: m[0], lon: m[1] };
+  }
+  var odabrano = { mjesto: null, zivi: null };
+  function imeMjesta(x) { return x && typeof x === 'object' ? x.ime : x || ''; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function datum(iso) { return new Date(iso).toLocaleString(I18n.locale(), { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
 
@@ -167,7 +174,9 @@
     var p = stanje.profil || {}, r = p.rodenje || {}, f = $('#profil');
     f.ime.value = p.ime || ''; f.datum.value = r.g ? r.g + '-' + String(r.m).padStart(2, '0') + '-' + String(r.d).padStart(2, '0') : '';
     f.vrijeme.value = r.g != null && r.h != null ? String(r.h).padStart(2, '0') + ':' + String(r.min).padStart(2, '0') : '';
-    f.mjesto.value = r.mjesto || 'Zagreb'; f.zivi.value = p.zivi || 'Zagreb';
+    f.mjesto.value = r.mjesto || ''; f.zivi.value = imeMjesta(p.zivi);
+    odabrano.mjesto = r.lat != null ? { ime: r.mjesto, lat: r.lat, lon: r.lon, zona: r.zona } : null;
+    odabrano.zivi = p.zivi && typeof p.zivi === 'object' ? p.zivi : null;
   }
   function osvjezi() { prikaziDanas(); prikaziDnevnik(); }
   // promjena jezika: sve se ponovno ispisuje na novom jeziku
@@ -210,13 +219,21 @@
   $('#ponavljanja').addEventListener('click', function (e) { var b = e.target.closest('[data-simbol]'); if (!b) return; stanje.filtar = b.dataset.simbol; prikaziDnevnik(); });
   $('#filtar-makni').addEventListener('click', function () { stanje.filtar = null; prikaziDnevnik(); });
 
-  var sel = Object.keys(MJESTA).sort(function (a, b) { return a.localeCompare(b, I18n.locale()); }).map(function (m) { return '<option>' + m + '</option>'; }).join('');
-  $('#profil').mjesto.innerHTML = sel; $('#profil').zivi.innerHTML = sel;
+  ['mjesto', 'zivi'].forEach(function (polje) {
+    MjestoTrazi.spoji($('#profil')[polje], function (m) { odabrano[polje] = { ime: m.ime + ', ' + m.zemlja, lat: m.lat, lon: m.lon, zona: m.zona }; });
+    $('#profil')[polje].addEventListener('input', function () { odabrano[polje] = null; });
+  });
+  // upisano ime bez odabira s popisa: kratki popis (MJESTA, srednja Europa) kao rezerva
+  function izPolja(polje) {
+    if (odabrano[polje]) return odabrano[polje];
+    var ime = $('#profil')[polje].value.split(',')[0].trim(), m = MJESTA[ime];
+    return m ? { ime: ime, lat: m[0], lon: m[1], zona: 'Europe/Zagreb' } : null;
+  }
   $('#profil').addEventListener('submit', function (e) {
     e.preventDefault();
-    var f = e.target, d = f.datum.value.split('-'), v = (f.vrijeme.value || '12:00').split(':'), m = MJESTA[f.mjesto.value];
-    var p = { ime: f.ime.value.trim(), zivi: f.zivi.value,
-      rodenje: d.length === 3 ? { g: +d[0], m: +d[1], d: +d[2], h: +v[0], min: +v[1], mjesto: f.mjesto.value, lat: m[0], lon: m[1], zona: 'Europe/Zagreb', bezVremena: !f.vrijeme.value } : null };
+    var f = e.target, d = f.datum.value.split('-'), v = (f.vrijeme.value || '12:00').split(':'), m = izPolja('mjesto') || { ime: 'Zagreb', lat: 45.815, lon: 15.982, zona: 'Europe/Zagreb' };
+    var p = { ime: f.ime.value.trim(), zivi: izPolja('zivi') || m,
+      rodenje: d.length === 3 ? { g: +d[0], m: +d[1], d: +d[2], h: +v[0], min: +v[1], mjesto: m.ime, lat: m.lat, lon: m.lon, zona: m.zona, bezVremena: !f.vrijeme.value } : null };
     Pohrana.spremiProfil(p).then(function () { stanje.profil = p; osvjezi(); setTimeout(function () { izracunaj('mjesec'); prikaziDanas(); }, 50); $('#profil-spremljeno').textContent = t('pr.spremljeno'); });
   });
   $('#izvoz').addEventListener('click', function () {

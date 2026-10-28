@@ -125,8 +125,8 @@ button.cip { cursor: pointer; font-family: var(--f-tijelo); }
         <div><label for="vrijeme" data-i18n="pr.vrijeme">Vrijeme rođenja (ako znaš)</label><input id="vrijeme" name="vrijeme" type="time"></div>
       </div>
       <div class="red">
-        <div><label for="mjesto" data-i18n="pr.mjesto">Mjesto rođenja</label><select id="mjesto" name="mjesto"></select></div>
-        <div><label for="zivi" data-i18n="pr.zivi">Gdje živiš (za nebo i planetarne sate)</label><select id="zivi" name="zivi"></select></div>
+        <div><label for="mjesto" data-i18n="pr.mjesto">Mjesto rođenja</label><input id="mjesto" name="mjesto" data-i18n-ph="nat.forma.mjestoPh" placeholder="Upiši grad"></div>
+        <div><label for="zivi" data-i18n="pr.zivi">Gdje živiš (za nebo i planetarne sate)</label><input id="zivi" name="zivi" data-i18n-ph="nat.forma.mjestoPh" placeholder="Upiši grad"></div>
       </div>
       <button class="gumb" type="submit" data-i18n="pr.spremi">Spremi</button>
       <div id="profil-spremljeno" aria-live="polite"></div>
@@ -162,6 +162,9 @@ button.cip { cursor: pointer; font-family: var(--f-tijelo); }
 <script src="asteroids.js"></script>
 <script src="core.js"></script>
 <script src="simboli.js"></script>
+<script src="mjesto-trazi.js"></script>
+<script src="jezici/karta-hr.js"></script>
+<script src="jezici/karta-en.js"></script>
 <script src="nebo.js"></script>
 <script src="prijedlozi.js"></script>
 <script>I18n.prevedi(); I18n.izbornik(document.getElementById('jezik'));</script>

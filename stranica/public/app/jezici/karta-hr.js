@@ -95,7 +95,7 @@ I18n.dodaj('hr', {
   },
   'nat.forma.naslov': 'Tvoja natalna karta: izračunaj odmah', 'nat.forma.opis': 'Upiši datum, vrijeme i mjesto rođenja. Sve se računa u tvom pregledniku; podaci ne odlaze nikamo.',
   'nat.forma.ime': 'Ime (neobavezno)', 'nat.forma.datum': 'Datum rođenja', 'nat.forma.vrijeme': 'Vrijeme rođenja', 'nat.forma.neznam': 'Ne znam vrijeme rođenja',
-  'nat.forma.mjesto': 'Mjesto rođenja', 'nat.forma.drugo': 'Drugo mjesto (koordinate)…', 'nat.forma.lat': 'Širina (npr. 45.81)', 'nat.forma.lon': 'Dužina (npr. 15.98)',
+  'nat.forma.mjestoPh': 'Upiši grad, npr. Karlovac', 'nat.forma.mjesto': 'Mjesto rođenja', 'nat.forma.drugo': 'Drugo mjesto (koordinate)…', 'nat.forma.lat': 'Širina (npr. 45.81)', 'nat.forma.lon': 'Dužina (npr. 15.98)',
   'nat.forma.zona': 'Vremenska zona', 'nat.forma.gumb': 'Izračunaj kartu i duboko čitanje', 'nat.forma.racunam': 'Računam…', 'nat.forma.greska': 'Provjeri datum, vrijeme i mjesto.',
   'nat.polozaji': 'Položaji', 'nat.kopiraj': 'Kopiraj čitanje', 'nat.kopirano': 'Kopirano.', 'nat.podijeli': 'Podijeli', 'nat.sPodacima': 'Uključi datum, vrijeme i mjesto rođenja u kopiju i dijeljenje',
   'nat.dijeliTekst': 'Moja natalna karta: {sazetak}. Izračunaj svoju besplatno na Feniks π:', 'nat.uAplikaciju': 'Spremi u aplikaciju i prati dnevne preporuke'

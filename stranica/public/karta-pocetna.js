@@ -5,18 +5,18 @@
   var $ = function (s) { return document.querySelector(s); }, t = I18n.t, forma = $('#karta-forma'), izlaz = $('#karta-izlaz');
   if (!forma) return;
 
-  /* mjesta: gradovi s vremenskom zonom, ili ručne koordinate */
-  var DRUGO = '__drugo';
-  function popuniMjesta() {
-    var sel = forma.mjesto, odabrano = sel.value || 'Zagreb';
-    sel.innerHTML = Mjesta.popis().map(function (m) { return '<option>' + m + '</option>'; }).join('') + '<option value="' + DRUGO + '">' + t('nat.forma.drugo') + '</option>';
-    sel.value = odabrano;
-  }
+  /* mjesto: upis bilo kojeg grada na svijetu (koordinate i zona se upisuju same) ili ručne koordinate */
+  var odabranoMjesto = null;
   forma.zona.innerHTML = Mjesta.zone().map(function (z) { return '<option>' + z + '</option>'; }).join('');
   forma.zona.value = 'Europe/Zagreb';
-  forma.mjesto.addEventListener('change', function () { $('#karta-koord').hidden = forma.mjesto.value !== DRUGO; });
+  MjestoTrazi.spoji(forma.mjesto, function (m) {
+    odabranoMjesto = m;
+    $('#karta-odabrano').textContent = m.lat.toFixed(2) + '°, ' + m.lon.toFixed(2) + '° · ' + m.zona;
+  });
+  forma.mjesto.addEventListener('input', function () { odabranoMjesto = null; $('#karta-odabrano').textContent = ''; });
+  forma.rucno.addEventListener('change', function () { $('#karta-koord').hidden = !forma.rucno.checked; forma.mjesto.disabled = forma.rucno.checked; });
   forma.neznam.addEventListener('change', function () { forma.vrijeme.disabled = forma.neznam.checked; });
-  popuniMjesta();
+  function popuniMjesta() {}
 
   /* lijeno učitavanje skripti za izračun */
   var ucitano = null;
@@ -33,11 +33,13 @@
     var d = forma.datum.value.split('-'), bez = forma.neznam.checked, v = (forma.vrijeme.value || '12:00').split(':');
     if (d.length !== 3 || (!bez && !forma.vrijeme.value)) return null;
     var m;
-    if (forma.mjesto.value === DRUGO) {
+    if (forma.rucno.checked) {
       var la = parseFloat(String(forma.lat.value).replace(',', '.')), lo = parseFloat(String(forma.lon.value).replace(',', '.'));
       if (!(Math.abs(la) <= 90 && Math.abs(lo) <= 180)) return null;
       m = { ime: la.toFixed(2) + ', ' + lo.toFixed(2), lat: la, lon: lo, zona: forma.zona.value };
-    } else m = Mjesta.dohvati(forma.mjesto.value);
+    } else if (odabranoMjesto) m = { ime: odabranoMjesto.ime + ', ' + odabranoMjesto.zemlja, lat: odabranoMjesto.lat, lon: odabranoMjesto.lon, zona: odabranoMjesto.zona };
+    else m = Mjesta.dohvati(forma.mjesto.value.split(',')[0].trim());   // upisano ime s kratkog popisa (bez odabira)
+    if (!m) return null;
     return { g: +d[0], m: +d[1], d: +d[2], h: +v[0], min: +v[1], bezVremena: bez, lat: m.lat, lon: m.lon, zona: m.zona, mjesto: m.ime, ime: forma.ime.value.trim() };
   }
 
@@ -100,7 +102,7 @@
   function spremiUAplikaciju(e) {
     if (!zadnje) return;
     e.preventDefault();
-    var r = zadnje.r, p = { ime: r.ime, zivi: Mjesta.dohvati(r.mjesto) ? r.mjesto : 'Zagreb',
+    var r = zadnje.r, p = { ime: r.ime, zivi: { ime: r.mjesto, lat: r.lat, lon: r.lon, zona: r.zona },
       rodenje: { g: r.g, m: r.m, d: r.d, h: r.h, min: r.min, mjesto: r.mjesto, lat: r.lat, lon: r.lon, zona: r.zona, bezVremena: r.bezVremena } };
     var z = indexedDB.open('feniks-pi', 1);
     z.onupgradeneeded = function () { var db = z.result; db.createObjectStore('zapisi', { keyPath: 'id' }); db.createObjectStore('postavke'); };

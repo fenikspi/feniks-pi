@@ -63,6 +63,7 @@ footer { border-top: 1px solid var(--crta); padding-block: 28px 40px; color: var
 .karta-forma input, .karta-forma select { background: rgba(0, 0, 0, .45); color: var(--ink); border: 1px solid var(--crta); border-radius: 10px; padding: 10px 12px; font: 1rem var(--f-tijelo); width: 100%; }
 .karta-forma .karta-check, .karta-check { flex-direction: row; align-items: center; gap: 8px; color: var(--ink); }
 .karta-check input { width: 18px; height: 18px; accent-color: var(--zlato); }
+.karta-koord-info { grid-column: 1 / -1; margin: -6px 0 0; color: var(--muted); font-size: .88rem; min-height: 1em; }
 .karta-koord { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px 16px; }
 .gumb-zlatni { grid-column: 1 / -1; justify-self: start; background: linear-gradient(#f6d27a, #d9a23e); color: #1a1206; border: 0; border-radius: 12px; padding: 12px 20px; font: 600 1.05rem var(--f-tijelo); cursor: pointer; }
 .gumb-zlatni:disabled { opacity: .6; cursor: wait; }
@@ -111,7 +112,9 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
       <label><span data-i18n="nat.forma.datum">Datum rođenja</span><input name="datum" type="date" required min="1800-01-01" max="2100-12-31"></label>
       <label><span data-i18n="nat.forma.vrijeme">Vrijeme rođenja</span><input name="vrijeme" type="time"></label>
       <label class="karta-check"><input name="neznam" type="checkbox"> <span data-i18n="nat.forma.neznam">Ne znam vrijeme rođenja</span></label>
-      <label><span data-i18n="nat.forma.mjesto">Mjesto rođenja</span><select name="mjesto"></select></label>
+      <label><span data-i18n="nat.forma.mjesto">Mjesto rođenja</span><input name="mjesto" data-i18n-ph="nat.forma.mjestoPh" placeholder="Upiši grad, npr. Karlovac"></label>
+      <p class="karta-koord-info" id="karta-odabrano" aria-live="polite"></p>
+      <label class="karta-check"><input name="rucno" type="checkbox"> <span data-i18n="nat.forma.drugo">Drugo mjesto (koordinate)…</span></label>
       <div id="karta-koord" class="karta-koord" hidden>
         <label><span data-i18n="nat.forma.lat">Širina</span><input name="lat" inputmode="decimal"></label>
         <label><span data-i18n="nat.forma.lon">Dužina</span><input name="lon" inputmode="decimal"></label>
@@ -197,6 +200,7 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
 <script src="/app/jezici/karta-ru.js"></script>
 <script src="/app/jezici/karta-uk.js"></script>
 <script src="/app/mjesta.js"></script>
+<script src="/app/mjesto-trazi.js"></script>
 <script>I18n.prevedi(document.getElementById('karta')); I18n.izbornik(document.getElementById('jezik'));</script>
 <script src="/karta-pocetna.js"></script>
 <script src="/glazba.js" defer></script>

@@ -46,6 +46,7 @@ ali svaka izmijenjena inačica koju dijeliš mora ostati slobodna i otvorena pod
 - [astronomy-engine](https://github.com/cosinekitty/astronomy) (MIT), © Don Cross
 - Linije i zvijezde zviježđa: [d3-celestial](https://github.com/ofrohn/d3-celestial) (BSD-3), © Olaf Frohn
 - Putanje asteroida: JPL Horizons (NASA)
+- Gradovi svijeta s koordinatama i vremenskim zonama: [GeoNames](https://www.geonames.org) (CC BY 4.0)
 - Fotografije planeta: NASA, javno dobro (popis u `assets/planeti/zasluge.json`)
 - Fontovi: Pinyon Script, Marcellus, Alegreya Sans, Noto Sans Glagolitic, Cormorant Garamond (SIL Open Font License)
 - Feniks generiran lokalno modelom DreamShaper 8 (CreativeML OpenRAIL-M); gravura feniksa: British Museum, javno dobro
