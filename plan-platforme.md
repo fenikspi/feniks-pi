@@ -24,6 +24,14 @@ Dnevnik simbolizma i sinkroniciteta nije sam sebi svrha: on hrani **bolja čitan
 kako bi korisnik pronašao svoj životni put i hodao njime, **kao odraz prepuštanja**. Preporuke ne naređuju,
 nego zrcale: pokazuju što se u znakovima i u nebu ponavlja i kamo vodi tok, a korisnik bira hoće li mu se prepustiti.
 
+## Mreža simbola (obavezno)
+
+Sve tradicije povezuju se preko zajedničkih simbola. Agent čitač iz svake knjige izvlači obrasce; `~/Kosmogram/biblioteka/mreza_simbola.py`
+u njima prepoznaje simbole, planete i znakove (hr/en/de/ru) i za svaki simbol bilježi u kojim se tradicijama javlja, s kojim značenjima
+i koji ga simboli prate. Mreža se obnavlja nakon svakog čitanja i hrani duboko čitanje: simbol iz korisnikova dnevnika tumači se kroz
+njegovu kartu i kroz sve tradicije u kojima se javlja (npr. zmija: gnoza, Veles, Kundalini, Jungov uroboros, Saturn u Škorpionu).
+Gnosticizam i astralna tema su srodne teme (uspon duše kroz sfere).
+
 ## Dijelovi
 
 | Dio | Što radi | Gdje se računa |
