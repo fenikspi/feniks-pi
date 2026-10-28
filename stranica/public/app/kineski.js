@@ -13,7 +13,7 @@ var Kineski = (function (A) {
   var ELEMENT_GRANE = ['voda', 'zemlja', 'drvo', 'drvo', 'zemlja', 'vatra', 'vatra', 'zemlja', 'metal', 'metal', 'zemlja', 'voda'];
   // klasično preklapanje: pet elemenata ↔ pet vidljivih planeta (Jupiter = Drvena zvijezda, Mars = Vatrena, Saturn = Zemljana, Venera = Metalna, Merkur = Vodena)
   var PLANET_ELEMENTA = { drvo: 'jupiter', vatra: 'mars', zemlja: 'saturn', metal: 'venus', voda: 'mercury' };
-  var ZVIJEZDE = ['', '1 bijela voda', '2 crna zemlja', '3 zelena (jade) drvo', '4 zelena drvo', '5 žuta zemlja', '6 bijeli metal', '7 crveni metal', '8 bijela zemlja', '9 ljubičasta vatra'];
+  var ZVIJEZDE = ['', 'voda', 'zemlja', 'drvo', 'drvo', 'zemlja', 'metal', 'metal', 'zemlja', 'vatra'];   // element svake od devet zvijezda
 
   function mod(a, n) { return ((a % n) + n) % n; }
   function duzinaSunca(ms) { return A.SunPosition(A.MakeTime(new Date(ms))).elon; }

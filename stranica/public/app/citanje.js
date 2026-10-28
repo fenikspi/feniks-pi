@@ -87,7 +87,7 @@ var Citanje = (function (N) {
           nedostaje: nema ? t('kin.nedostaje', { lista: nema }) : '' }) + '</p>' +
         '<p>' + t('kin.preklapanje', { element: E(ks.ja), planet: t('planet.' + kp.planetJa), znak: kp.planetJaZnak != null ? t('kin.planetZnak', { znak: Nebo.znak(kp.planetJaZnak) }) : '',
           zivotinja: Z(ks.mjesec), sunce: Nebo.znak(kp.sunceZnak) }) + '</p>' +
-        '<p>' + t('kin.zvijezde', { natal: Kineski.ZVIJEZDE[ks.zvijezda], godina: ksad.godina, sada: Kineski.ZVIJEZDE[ksad.zvijezda], osobna: osobna }) + '</p>');
+        '<p>' + t('kin.zvijezde', { natal: ks.zvijezda + ' (' + E(Kineski.ZVIJEZDE[ks.zvijezda]) + ')', godina: ksad.godina, sada: ksad.zvijezda + ' (' + E(Kineski.ZVIJEZDE[ksad.zvijezda]) + ')', osobna: osobna }) + '</p>');
     }
 
     // 7. put i prepuštanje
