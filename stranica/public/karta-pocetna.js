@@ -22,7 +22,7 @@
   var ucitano = null;
   function ucitaj() {
     if (ucitano) return ucitano;
-    var skripte = ['/app/astronomy.js', '/app/asteroids.js', '/app/core.js', '/app/nebo.js', '/app/kineski.js', '/app/citanje.js'];
+    var skripte = ['/app/astronomy.js', '/app/asteroids.js', '/app/core.js', '/app/nebo.js', '/app/kineski.js', '/app/helenisticki.js', '/app/citanje.js'];
     ucitano = skripte.reduce(function (p, src) {
       return p.then(function () { return new Promise(function (ok, ne) { var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = ne; document.head.appendChild(s); }); });
     }, Promise.resolve());

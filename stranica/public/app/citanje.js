@@ -95,6 +95,28 @@ var Citanje = (function (N) {
         '<p>' + t('kin.zvijezde', { natal: ks.zvijezda + ' (' + E(Kineski.ZVIJEZDE[ks.zvijezda]) + ')', godina: ksad.godina, sada: ksad.zvijezda + ' (' + E(Kineski.ZVIJEZDE[ksad.zvijezda]) + ')', osobna: osobna }) + '</p>');
     }
 
+    // 6b. helenistički sloj: dekani, sekta, točke Sreće i Duha, firdarija, zodijakalno otpuštanje (ako je učitan helenisticki.js)
+    if (typeof Helenisticki !== 'undefined') {
+      var h = Helenisticki.izracunaj(k, Date.now()), P = function (id) { return t(/node/i.test(id) ? 'hel.cvor.' + id : 'planet.' + id); };
+      var dat = function (ms) { return new Date(ms).toLocaleDateString(I18n.locale(), { month: 'numeric', year: 'numeric' }); };
+      var tema = function (id) { return t(/node/i.test(id) ? 'hel.tema.' + id : 'nat.tema.' + id); };
+      var mjesto = function (x) { return Nebo.znak(x.znak) + (x.kuca ? ', ' + t('nat.kucaBr', { n: x.kuca }) + ' (' + niz('kuce', x.kuca - 1) + ')' : ''); };
+      var html = '<p><b>' + t('hel.dekani') + ':</b> ' + Object.keys(h.dekani).map(function (id) {
+        var d = h.dekani[id];
+        return t('hel.dekan', { tko: t('planet.' + id), n: d.broj, znak: Nebo.znak(d.znak), planet: P(d.vladar), tema: tema(d.vladar) });
+      }).join(' · ') + '.</p>';
+      if (h.sekta) {
+        var sk = h.sekta, f = h.firdarija, z = h.otpustanje;
+        html += '<p>' + t(sk.dan ? 'hel.sekta.dan' : 'hel.sekta.noc', { svjetlo: P(sk.svjetlo), dobro: P(sk.dobrocinitelj), zlo: P(sk.zlocinitelj), protiv: P(sk.protivSekte) }) + '</p>' +
+          '<p>' + t('hel.sreca', { mjesto: mjesto(h.sreca), vladar: P(h.sreca.vladar) }) + ' ' + t('hel.duh', { mjesto: mjesto(h.duh), vladar: P(h.duh.vladar) }) + '</p>' +
+          '<p>' + t('hel.firdarija', { planet: P(f.planet), od: dat(f.odMs), do: dat(f.doMs), tema: tema(f.planet),
+            pod: f.pod ? t('hel.firdarijaPod', { planet: P(f.pod.planet), do: dat(f.pod.doMs) }) : '' }) + '</p>' +
+          '<p>' + t('hel.otpustanje', { z1: Nebo.znak(z.L1.znak), od: dat(z.L1.odMs), do: dat(z.L1.doMs), z2: Nebo.znak(z.L2.znak), do2: dat(z.L2.doMs) }) +
+          (z.L2.vrh || z.L1.vrh ? ' ' + t('hel.vrh', { n: z.L2.vrh || z.L1.vrh }) : '') + (z.L2.otpustanjeVeze ? ' ' + t('hel.veza') : '') + '</p>';
+      } else html += '<p>' + t('hel.bezVremena') + '</p>';
+      dio(t('hel.naslov'), html + '<p>' + t('hel.most') + '</p>');
+    }
+
     // 7. put i prepuštanje
     dio(t('nat.put.naslov'), '<p>' + t('nat.put', { sunce: niz('znakTema', s.sign), mjesec: niz('znakTema', m.sign),
       asc: k.kuce ? niz('znakTema', o.asc.sign) : null, el: t('nat.el.' + ELEMENT[e1]), broj: zp }) + '</p>');
@@ -102,6 +124,13 @@ var Citanje = (function (N) {
     var tablica = PLANETI.concat(k.kuce ? ['asc', 'mc'] : []).map(function (id) {
       return { id: id, glif: Nebo.glifPlaneta(id), ime: t('planet.' + id), polozaj: polozaj(o[id], k.kuce) };
     });
+    if (typeof Helenisticki !== 'undefined' && k.kuce) {         // točke Sreće i Duha uz položaje
+      var ht = Helenisticki.tocke(o, Helenisticki.sekta(o).dan);
+      [['sreca', '⊗'], ['duh', '⊙']].forEach(function (x) {
+        tablica.push({ id: x[0], glif: x[1], ime: t('hel.tocka.' + x[0]), polozaj: polozaj({ sign: Math.floor(ht[x[0]] / 30), deg: ht[x[0]] % 30, point: true,
+          house: N.houseOf(ht[x[0]], k.karta.houses.cusps) }, true) });
+      });
+    }
     if (typeof Kineski !== 'undefined') {                       // kineski stupovi uz položaje (iz iste tropske Sunčeve dužine)
       var kz = Kineski.stupovi(r, k.utcMs);
       tablica.push({ id: 'kin', glif: '☯', ime: t('kin.stupovi'), polozaj: [kz.godina, kz.mjesec, kz.dan, kz.sat].filter(Boolean).map(function (x) {
