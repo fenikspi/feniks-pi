@@ -78,6 +78,7 @@
     'pr.ime': 'Name oder Spitzname', 'pr.datum': 'Geburtsdatum', 'pr.vrijeme': 'Geburtszeit (falls bekannt)', 'pr.mjesto': 'Geburtsort',
     'pr.zivi': 'Wohnort (für Himmel und Planetenstunden)', 'pr.spremi': 'Speichern', 'pr.spremljeno': 'Auf diesem Gerät gespeichert.',
     'pr.doprinosNaslov': "Beitrag zur Symbolbibliothek", 'pr.doprinos': "Anonyme Muster beitragen",
+    'pr.doprinosSvrha': "Anonyme Muster dienen dem Wachstum und der Entwicklung besserer, genauerer und präziserer Deutungen, damit jeder seinen Lebensweg leichter findet und geht.",
     'pr.doprinosOpis': "Standardmäßig aus. Wenn aktiviert, wird nach einem Eintrag nur ein abstraktes Muster gesendet (Symbole, Mondzeichen und -phase, Haupttransit), ohne Namen, Daten, Ort und Text. So lernt Feniks für alle zu deuten. <a href=\"/privatnost.html#5-doprinos\">Mehr dazu</a>",
     'pr.podaci': 'Deine Daten', 'pr.podaciOpis': 'Exportiere alles als Text zur Sicherung oder lösche alles von diesem Gerät.',
     'pr.izvezi': 'Alle Daten exportieren', 'pr.izvezeno': 'Kopiere den Text und bewahre ihn als Sicherung auf.', 'pr.brisi': 'Alle Daten von diesem Gerät löschen',

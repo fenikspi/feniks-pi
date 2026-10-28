@@ -16,12 +16,13 @@ var I18n = (function () {
   function cirilica(s) {
     return String(s).split(/(<[^>]*>|\{\w+\}|https?:\/\/\S+)/).map(function (dio, i) {
       if (i % 2) return dio;
+      dio = dio.replace(/(kon)(junk)/gi, '$1\u200C$2');            // n+j u „konjunkcija” nije slovo nj (конјункција)
       return dio.replace(/Lj|LJ|lj|Nj|NJ|nj|Dž|DŽ|dž|[a-zA-ZčćđšžČĆĐŠŽ]/g, function (z) {
         if (LAT[z]) return LAT[z];
         var m = z.toLowerCase(), k = SLOVA.indexOf(m); if (k < 0) return z;
         return z === m ? CIR[k] : CIR[k].toUpperCase();
       });
-    }).join('');
+    }).join('').replace(/\u200C/g, '');
   }
 
   function prepoznaj() {

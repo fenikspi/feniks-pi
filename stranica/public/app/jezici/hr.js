@@ -61,11 +61,11 @@
     'dog.postaja.tekst': function (p, t) { return p.retro ? 'Vrijeme da se ' + t('tema.' + p.planet) + ' okrene prema unutra: ponovno promisli, ne žuri.' : 'Ono što je sazrijevalo iznutra sada se smije pokazati.'; },
     'dog.tranzit.naslov': function (p, t) { return t('planet.' + p.planet) + ' ' + t('aspekt.' + p.aspekt) + ' natalni ' + t('planet.' + p.natal) + ' ' + p.glif; },
     'dog.tranzit.tekst': function (p, t) {
-      return (p.planet === 'venus' ? 'Tranzitna ' : 'Tranzitni ') + t('planet.' + p.planet) + ' (' + t('tema.' + p.planet) + ') ' + ASPEKT_U[p.aspekt] + ' je s tvojim natalnim ' + S_KIM[p.natal] + kuca(p.kuca, t) + '. ' + t('zrcalo.' + p.aspekt);
+      return (p.planet === 'venus' ? 'Tranzitna ' : 'Tranzitni ') + t('planet.' + p.planet) + ' (' + t('tema.' + p.planet) + ') ' + ASPEKT_U[p.aspekt] + ' je s ' + (p.natal === 'venus' || p.natal === 'mc' ? 'tvojom natalnom ' : 'tvojim natalnim ') + S_KIM[p.natal] + kuca(p.kuca, t) + '. ' + t('zrcalo.' + p.aspekt);
     },
     'dog.pomrcina.mjesec': 'Pomrčina Mjeseca', 'dog.pomrcina.sunce': 'Pomrčina Sunca',
     'dog.pomrcina.naslov': '{ime} u znaku {znak}',
-    'dog.pomrcina.tekst': function (p, t) { return 'Pomrčine otvaraju i zatvaraju poglavlja' + kuca(p.kuca, t) + '. Ne treba ništa forsirati; prati što se samo mijenja oko ' + t('znakTema')[p.znak] + '.'; },
+    'dog.pomrcina.tekst': function (p, t) { return 'Pomrčine otvaraju i zatvaraju poglavlja' + kuca(p.kuca, t) + '. Ne treba ništa forsirati; prati što se samo mijenja u temi: ' + t('znakTema')[p.znak] + '.'; },
     'mj.osobni': '<b>Osobni mjesec {n}:</b> mjesec za {tema}.',
     'mj.sjeme': function (p, t) { return '<b>Sjeme mjeseca</b> pada u znak ' + t('znakovi')[p.znak] + (p.kuca ? ', u tvoju ' + p.kuca + '. kuću: ' + t('kuce')[p.kuca - 1] : ': ' + t('znakTema')[p.znak]) + '.'; },
     'mj.vrhunac': function (p, t) { return '<b>Vrhunac mjeseca</b> (uštap) pada u znak ' + t('znakovi')[p.znak] + (p.kuca ? ', u tvoju ' + p.kuca + '. kuću: ' + t('kuce')[p.kuca - 1] : ': ' + t('znakTema')[p.znak]) + '.'; },
@@ -97,6 +97,7 @@
     'pr.ime': 'Ime ili nadimak', 'pr.datum': 'Datum rođenja', 'pr.vrijeme': 'Vrijeme rođenja (ako znaš)', 'pr.mjesto': 'Mjesto rođenja',
     'pr.zivi': 'Gdje živiš (za nebo i planetarne sate)', 'pr.spremi': 'Spremi', 'pr.spremljeno': 'Spremljeno na ovom uređaju.',
     'pr.doprinosNaslov': "Doprinos simboličkoj knjižnici", 'pr.doprinos': "Doprinesi anonimne obrasce",
+    'pr.doprinosSvrha': "Anonimni obrasci služe rastu i razvoju boljih, točnijih i preciznijih čitanja, kako bi svatko lakše pronašao svoj životni put i hodao njime.",
     'pr.doprinosOpis': "Zadano isključeno. Kad uključiš, nakon zapisa šalje se samo apstraktni obrazac (simboli, Mjesečev znak i mijena, glavni tranzit), bez imena, datuma, mjesta i teksta. Tako Feniks uči tumačiti za sve. <a href=\"/privatnost.html#5-doprinos\">Više o tome</a>",
     'pr.podaci': 'Tvoji podaci', 'pr.podaciOpis': 'Izvezi sve kao tekst za sigurnosnu kopiju ili obriši sve s ovog uređaja.',
     'pr.izvezi': 'Izvezi sve podatke', 'pr.izvezeno': 'Kopiraj tekst i spremi ga kao sigurnosnu kopiju.', 'pr.brisi': 'Obriši sve podatke s ovog uređaja',

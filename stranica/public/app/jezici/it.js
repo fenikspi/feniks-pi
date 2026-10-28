@@ -78,6 +78,7 @@
     'pr.ime': 'Nome o soprannome', 'pr.datum': 'Data di nascita', 'pr.vrijeme': 'Ora di nascita (se la conosci)', 'pr.mjesto': 'Luogo di nascita',
     'pr.zivi': 'Dove vivi (per il cielo e le ore planetarie)', 'pr.spremi': 'Salva', 'pr.spremljeno': 'Salvato su questo dispositivo.',
     'pr.doprinosNaslov': "Contributo alla biblioteca dei simboli", 'pr.doprinos': "Contribuisci con schemi anonimi",
+    'pr.doprinosSvrha': "Gli schemi anonimi servono alla crescita e allo sviluppo di letture migliori, più accurate e più precise, perché ognuno trovi e percorra più facilmente il proprio cammino di vita.",
     'pr.doprinosOpis': "Disattivato per impostazione predefinita. Se attivo, dopo ogni voce viene inviato solo uno schema astratto (simboli, segno e fase della Luna, transito principale), senza nome, date, luogo né testo. Così Feniks impara a interpretare per tutti. <a href=\"/privatnost.html#5-doprinos\">Per saperne di più</a>",
     'pr.podaci': 'I tuoi dati', 'pr.podaciOpis': 'Esporta tutto come testo per un backup o elimina tutto da questo dispositivo.',
     'pr.izvezi': 'Esporta tutti i dati', 'pr.izvezeno': 'Copia il testo e conservalo come backup.', 'pr.brisi': 'Elimina tutti i dati da questo dispositivo',

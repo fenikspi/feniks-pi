@@ -78,6 +78,7 @@
     'pr.ime': 'Nom ou surnom', 'pr.datum': 'Date de naissance', 'pr.vrijeme': 'Heure de naissance (si tu la connais)', 'pr.mjesto': 'Lieu de naissance',
     'pr.zivi': 'Où tu vis (pour le ciel et les heures planétaires)', 'pr.spremi': 'Enregistrer', 'pr.spremljeno': 'Enregistré sur cet appareil.',
     'pr.doprinosNaslov': "Contribution à la bibliothèque des symboles", 'pr.doprinos': "Contribuer des motifs anonymes",
+    'pr.doprinosSvrha': "Les motifs anonymes servent à faire grandir et développer des lectures meilleures, plus justes et plus précises, pour que chacun trouve et parcoure plus facilement son chemin de vie.",
     'pr.doprinosOpis': "Désactivé par défaut. Une fois activé, seul un motif abstrait est envoyé après chaque entrée (symboles, signe et phase de la Lune, transit principal), sans nom, dates, lieu ni texte. C'est ainsi que Feniks apprend à interpréter pour tous. <a href=\"/privatnost.html#5-doprinos\">En savoir plus</a>",
     'pr.podaci': 'Tes données', 'pr.podaciOpis': 'Exporte tout en texte pour une sauvegarde ou supprime tout de cet appareil.',
     'pr.izvezi': 'Exporter toutes les données', 'pr.izvezeno': 'Copie le texte et garde-le comme sauvegarde.', 'pr.brisi': 'Supprimer toutes les données de cet appareil',

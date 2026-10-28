@@ -1,11 +1,11 @@
 /* Feniks π: srpski (latinica, ekavica). Ćirilica nastaje automatski iz ovih tekstova (i18n.js).
    Funkcije služe za padeže i rod (s natalnim Merkurom, s natalnom Venerom, ulazi u Vagu, retrogradna Venera).
-   U reči „kon‌junkcija" između n i j stoji nevidljivi znak (U+200C) da ćirilica ne bi dala „коњункција". */
+   U reči „konjunkcija" između n i j stoji nevidljivi znak (U+200C) da ćirilica ne bi dala „коњункција". */
 (function () {
   var S_KIM = { sun: 'Suncem', moon: 'Mesecom', mercury: 'Merkurom', venus: 'Venerom', mars: 'Marsom', jupiter: 'Jupiterom', saturn: 'Saturnom',
     uranus: 'Uranom', neptune: 'Neptunom', pluto: 'Plutonom', node: 'Mesečevim čvorom', asc: 'Ascendentom', mc: 'Sredinom neba' };
   var U_ZNAK = ['Ovna', 'Bika', 'Blizance', 'Raka', 'Lava', 'Devicu', 'Vagu', 'Škorpiju', 'Strelca', 'Jarca', 'Vodoliju', 'Ribe'];
-  var ASPEKT_U = { konjunkcija: 'u kon‌junkciji', sekstil: 'u sekstilu', kvadrat: 'u kvadratu', trigon: 'u trigonu', opozicija: 'u opoziciji' };
+  var ASPEKT_U = { konjunkcija: 'u konjunkciji', sekstil: 'u sekstilu', kvadrat: 'u kvadratu', trigon: 'u trigonu', opozicija: 'u opoziciji' };
   var ZENSKI = { venus: 1, mc: 1 }, SREDNJI = { sun: 1 };
   function pridev(p, m, z, s) { return ZENSKI[p] ? z : SREDNJI[p] ? s : m; }
   function kuca(k, t) { return k ? ' u tvojoj ' + k + '. kući (' + t('kuce')[k - 1] + ')' : ''; }
@@ -37,7 +37,7 @@
     'savjet.stari': 'Tišina pre novog. Odmori se, sanjaj i zapisuj; odgovori dolaze u snu.',
     'kratko.mladak': 'Seme: tiho imenuj jednu nameru i pusti je.', 'kratko.prva': 'Prvi otpor; posmatraj ga bez borbe.',
     'kratko.ustap': 'Svetlost otkriva skriveno; primeti šta ti se pokazuje.', 'kratko.zadnja': 'Otpusti ono što više ne nosi tvoj put.',
-    'aspekt.konjunkcija': 'kon‌junkcija', 'aspekt.sekstil': 'sekstil', 'aspekt.kvadrat': 'kvadrat', 'aspekt.trigon': 'trigon', 'aspekt.opozicija': 'opozicija',
+    'aspekt.konjunkcija': 'konjunkcija', 'aspekt.sekstil': 'sekstil', 'aspekt.kvadrat': 'kvadrat', 'aspekt.trigon': 'trigon', 'aspekt.opozicija': 'opozicija',
     'zrcalo.konjunkcija': 'Novi početak u tom delu tebe.', 'zrcalo.sekstil': 'Mala vrata; dovoljno je da ih primetiš.', 'zrcalo.kvadrat': 'Napetost koja traži promenu, ne borbu.',
     'zrcalo.trigon': 'Tok je lak; prepusti mu se.', 'zrcalo.opozicija': 'Svet spolja odražava ono što je u tebi.',
     'sat.sun': 'jasnoću i lice okrenuto svetu', 'sat.moon': 'osećanja, snove i porodicu', 'sat.mercury': 'reči, pisanje i dogovore', 'sat.venus': 'lepotu, ljubav i pomirenje',
@@ -105,6 +105,9 @@
     'pr.podaci': 'Tvoji podaci', 'pr.podaciOpis': 'Izvezi sve kao tekst za rezervnu kopiju ili obriši sve s ovog uređaja.',
     'pr.izvezi': 'Izvezi sve podatke', 'pr.izvezeno': 'Kopiraj tekst i sačuvaj ga kao rezervnu kopiju.', 'pr.brisi': 'Obriši sve podatke s ovog uređaja',
     'pr.sigurno': 'Sigurno? Klikni još jednom', 'pr.izvozAria': 'Izvezeni podaci',
+    'pr.doprinosNaslov': "Doprinos biblioteci simbola", 'pr.doprinos': "Doprinesi anonimne obrasce",
+    'pr.doprinosSvrha': "Anonimni obrasci služe rastu i razvoju boljih, tačnijih i preciznijih čitanja, kako bi svako lakše pronašao svoj životni put i hodao njime.",
+    'pr.doprinosOpis': "Podrazumevano isključeno. Kad uključiš, posle svakog zapisa šalje se samo apstraktni obrazac (simboli, Mesečev znak i mena, glavni tranzit), bez imena, datuma, mesta i teksta. Tako Feniks uči da tumači za sve. <a href=\"/privatnost.html#5-doprinos\">Više o tome</a>",
     'glazba.pusti': 'Pusti drevnu muziku', 'glazba.zaustavi': 'Zaustavi muziku', 'glazba.gumb': '♪ muzika', 'glazba.svira': '♪ muzika svira'
   });
 })();

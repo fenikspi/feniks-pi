@@ -102,6 +102,9 @@
     'pr.podaci': 'Tvoji podatki', 'pr.podaciOpis': 'Izvozi vse kot besedilo za varnostno kopijo ali izbriši vse s te naprave.',
     'pr.izvezi': 'Izvozi vse podatke', 'pr.izvezeno': 'Kopiraj besedilo in ga shrani kot varnostno kopijo.', 'pr.brisi': 'Izbriši vse podatke s te naprave',
     'pr.sigurno': 'Res? Klikni še enkrat', 'pr.izvozAria': 'Izvoženi podatki',
+    'pr.doprinosNaslov': "Prispevek h knjižnici simbolov", 'pr.doprinos': "Prispevaj anonimne vzorce",
+    'pr.doprinosSvrha': "Anonimni vzorci služijo rasti in razvoju boljših, točnejših in natančnejših branj, da bi vsak lažje našel svojo življenjsko pot in hodil po njej.",
+    'pr.doprinosOpis': "Privzeto izklopljeno. Ko vklopiš, se po vsakem zapisu pošlje le abstraktni vzorec (simboli, Lunino znamenje in mena, glavni tranzit), brez imena, datumov, kraja in besedila. Tako se Feniks uči tolmačiti za vse. <a href=\"/privatnost.html#5-doprinos\">Več o tem</a>",
     'glazba.pusti': 'Predvajaj starodavno glasbo', 'glazba.zaustavi': 'Ustavi glasbo', 'glazba.gumb': '♪ glasba', 'glazba.svira': '♪ glasba igra'
   });
 })();
