@@ -20,11 +20,15 @@
 
 <div class="mreza">
   <section class="kartica" id="linux">
-    <span class="oznaka">U pripremi</span>
+    <span class="oznaka">Dostupno · 0.1.0</span>
     <h2>Linux</h2>
-    <p>Za Ubuntu, Linux Mint, Debian, Fedoru i ostale. Živa pozadina radne površine radi na XFCE-u, GNOME-u i KDE-u.</p>
-    <ul><li>AppImage (sve distribucije)</li><li>.deb (Ubuntu, Mint, Debian)</li></ul>
-    <a class="gumb" aria-disabled="true">Uskoro</a>
+    <p>Za Ubuntu, Linux Mint, Debian, Fedoru i ostale (64-bitni). Radi bez interneta; podaci ostaju na računalu.</p>
+    <ul>
+      <li><a href="https://github.com/fenikspi/feniks-pi/releases/download/v0.1.0/feniks-pi-0.1.0-x86_64.AppImage">AppImage</a> (sve distribucije, 126 MB): desni klik → Svojstva → Dopusti pokretanje, pa dvoklik</li>
+      <li><a href="https://github.com/fenikspi/feniks-pi/releases/download/v0.1.0/feniks-pi-0.1.0-amd64.deb">.deb</a> (Ubuntu, Mint, Debian, 99 MB): <code>sudo apt install ./feniks-pi-0.1.0-amd64.deb</code></li>
+      <li><a href="https://github.com/fenikspi/feniks-pi/releases/download/v0.1.0/SHA256SUMS.txt">SHA-256 otisci</a> za provjeru</li>
+    </ul>
+    <a class="gumb" href="https://github.com/fenikspi/feniks-pi/releases/download/v0.1.0/feniks-pi-0.1.0-x86_64.AppImage">Preuzmi AppImage</a>
   </section>
   <section class="kartica" id="windows">
     <span class="oznaka">U pripremi</span>
@@ -57,7 +61,7 @@
 </div>
 
 <h2>Sigurnost preuzimanja</h2>
-<p>Uz svaku datoteku objavit ćemo njen SHA-256 otisak, a izvorni kod bit će javan na GitHubu, pa svatko može provjeriti da je aplikacija ono što tvrdi da jest.</p>
+<p>Uz svaku inačicu objavljujemo SHA-256 otiske (<code>sha256sum -c SHA256SUMS.txt</code>), a izvorni kod je javan na <a href="https://github.com/fenikspi/feniks-pi">GitHubu</a> pod licencom GPL-3.0, pa svatko može provjeriti da je aplikacija ono što tvrdi da jest.</p>
 </main>
 <footer><span>Feniks π · bez reklama, bez praćenja, bez naplate</span><span><a href="/privatnost.html">Privatnost</a> · <a href="/uvjeti.html">Uvjeti korištenja</a></span></footer>
 <script>
