@@ -57,6 +57,8 @@ I18n.dodaj('es', {
   'nat.kv.vlada': 'La modalidad es sobre todo <b>{kv}</b>: {opis}',
   'nat.kvOpis.kardinalna': 'impulsas y empiezas; tu don es el primer paso.', 'nat.kvOpis.fiksna': 'perseveras y preservas; tu don es la lealtad y la profundidad.',
   'nat.kvOpis.promjenjiva': 'te adaptas y conectas; tu don es la transición y el fluir.',
+  "nat.eter": "<b>El quinto elemento, el éter</b> (el dodecaedro de Platón, la totalidad del cielo; el akasha védico, el espacio) sostiene a todos los demás. Según la regla védica lo lleva Júpiter, en tu carta en {znak}{kuca}: allí tu espacio se ensancha y se abre al sentido. Un puente entre tres sistemas, por planeta (elemento védico / chino): Sol fuego · Marte fuego / fuego · Mercurio tierra / agua · Venus agua / metal · Luna agua · Saturno aire / tierra · Júpiter éter / madera.",
+  "nat.eterKuca": ", en la casa {n} ({tema})",
   'nat.aspekti.naslov': 'Los aspectos más fuertes',
   'nat.tema.sun': 'conciencia y voluntad', 'nat.tema.moon': 'sentimientos y necesidades', 'nat.tema.mercury': 'pensamientos y palabras', 'nat.tema.venus': 'amor y valores',
   'nat.tema.mars': 'deseo y acción', 'nat.tema.jupiter': 'crecimiento y fe', 'nat.tema.saturn': 'límites y madurez', 'nat.tema.uranus': 'libertad y despertar',

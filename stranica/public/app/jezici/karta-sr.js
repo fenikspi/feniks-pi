@@ -57,6 +57,8 @@ I18n.dodaj('sr', {
   'nat.kv.vlada': 'Kvalitet je pretežno <b>{kv}</b>: {opis}',
   'nat.kvOpis.kardinalna': 'pokrećeš i započinješ; tvoj dar je prvi korak.', 'nat.kvOpis.fiksna': 'istrajavaš i čuvaš; tvoj dar su vernost i dubina.',
   'nat.kvOpis.promjenjiva': 'prilagođavaš se i povezuješ; tvoj dar su prelaz i tok.',
+  "nat.eter": "<b>Peti element, etar</b> (Platonov dodekaedar, celina neba; vedska akaša, prostor) drži sve ostale. Po vedskom pravilu nosi ga Jupiter, u tvojoj karti u znaku {znak}{kuca}: tamo se tvoj prostor širi i otvara smislu. Most triju sistema, po planeti (vedski / kineski element): Sunce vatra · Mars vatra / vatra · Merkur zemlja / voda · Venera voda / metal · Mesec voda · Saturn vazduh / zemlja · Jupiter etar / drvo.",
+  "nat.eterKuca": ", u {n}. kući ({tema})",
   'nat.aspekti.naslov': 'Najjači aspekti',
   'nat.tema.sun': 'svest i volja', 'nat.tema.moon': 'osećanja i potrebe', 'nat.tema.mercury': 'misli i reči', 'nat.tema.venus': 'ljubav i vrednosti',
   'nat.tema.mars': 'želja i delovanje', 'nat.tema.jupiter': 'rast i vera', 'nat.tema.saturn': 'granice i zrelost', 'nat.tema.uranus': 'sloboda i buđenje',

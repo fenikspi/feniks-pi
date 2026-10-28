@@ -57,6 +57,8 @@ I18n.dodaj('de', {
   'nat.kv.vlada': 'Die Qualität ist überwiegend <b>{kv}</b>: {opis}',
   'nat.kvOpis.kardinalna': 'du stößt an und beginnst; deine Gabe ist der erste Schritt.', 'nat.kvOpis.fiksna': 'du bleibst dran und bewahrst; deine Gabe ist Treue und Tiefe.',
   'nat.kvOpis.promjenjiva': 'du passt dich an und verbindest; deine Gabe ist Übergang und Fluss.',
+  "nat.eter": "<b>Das fünfte Element, Äther</b> (Platons Dodekaeder, das Ganze des Himmels; vedisch Akasha, der Raum) hält alle anderen. Nach vedischer Regel trägt ihn Jupiter, in deinem Horoskop im Zeichen {znak}{kuca}: Dort weitet sich dein Raum und öffnet sich dem Sinn. Eine Brücke dreier Systeme, nach Planet (vedisches / chinesisches Element): Sonne Feuer · Mars Feuer / Feuer · Merkur Erde / Wasser · Venus Wasser / Metall · Mond Wasser · Saturn Luft / Erde · Jupiter Äther / Holz.",
+  "nat.eterKuca": ", im {n}. Haus ({tema})",
   'nat.aspekti.naslov': 'Die stärksten Aspekte',
   'nat.tema.sun': 'Bewusstsein und Wille', 'nat.tema.moon': 'Gefühle und Bedürfnisse', 'nat.tema.mercury': 'Gedanken und Worte', 'nat.tema.venus': 'Liebe und Werte',
   'nat.tema.mars': 'Begehren und Handeln', 'nat.tema.jupiter': 'Wachstum und Glaube', 'nat.tema.saturn': 'Grenzen und Reife', 'nat.tema.uranus': 'Freiheit und Erwachen',

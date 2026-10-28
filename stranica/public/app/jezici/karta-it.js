@@ -57,6 +57,8 @@ I18n.dodaj('it', {
   "nat.kv.vlada": "La modalità è soprattutto <b>{kv}</b>: {opis}",
   "nat.kvOpis.kardinalna": "avvii e cominci; il tuo dono è il primo passo.", "nat.kvOpis.fiksna": "perseveri e custodisci; il tuo dono è la fedeltà e la profondità.",
   "nat.kvOpis.promjenjiva": "ti adatti e colleghi; il tuo dono è il passaggio e il flusso.",
+  "nat.eter": "<b>Il quinto elemento, l'etere</b> (il dodecaedro di Platone, la totalità del cielo; l'akasha vedico, lo spazio) contiene tutti gli altri. Secondo la regola vedica lo porta Giove, nel tuo tema in {znak}{kuca}: lì il tuo spazio si allarga e si apre al senso. Un ponte tra tre sistemi, per pianeta (elemento vedico / cinese): Sole fuoco · Marte fuoco / fuoco · Mercurio terra / acqua · Venere acqua / metallo · Luna acqua · Saturno aria / terra · Giove etere / legno.",
+  "nat.eterKuca": ", nella casa {n} ({tema})",
   "nat.aspekti.naslov": "Gli aspetti più forti",
   "nat.tema.sun": "coscienza e volontà", "nat.tema.moon": "sentimenti e bisogni", "nat.tema.mercury": "pensieri e parole", "nat.tema.venus": "amore e valori",
   "nat.tema.mars": "desiderio e azione", "nat.tema.jupiter": "crescita e fede", "nat.tema.saturn": "limiti e maturità", "nat.tema.uranus": "libertà e risveglio",
