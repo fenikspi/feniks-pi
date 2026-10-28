@@ -43,6 +43,8 @@ simbolici, a sustav ima to veći prioritet što više tog kostura dijeli:
   12 kineskih životinja i godina koja ih nosi; 13. lunacija u godini);
 - **5 elemenata**: vatra, zemlja, zrak, voda i eter (zapad), pet kineskih elemenata, pet vedskih (bhute), most po planetu;
 - **9 godina**: numerološka osobna godina, kinesko-japanskih devet zvijezda, i ostali devetostruki ciklusi koje nađemo.
+- **Priroda, životinje i vez**: simbolika biljaka, životinja i godišnjih doba te ornamenti narodnog veza (sunce, rozeta, drvo
+  života, ptica, kolovrat, pletenica) kao zapisani simboli koji se vežu uz isti simbol u svim tradicijama.
 
 Dodajemo svaki horoskopski sustav koji pronađemo, redom: **najbliži** (računa se iz istog neba i iste tropske točke ili se točno
 preračunava) i **najpouzdaniji** (stari, provjerljivi izvori). Svaki novi sloj spaja se s ostalima preko preklapanja (planeti,
