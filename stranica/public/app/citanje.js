@@ -73,7 +73,24 @@ var Citanje = (function (N) {
     var zp = zivotniPut(r);
     dio(t('nat.broj.naslov', { n: zp }), '<p>' + t('nat.broj.' + zp) + '</p>');
 
-    // 6. put i prepuštanje
+    // 6. kineski horoskop: četiri stupa, elementi, preklapanja i devetogodišnji ciklus (ako je učitan kineski.js)
+    if (typeof Kineski !== 'undefined') {
+      var ks = Kineski.stupovi(r, k.utcMs), kp = Kineski.preklapanja(ks, k.karta), ksad = Kineski.godinaSada(new Date());
+      var Z = function (st) { return t('kin.zivotinja.' + st.zivotinja); }, E = function (e) { return t('kin.el.' + e); };
+      var red = [['kin.godina', ks.godina], ['kin.mjesec', ks.mjesec], ['kin.dan', ks.dan], ['kin.sat', ks.sat]].filter(function (x) { return x[1]; });
+      var nema = kp.nedostaje.map(E).join(', ');
+      var osobna = zbroj(zbroj(r.d) + zbroj(r.m) + zbroj(new Date().getFullYear()));
+      dio(t('kin.naslov', { element: E(ks.godina.element), zivotinja: Z(ks.godina), znak: ks.godina.znak }),
+        '<p><b>' + t('kin.stupovi') + ':</b> ' + red.map(function (x) { return t(x[0]) + ' <span lang="zh">' + x[1].znak + '</span> (' + E(x[1].element) + ', ' + Z(x[1]) + ')'; }).join(' · ') + '</p>' +
+        '<p>' + t('kin.ja', { element: E(ks.ja), yy: t(ks.dan.yang ? 'kin.yang' : 'kin.yin'), opis: t('kin.elOpis.' + ks.ja) }) + '</p>' +
+        '<p>' + t('kin.elementi', { lista: Object.keys(ks.elementi).map(function (e) { return E(e) + ' ' + ks.elementi[e]; }).join(', '), jaci: E(kp.najjaciElement),
+          nedostaje: nema ? t('kin.nedostaje', { lista: nema }) : '' }) + '</p>' +
+        '<p>' + t('kin.preklapanje', { element: E(ks.ja), planet: t('planet.' + kp.planetJa), znak: kp.planetJaZnak != null ? t('kin.planetZnak', { znak: Nebo.znak(kp.planetJaZnak) }) : '',
+          zivotinja: Z(ks.mjesec), sunce: Nebo.znak(kp.sunceZnak) }) + '</p>' +
+        '<p>' + t('kin.zvijezde', { natal: Kineski.ZVIJEZDE[ks.zvijezda], godina: ksad.godina, sada: Kineski.ZVIJEZDE[ksad.zvijezda], osobna: osobna }) + '</p>');
+    }
+
+    // 7. put i prepuštanje
     dio(t('nat.put.naslov'), '<p>' + t('nat.put', { sunce: I18n.niz('znakTema', s.sign), mjesec: I18n.niz('znakTema', m.sign),
       asc: k.kuce ? I18n.niz('znakTema', o.asc.sign) : null, el: t('nat.el.' + ELEMENT[e1]), broj: zp }) + '</p>');
 
