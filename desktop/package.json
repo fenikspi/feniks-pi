@@ -1,0 +1,58 @@
+{
+  "name": "feniks-pi",
+  "version": "0.1.0",
+  "description": "Natalna karta, Dnevnik simbolizma i sinkroniciteta, dnevni, mjesečni i godišnji prijedlozi. Sve ostaje na tvom računalu.",
+  "homepage": "https://fenikspi.com",
+  "author": {
+    "name": "Feniks π",
+    "email": "info@fenikspi.com"
+  },
+  "license": "GPL-3.0-only",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "pripremi": "rm -rf web && cp -r ../stranica/public web",
+    "start": "npm run pripremi && electron .",
+    "linux": "npm run pripremi && electron-builder --linux AppImage deb --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "43.7.9",
+    "electron-builder": "26.17.0"
+  },
+  "build": {
+    "appId": "com.fenikspi.app",
+    "productName": "Feniks Pi",
+    "copyright": "Feniks π · GPL-3.0",
+    "artifactName": "feniks-pi-${version}-${arch}.${ext}",
+    "files": [
+      "main.js",
+      "web/**/*",
+      "!web/**/*.map"
+    ],
+    "directories": {
+      "output": "izlaz",
+      "buildResources": "build"
+    },
+    "linux": {
+      "executableName": "feniks-pi",
+      "icon": "build/icon.png",
+      "category": "Education",
+      "synopsis": "Natalna karta i Dnevnik simbolizma i sinkroniciteta",
+      "description": "Feniks π: natalna karta, numerologija, Dnevnik simbolizma i sinkroniciteta te dnevni, mjesečni i godišnji prijedlozi. Besplatno, bez reklama i bez praćenja; svi podaci ostaju na računalu.",
+      "maintainer": "Feniks π <info@fenikspi.com>",
+      "vendor": "Feniks π",
+      "desktop": {
+        "entry": {
+          "Name": "Feniks π",
+          "Comment": "Natalna karta i Dnevnik simbolizma i sinkroniciteta",
+          "Keywords": "astrologija;astrology;numerologija;dnevnik;"
+        }
+      },
+      "syncDesktopName": true
+    },
+    "deb": {
+      "packageName": "feniks-pi"
+    }
+  },
+  "desktopName": "feniks-pi.desktop"
+}
