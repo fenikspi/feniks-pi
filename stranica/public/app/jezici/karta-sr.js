@@ -115,6 +115,9 @@ I18n.dodaj('sr', {
   'nat.forma.zona': 'Vremenska zona', 'nat.forma.gumb': 'Izračunaj kartu i duboko čitanje', 'nat.forma.racunam': 'Računam…', 'nat.forma.greska': 'Proveri datum, vreme i mesto.',
   'nat.polozaji': 'Položaji', 'nat.kopiraj': 'Kopiraj čitanje', 'nat.kopirano': 'Kopirano.', 'nat.podijeli': 'Podeli', 'nat.sPodacima': 'Uključi datum, vreme i mesto rođenja u kopiju i deljenje',
   'nat.dijeliTekst': 'Moja natalna karta: {sazetak}. Izračunaj svoju besplatno na Feniks π:', 'nat.uAplikaciju': 'Sačuvaj u aplikaciji i prati dnevne preporuke',
+  'nat.datoteka': 'Sačuvaj kao datoteku', 'nat.link': 'Link na ovo čitanje (karta se izračunava u pregledaču i nigde se ne čuva):',
+  'nat.ai': 'Dublje čitanje (Claude)', 'nat.ai.naslov': 'Dublje čitanje', 'nat.ai.pise': 'Claude piše…',
+  'nat.ai.traje': 'Pišem dublje čitanje, to traje do minut. Šalje se samo karta, bez imena, datuma i mesta.', 'nat.ai.greska': 'Dublje čitanje trenutno nije uspelo',
   /* --- kineski horoskop --- */
   "nat.forma.mjestoPh": "Upiši grad, npr. Beograd",
   "kin.naslov": "Kineski horoskop: {zivotinja}, element {element} ({znak})",

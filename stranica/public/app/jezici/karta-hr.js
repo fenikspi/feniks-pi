@@ -196,5 +196,8 @@ I18n.dodaj('hr', {
   'nat.forma.mjestoPh': 'Upiši grad, npr. Karlovac', 'nat.forma.mjesto': 'Mjesto rođenja', 'nat.forma.drugo': 'Drugo mjesto (koordinate)…', 'nat.forma.lat': 'Širina (npr. 45.81)', 'nat.forma.lon': 'Dužina (npr. 15.98)',
   'nat.forma.zona': 'Vremenska zona', 'nat.forma.gumb': 'Izračunaj kartu i duboko čitanje', 'nat.forma.racunam': 'Računam…', 'nat.forma.greska': 'Provjeri datum, vrijeme i mjesto.',
   'nat.polozaji': 'Položaji', 'nat.kopiraj': 'Kopiraj čitanje', 'nat.kopirano': 'Kopirano.', 'nat.podijeli': 'Podijeli', 'nat.sPodacima': 'Uključi datum, vrijeme i mjesto rođenja u kopiju i dijeljenje',
-  'nat.dijeliTekst': 'Moja natalna karta: {sazetak}. Izračunaj svoju besplatno na Feniks π:', 'nat.uAplikaciju': 'Spremi u aplikaciju i prati dnevne preporuke'
+  'nat.dijeliTekst': 'Moja natalna karta: {sazetak}. Izračunaj svoju besplatno na Feniks π:', 'nat.uAplikaciju': 'Spremi u aplikaciju i prati dnevne preporuke',
+  'nat.datoteka': 'Spremi kao datoteku', 'nat.link': 'Link na ovo čitanje (karta se izračuna u pregledniku, nigdje se ne sprema):',
+  'nat.ai': 'Dublje čitanje (Claude)', 'nat.ai.naslov': 'Dublje čitanje', 'nat.ai.pise': 'Claude piše…',
+  'nat.ai.traje': 'Pišem dublje čitanje, to traje do minute. Šalje se samo karta bez imena, datuma i mjesta.', 'nat.ai.greska': 'Dublje čitanje trenutno nije uspjelo'
 });

@@ -137,5 +137,8 @@ I18n.dodaj('en', {
   'nat.forma.mjestoPh': 'Type a city, e.g. London', 'nat.forma.mjesto': 'Place of birth', 'nat.forma.drugo': 'Other place (coordinates)…', 'nat.forma.lat': 'Latitude (e.g. 51.51)', 'nat.forma.lon': 'Longitude (e.g. -0.13)',
   'nat.forma.zona': 'Time zone', 'nat.forma.gumb': 'Calculate chart and deep reading', 'nat.forma.racunam': 'Calculating…', 'nat.forma.greska': 'Check the date, time and place.',
   'nat.polozaji': 'Positions', 'nat.kopiraj': 'Copy reading', 'nat.kopirano': 'Copied.', 'nat.podijeli': 'Share', 'nat.sPodacima': 'Include birth date, time and place when copying and sharing',
-  'nat.dijeliTekst': 'My natal chart: {sazetak}. Calculate yours for free at Feniks π:', 'nat.uAplikaciju': 'Save it in the app and follow daily guidance'
+  'nat.dijeliTekst': 'My natal chart: {sazetak}. Calculate yours for free at Feniks π:', 'nat.uAplikaciju': 'Save it in the app and follow daily guidance',
+  'nat.datoteka': 'Save as file', 'nat.link': 'Link to this reading (the chart is calculated in the browser and stored nowhere):',
+  'nat.ai': 'Deeper reading (Claude)', 'nat.ai.naslov': 'Deeper reading', 'nat.ai.pise': 'Claude is writing…',
+  'nat.ai.traje': 'Writing a deeper reading, this takes up to a minute. Only the chart is sent, without name, date or place.', 'nat.ai.greska': 'The deeper reading did not work right now'
 });

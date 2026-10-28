@@ -102,6 +102,9 @@ I18n.dodaj('it', {
   "nat.forma.zona": "Fuso orario", "nat.forma.gumb": "Calcola il tema e la lettura profonda", "nat.forma.racunam": "Calcolo in corso…", "nat.forma.greska": "Controlla data, ora e luogo.",
   "nat.polozaji": "Posizioni", "nat.kopiraj": "Copia la lettura", "nat.kopirano": "Copiato.", "nat.podijeli": "Condividi", "nat.sPodacima": "Includi data, ora e luogo di nascita quando copi e condividi",
   "nat.dijeliTekst": "Il mio tema natale: {sazetak}. Calcola il tuo gratis su Feniks π:", "nat.uAplikaciju": "Salvalo nell'app e segui i consigli quotidiani",
+  "nat.datoteka": "Salva come file", "nat.link": "Link a questa lettura (il tema viene calcolato nel browser e non viene salvato da nessuna parte):",
+  "nat.ai": "Lettura più profonda (Claude)", "nat.ai.naslov": "Lettura più profonda", "nat.ai.pise": "Claude sta scrivendo…",
+  "nat.ai.traje": "Sto scrivendo una lettura più profonda, ci vuole fino a un minuto. Viene inviato solo il tema, senza nome, data e luogo.", "nat.ai.greska": "La lettura più profonda non è riuscita in questo momento",
   /* --- kineski horoskop --- */
   "nat.forma.mjestoPh": "Scrivi una città, es. Roma",
   "kin.naslov": "Oroscopo cinese: {zivotinja} di {element} ({znak})",
