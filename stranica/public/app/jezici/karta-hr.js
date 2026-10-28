@@ -57,7 +57,7 @@ I18n.dodaj('hr', {
   'nat.kv.vlada': 'Kvaliteta je pretežno <b>{kv}</b>: {opis}',
   'nat.kvOpis.kardinalna': 'pokrećeš i započinješ; tvoj je dar prvi korak.', 'nat.kvOpis.fiksna': 'ustraješ i čuvaš; tvoj je dar vjernost i dubina.',
   'nat.kvOpis.promjenjiva': 'prilagođavaš se i povezuješ; tvoj je dar prijelaz i tok.',
-  "nat.eter": "<b>Peti element, eter</b> (Platonov dodekaedar, cjelina neba; vedska akaša, prostor) drži sve ostale. Po vedskom pravilu nosi ga Jupiter, u tvojoj karti u znaku {znak}{kuca}: ondje se tvoj prostor širi i otvara smislu. Most triju sustava: vatra (Sunce, Mars; kin. vatra) · zemlja (Merkur; kin. zemlja) · voda (Mjesec, Venera; kin. voda i metal) · zrak (Saturn) · eter (Jupiter; kin. drvo).",
+  "nat.eter": "<b>Peti element, eter</b> (Platonov dodekaedar, cjelina neba; vedska akaša, prostor) drži sve ostale. Po vedskom pravilu nosi ga Jupiter, u tvojoj karti u znaku {znak}{kuca}: ondje se tvoj prostor širi i otvara smislu. Most triju sustava, po planetu (vedski / kineski element): Sunce vatra · Mars vatra / vatra · Merkur zemlja / voda · Venera voda / metal · Mjesec voda · Saturn zrak / zemlja · Jupiter eter / drvo.",
   "nat.eterKuca": ", u {n}. kući ({tema})",
   'nat.aspekti.naslov': 'Najjači aspekti',
   'nat.tema.sun': 'svijest i volja', 'nat.tema.moon': 'osjećaji i potrebe', 'nat.tema.mercury': 'misli i riječi', 'nat.tema.venus': 'ljubav i vrijednosti',
