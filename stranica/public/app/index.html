@@ -49,100 +49,114 @@ button.cip { cursor: pointer; font-family: var(--f-tijelo); }
 .dogadaji b { font-weight: 500; }
 .dogadaji p { margin: 2px 0 0; color: var(--tekst); font-size: .95rem; }
 @media (max-width: 520px) { .dogadaji li { grid-template-columns: 1fr; } }
+.jezik { width: auto; padding: 4px 8px; font-size: .9rem; color: var(--muted); }
 #izvoz-tekst { min-height: 160px; font-family: monospace; font-size: .8rem; margin-top: 10px; }
 </style>
 </head>
 <body>
 <header class="vrh">
   <a class="ime" href="/">Feniks π</a>
-  <nav aria-label="Glavna navigacija"><a href="/">Početna</a><a href="/preuzmi.html">Preuzmi</a><a href="/privatnost.html">Privatnost</a></nav>
+  <nav aria-label="Glavna navigacija"><a href="/" data-i18n="nav.pocetna">Početna</a><a href="/preuzmi.html" data-i18n="nav.preuzmi">Preuzmi</a><a href="/privatnost.html" data-i18n="nav.privatnost">Privatnost</a>
+    <select id="jezik" class="jezik" data-i18n-aria="nav.jezik" aria-label="Jezik"></select></nav>
 </header>
 <main class="app siroko">
-  <h1 id="pozdrav">Dobro došli</h1>
-  <p class="tiho">Sve što ovdje upišeš ostaje samo na ovom uređaju.</p>
+  <h1 id="pozdrav" data-i18n="ui.pozdrav">Dobro došli</h1>
+  <p class="tiho" data-i18n="ui.opis">Sve što ovdje upišeš ostaje samo na ovom uređaju.</p>
   <div class="kartice" role="tablist">
-    <button role="tab" data-t="danas" aria-selected="true">Danas</button>
-    <button role="tab" data-t="mjesec" aria-selected="false">Mjesec</button>
-    <button role="tab" data-t="godina" aria-selected="false">Godina</button>
-    <button role="tab" data-t="dnevnik" aria-selected="false">Dnevnik simbolizma i sinkroniciteta</button>
-    <button role="tab" data-t="profil" aria-selected="false">Profil</button>
+    <button role="tab" data-t="danas" aria-selected="true" data-i18n="tab.danas">Danas</button>
+    <button role="tab" data-t="mjesec" aria-selected="false" data-i18n="tab.mjesec">Mjesec</button>
+    <button role="tab" data-t="godina" aria-selected="false" data-i18n="tab.godina">Godina</button>
+    <button role="tab" data-t="dnevnik" aria-selected="false" data-i18n="tab.dnevnik">Dnevnik simbolizma i sinkroniciteta</button>
+    <button role="tab" data-t="profil" aria-selected="false" data-i18n="tab.profil">Profil</button>
   </div>
 
   <section role="tabpanel" id="t-danas">
-    <div class="ploca"><h2>Preporuka dana</h2><div id="danas-preporuka"></div></div>
-    <div class="ploca"><h2>Nebo sada</h2><ul id="danas-nebo"></ul></div>
+    <div class="ploca"><h2 data-i18n="danas.naslov">Preporuka dana</h2><div id="danas-preporuka"></div></div>
+    <div class="ploca"><h2 data-i18n="danas.neboSada">Nebo sada</h2><ul id="danas-nebo"></ul></div>
   </section>
 
   <section role="tabpanel" id="t-mjesec" hidden>
-    <div class="ploca"><h2 id="mjesec-naslov">Ovaj mjesec</h2><div id="mjesec-sazetak"><p class="tiho">Računam nebo mjeseca…</p></div>
-      <button class="gumb" type="button" id="mjesec-ics" hidden>Dodaj u kalendar (.ics)</button></div>
-    <div class="ploca"><h2>Što donosi</h2><ol class="dogadaji" id="mjesec-dogadaji"></ol></div>
+    <div class="ploca"><h2 id="mjesec-naslov" data-i18n="mj.naslov">Ovaj mjesec</h2><div id="mjesec-sazetak"><p class="tiho" data-i18n="mj.racunam">Računam nebo mjeseca…</p></div>
+      <button class="gumb" type="button" id="mjesec-ics" hidden data-i18n="ui.ics">Dodaj u kalendar (.ics)</button></div>
+    <div class="ploca"><h2 data-i18n="mj.donosi">Što donosi</h2><ol class="dogadaji" id="mjesec-dogadaji"></ol></div>
   </section>
 
   <section role="tabpanel" id="t-godina" hidden>
-    <div class="ploca"><h2 id="godina-naslov">Tvoja godina</h2><div id="godina-sazetak"><p class="tiho">Računam tvoju godinu…</p></div>
-      <button class="gumb" type="button" id="godina-ics" hidden>Dodaj u kalendar (.ics)</button></div>
-    <div class="ploca"><h2>Veliki trenuci godine</h2><p class="tiho">Pomrčine, ulasci i postaje sporih planeta i njihovi točni tranziti na tvoju kartu. Istaknut je gospodar godine.</p><ol class="dogadaji" id="godina-dogadaji"></ol></div>
+    <div class="ploca"><h2 id="godina-naslov" data-i18n="god.naslovPrazan">Tvoja godina</h2><div id="godina-sazetak"><p class="tiho" data-i18n="god.racunam">Računam tvoju godinu…</p></div>
+      <button class="gumb" type="button" id="godina-ics" hidden data-i18n="ui.ics">Dodaj u kalendar (.ics)</button></div>
+    <div class="ploca"><h2 data-i18n="god.trenuci">Veliki trenuci godine</h2><p class="tiho" data-i18n="god.trenuciOpis">Pomrčine, ulasci i postaje sporih planeta i njihovi točni tranziti na tvoju kartu. Istaknut je gospodar godine.</p><ol class="dogadaji" id="godina-dogadaji"></ol></div>
   </section>
 
   <section role="tabpanel" id="t-dnevnik" hidden>
     <form class="ploca" id="unos">
-      <h2>Novi zapis</h2>
+      <h2 data-i18n="dn.novi">Novi zapis</h2>
       <div class="red">
-        <div><label for="vrsta">Što se dogodilo</label>
-          <select id="vrsta" name="vrsta"><option value="san">San</option><option value="znak">Znak</option><option value="susret">Susret</option><option value="sinkronicitet">Sinkronicitet (smislena slučajnost)</option><option value="misao">Misao</option></select></div>
-        <div><label for="dodatni">Dodatni simboli (zarezom)</label><input id="dodatni" name="dodatni" placeholder="npr. ključ, sova"></div>
+        <div><label for="vrsta" data-i18n="dn.sto">Što se dogodilo</label>
+          <select id="vrsta" name="vrsta"><option value="san" data-i18n="vrsta.san">San</option><option value="znak" data-i18n="vrsta.znak">Znak</option><option value="susret" data-i18n="vrsta.susret">Susret</option><option value="sinkronicitet" data-i18n="dn.vrsta.sinkronicitet">Sinkronicitet (smislena slučajnost)</option><option value="misao" data-i18n="vrsta.misao">Misao</option></select></div>
+        <div><label for="dodatni" data-i18n="dn.dodatni">Dodatni simboli (zarezom)</label><input id="dodatni" name="dodatni" placeholder="npr. ključ, sova" data-i18n-ph="dn.dodatniPh"></div>
       </div>
-      <label for="tekst">Zapis</label>
-      <textarea id="tekst" name="tekst" placeholder="Opiši san, znak ili susret svojim riječima…" required></textarea>
+      <label for="tekst" data-i18n="dn.zapis">Zapis</label>
+      <textarea id="tekst" name="tekst" placeholder="Opiši san, znak ili susret svojim riječima…" data-i18n-ph="dn.zapisPh" required></textarea>
       <div id="prepoznato" aria-live="polite"></div>
-      <button class="gumb" type="submit">Zapiši s nebom ovog trenutka</button>
+      <button class="gumb" type="submit" data-i18n="dn.zapisi">Zapiši s nebom ovog trenutka</button>
       <div id="spremljeno" aria-live="polite"></div>
     </form>
     <div class="ploca">
-      <h2>Simboli koji se vraćaju</h2>
-      <p class="tiho">Zadnjih 30 dana. Istaknuti su sinkroniciteti: simbol koji se javio tri ili više puta u sedam dana.</p>
+      <h2 data-i18n="dn.vracaju">Simboli koji se vraćaju</h2>
+      <p class="tiho" data-i18n="dn.vracajuOpis">Zadnjih 30 dana. Istaknuti su sinkroniciteti: simbol koji se javio tri ili više puta u sedam dana.</p>
       <div id="ponavljanja"></div>
     </div>
     <div class="ploca">
-      <h2>Zapisi</h2>
-      <p id="filtar" hidden>Samo zapisi sa simbolom <b id="filtar-ime"></b> · <button type="button" class="cip" id="filtar-makni">prikaži sve</button></p>
+      <h2 data-i18n="dn.zapisiNaslov">Zapisi</h2>
+      <p id="filtar" hidden><span data-i18n="dn.samo">Samo zapisi sa simbolom</span> <b id="filtar-ime"></b> · <button type="button" class="cip" id="filtar-makni" data-i18n="dn.prikaziSve">prikaži sve</button></p>
       <div id="zapisi"></div>
     </div>
   </section>
 
   <section role="tabpanel" id="t-profil" hidden>
     <form class="ploca" id="profil">
-      <h2>Tvoj profil</h2>
-      <p class="tiho">Podaci o rođenju služe za tranzite na tvoju kartu i osobni dan. Ostaju samo na ovom uređaju.</p>
-      <label for="ime">Ime ili nadimak</label><input id="ime" name="ime" autocomplete="nickname">
+      <h2 data-i18n="pr.naslov">Tvoj profil</h2>
+      <p class="tiho" data-i18n="pr.opis">Podaci o rođenju služe za tranzite na tvoju kartu i osobni dan. Ostaju samo na ovom uređaju.</p>
+      <label for="ime" data-i18n="pr.ime">Ime ili nadimak</label><input id="ime" name="ime" autocomplete="nickname">
       <div class="red">
-        <div><label for="datum">Datum rođenja</label><input id="datum" name="datum" type="date"></div>
-        <div><label for="vrijeme">Vrijeme rođenja (ako znaš)</label><input id="vrijeme" name="vrijeme" type="time"></div>
+        <div><label for="datum" data-i18n="pr.datum">Datum rođenja</label><input id="datum" name="datum" type="date"></div>
+        <div><label for="vrijeme" data-i18n="pr.vrijeme">Vrijeme rođenja (ako znaš)</label><input id="vrijeme" name="vrijeme" type="time"></div>
       </div>
       <div class="red">
-        <div><label for="mjesto">Mjesto rođenja</label><select id="mjesto" name="mjesto"></select></div>
-        <div><label for="zivi">Gdje živiš (za nebo i planetarne sate)</label><select id="zivi" name="zivi"></select></div>
+        <div><label for="mjesto" data-i18n="pr.mjesto">Mjesto rođenja</label><select id="mjesto" name="mjesto"></select></div>
+        <div><label for="zivi" data-i18n="pr.zivi">Gdje živiš (za nebo i planetarne sate)</label><select id="zivi" name="zivi"></select></div>
       </div>
-      <button class="gumb" type="submit">Spremi</button>
+      <button class="gumb" type="submit" data-i18n="pr.spremi">Spremi</button>
       <div id="profil-spremljeno" aria-live="polite"></div>
     </form>
     <div class="ploca">
-      <h2>Tvoji podaci</h2>
-      <p class="tiho">Izvezi sve kao tekst za sigurnosnu kopiju ili obriši sve s ovog uređaja.</p>
-      <button class="gumb" type="button" id="izvoz">Izvezi sve podatke</button>
+      <h2 data-i18n="pr.podaci">Tvoji podaci</h2>
+      <p class="tiho" data-i18n="pr.podaciOpis">Izvezi sve kao tekst za sigurnosnu kopiju ili obriši sve s ovog uređaja.</p>
+      <button class="gumb" type="button" id="izvoz" data-i18n="pr.izvezi">Izvezi sve podatke</button>
       <div id="izvoz-poruka" aria-live="polite"></div>
-      <textarea id="izvoz-tekst" readonly hidden aria-label="Izvezeni podaci"></textarea>
-      <button class="gumb" type="button" id="brisi-sve">Obriši sve podatke s ovog uređaja</button>
+      <textarea id="izvoz-tekst" readonly hidden aria-label="Izvezeni podaci" data-i18n-aria="pr.izvozAria"></textarea>
+      <button class="gumb" type="button" id="brisi-sve" data-i18n="pr.brisi">Obriši sve podatke s ovog uređaja</button>
     </div>
   </section>
 </main>
+<script src="i18n.js"></script>
+<script src="jezici/hr.js"></script>
+<script src="jezici/en.js"></script>
+<script src="jezici/de.js"></script>
+<script src="jezici/it.js"></script>
+<script src="jezici/es.js"></script>
+<script src="jezici/fr.js"></script>
+<script src="jezici/sl.js"></script>
+<script src="jezici/sr.js"></script>
+<script src="jezici/ru.js"></script>
+<script src="jezici/uk.js"></script>
 <script src="astronomy.js"></script>
 <script src="asteroids.js"></script>
 <script src="core.js"></script>
 <script src="simboli.js"></script>
 <script src="nebo.js"></script>
 <script src="prijedlozi.js"></script>
+<script>I18n.prevedi(); I18n.izbornik(document.getElementById('jezik'));</script>
 <script src="app.js"></script>
 <script src="/glazba.js" defer></script>
 </body>

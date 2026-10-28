@@ -5,24 +5,9 @@
 var Prijedlozi = (function (A, N) {
   'use strict';
   var DAN = 86400000;
-  var KUCE = ['ja, tijelo i novi počeci', 'vrijednosti, sredstva i osjećaj sigurnosti', 'riječ, učenje, braća i bliski putevi', 'dom, korijeni i obitelj',
-    'stvaranje, ljubav, djeca i radost', 'rad, zdravlje i svakodnevni red', 'partnerstva i bliski odnosi', 'preobrazba, dubina i zajednička dobra',
-    'smisao, vjera, učitelji i daleki putevi', 'poziv, ugled i put u svijetu', 'prijatelji, zajednica i nade', 'tišina, snovi, skriveno i predanje'];
-  var ZNAK_TEMA = ['hrabrost i početak', 'tijelo, zemlja i strpljenje', 'riječ, susret i radoznalost', 'dom, majka i osjećaji', 'srce, igra i stvaranje',
-    'red, zdravlje i služenje', 'ravnoteža i odnosi', 'dubina, preobrazba i tajna', 'smisao, put i daljine', 'oblik, trajnost i odgovornost',
-    'sloboda, zajednica i novo', 'snovi, suosjećanje i predanje'];
   var VLADAR = ['mars', 'venus', 'mercury', 'moon', 'sun', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'saturn', 'jupiter'];
-  var PLANET_TEMA = { sun: 'svijest, volju i životnu snagu', moon: 'osjećaje, potrebe i snove', mercury: 'misli, riječi i putovanja', venus: 'ljubav, ljepotu i vrijednosti',
-    mars: 'odlučnost, želju i djelovanje', jupiter: 'rast, vjeru i darove', saturn: 'oblik, granice i zrelost', uranus: 'buđenje, slobodu i iznenađenja',
-    neptune: 'snove, maštu i rastapanje granica', pluto: 'duboku preobrazbu i snagu', asc: 'način na koji ulaziš u svijet', mc: 'poziv i put u svijetu' };
-  var ASPEKTI = [[0, 'konjunkcija', '☌', 'stapa se s'], [60, 'sekstil', '⚹', 'otvara vrata prema'], [90, 'kvadrat', '□', 'izaziva'], [120, 'trigon', '△', 'teče skladno s'], [180, 'opozicija', '☍', 'zrcali']];
-  var ASPEKT_U = { konjunkcija: 'u konjunkciji', sekstil: 'u sekstilu', kvadrat: 'u kvadratu', trigon: 'u trigonu', opozicija: 'u opoziciji' };
-  var S_KIM = { sun: 'Suncem', moon: 'Mjesecom', mercury: 'Merkurom', venus: 'Venerom', mars: 'Marsom', jupiter: 'Jupiterom', saturn: 'Saturnom', asc: 'Ascendentom', mc: 'Sredinom neba' };
-  var ZENSKI = { venus: 1 };
-  var ASPEKT_ZRCALO = { konjunkcija: 'Novi početak u tom dijelu tebe.', sekstil: 'Mala vrata; dovoljno ih je primijetiti.', kvadrat: 'Napetost koja traži promjenu, ne borbu.',
-    trigon: 'Tok je lagan; prepusti mu se.', opozicija: 'Svijet izvana zrcali ono što je u tebi.' };
-  var BROJ_TEMA = { 1: 'početak', 2: 'suradnju i slušanje', 3: 'izražavanje', 4: 'temelje', 5: 'promjenu', 6: 'brigu i dom', 7: 'tišinu i unutarnji uvid',
-    8: 'snagu i plod rada', 9: 'završetak i otpuštanje', 11: 'nadahnuće', 22: 'gradnju velikoga' };
+  var ASPEKTI = [[0, 'konjunkcija', '☌'], [60, 'sekstil', '⚹'], [90, 'kvadrat', '□'], [120, 'trigon', '△'], [180, 'opozicija', '☍']];   // ključevi; tekstovi u I18n
+  var t = I18n.t;
 
   function zbroj(n) { while (n > 9 && n !== 11 && n !== 22) n = String(n).split('').reduce(function (a, c) { return a + +c; }, 0); return n; }
   function osobnaGodina(r, g) { return zbroj(zbroj(r.d) + zbroj(r.m) + zbroj(g)); }
@@ -70,13 +55,13 @@ var Prijedlozi = (function (A, N) {
 
   // Mijene između dva trenutka: mlađak, prva četvrt, uštap, zadnja četvrt.
   function mijene(od, do_, natal) {
-    var out = [], imena = { 0: 'Mlađak', 90: 'Prva četvrt', 180: 'Uštap', 270: 'Zadnja četvrt' };
+    var out = [], kljucevi = { 0: 'mladak', 90: 'prva', 180: 'ustap', 270: 'zadnja' };
     [0, 90, 180, 270].forEach(function (kut) {
       var t = A.MakeTime(new Date(od));
       while (true) {
         var r = A.SearchMoonPhase(kut, t, 40); if (!r || r.date.getTime() > do_) break;
         var lon = A.EclipticGeoMoon(r).lon, znak = Math.floor(lon / 30);
-        out.push({ vrsta: 'mijena', kut: kut, ime: imena[kut], ms: r.date.getTime(), znak: znak, kuca: kucaOd(lon, natal) });
+        out.push({ vrsta: 'mijena', kut: kut, kljuc: kljucevi[kut], ms: r.date.getTime(), znak: znak, kuca: kucaOd(lon, natal) });
         t = r.AddDays(1);
       }
     });
@@ -124,10 +109,10 @@ var Prijedlozi = (function (A, N) {
   function pomrcine(od, do_, natal) {
     var out = [], t = A.MakeTime(new Date(od));
     for (var i = 0; i < 6; i++) { var l = A.SearchLunarEclipse(t.date); if (l.peak.date.getTime() > do_) break;
-      var lon = A.EclipticGeoMoon(l.peak).lon; out.push({ vrsta: 'pomrcina', ms: l.peak.date.getTime(), ime: 'Pomrčina Mjeseca', vrstaP: l.kind, znak: Math.floor(lon / 30), kuca: kucaOd(lon, natal) }); t = l.peak.AddDays(10); }
+      var lon = A.EclipticGeoMoon(l.peak).lon; out.push({ vrsta: 'pomrcina', ms: l.peak.date.getTime(), ime: 'mjesec', vrstaP: l.kind, znak: Math.floor(lon / 30), kuca: kucaOd(lon, natal) }); t = l.peak.AddDays(10); }
     t = A.MakeTime(new Date(od));
     for (var j = 0; j < 6; j++) { var s = A.SearchGlobalSolarEclipse(t.date); if (s.peak.date.getTime() > do_) break;
-      var lo = A.SunPosition(s.peak).elon; out.push({ vrsta: 'pomrcina', ms: s.peak.date.getTime(), ime: 'Pomrčina Sunca', vrstaP: s.kind, znak: Math.floor(lo / 30), kuca: kucaOd(lo, natal) }); t = s.peak.AddDays(10); }
+      var lo = A.SunPosition(s.peak).elon; out.push({ vrsta: 'pomrcina', ms: s.peak.date.getTime(), ime: 'sunce', vrstaP: s.kind, znak: Math.floor(lo / 30), kuca: kucaOd(lo, natal) }); t = s.peak.AddDays(10); }
     return out.sort(function (a, b) { return a.ms - b.ms; });
   }
 
@@ -140,31 +125,27 @@ var Prijedlozi = (function (A, N) {
     return { ms: ms, asc: Math.floor(c.houses.asc / 30), kucaSunca: sunce.house };
   }
 
-  /* ---------- tekstovi ---------- */
-  function uZnak(i) { var z = Nebo.znak(i); return /a$/.test(z) ? z.slice(0, -1) + 'u' : z; }
-  function kucaTekst(k) { return k ? ' u tvojoj ' + k + '. kući (' + KUCE[k - 1] + ')' : ''; }
+  /* ---------- tekstovi (na trenutnom jeziku, I18n) ---------- */
   function opis(d) {
-    var P = Nebo.planet, Z = Nebo.znak;
+    var G = Nebo.glifZnaka;
     switch (d.vrsta) {
       case 'mijena':
-        var mz = { 'Mlađak': 'Sjeme: tiho imenuj jednu namjeru i pusti je.', 'Prva četvrt': 'Prvi otpor; promotri ga bez borbe.',
-          'Uštap': 'Svjetlost otkriva skriveno; primijeti što ti se pokazuje.', 'Zadnja četvrt': 'Otpusti ono što više ne nosi tvoj put.' }[d.ime];
-        return { naslov: d.ime + ' u znaku ' + Z(d.znak) + ' ' + Nebo.glifZnaka(d.znak), tekst: 'Tema: ' + ZNAK_TEMA[d.znak] + kucaTekst(d.kuca) + '. ' + mz };
+        return { naslov: t('dog.mijena.naslov', { mijena: t('mijena.' + d.kljuc), znak: Nebo.znak(d.znak), glif: G(d.znak) }), tekst: t('dog.mijena.tekst', d) };
       case 'povratak':
-        return { naslov: 'Mjesečev povratak', tekst: 'Mjesec se vraća na mjesto gdje je bio kad si se rodio: nov osjećajni krug od četiri tjedna. Ascendent povratka u znaku ' + Z(d.asc) + ' boji ga temom: ' + ZNAK_TEMA[d.asc] + '.' };
+        return { naslov: t('dog.povratak.naslov'), tekst: t('dog.povratak.tekst', { znak: Nebo.znak(d.asc), tema: I18n.niz('znakTema', d.asc) }) };
       case 'ulazak':
-        return { naslov: P(d.planet) + (d.retro ? ' se vraća u ' : ' ulazi u ') + uZnak(d.znak) + ' ' + Nebo.glifZnaka(d.znak), tekst: 'Za ' + PLANET_TEMA[d.planet] + ' počinje vrijeme teme: ' + ZNAK_TEMA[d.znak] + '.' };
+        return { naslov: t('dog.ulazak.naslov', { planet: d.planet, znak: d.znak, retro: d.retro, glif: G(d.znak) }), tekst: t('dog.ulazak.tekst', d) };
       case 'postaja':
-        return { naslov: P(d.planet) + (d.retro ? (ZENSKI[d.planet] ? ' postaje retrogradna' : ' postaje retrogradan') : ' ponovno ide naprijed') + ' (' + Z(d.znak) + ')',
-          tekst: d.retro ? 'Vrijeme da se ' + PLANET_TEMA[d.planet] + ' okrene prema unutra: ponovno promisli, ne žuri.' : 'Ono što je sazrijevalo iznutra sada se smije pokazati.' };
+        return { naslov: t('dog.postaja.naslov', d), tekst: t('dog.postaja.tekst', d) };
       case 'tranzit':
-        return { naslov: P(d.planet) + ' ' + d.aspekt[1] + ' natalni ' + P(d.natal) + ' ' + d.aspekt[2],
-          tekst: (ZENSKI[d.planet] ? 'Tranzitna ' : 'Tranzitni ') + P(d.planet) + ' (' + PLANET_TEMA[d.planet] + ') ' + ASPEKT_U[d.aspekt[1]] + ' je s tvojim natalnim ' + S_KIM[d.natal] + kucaTekst(d.kuca) + '. ' + ASPEKT_ZRCALO[d.aspekt[1]] };
+        var p = { planet: d.planet, natal: d.natal, aspekt: d.aspekt[1], glif: d.aspekt[2], kuca: d.kuca };
+        return { naslov: t('dog.tranzit.naslov', p), tekst: t('dog.tranzit.tekst', p) };
       case 'pomrcina':
-        return { naslov: d.ime + ' u znaku ' + Z(d.znak), tekst: 'Pomrčine otvaraju i zatvaraju poglavlja' + kucaTekst(d.kuca) + '. Ne treba ništa forsirati; prati što se samo mijenja oko ' + ZNAK_TEMA[d.znak] + '.' };
+        return { naslov: t('dog.pomrcina.naslov', { ime: t('dog.pomrcina.' + d.ime), znak: Nebo.znak(d.znak) }), tekst: t('dog.pomrcina.tekst', d) };
     }
     return { naslov: '', tekst: '' };
   }
+  function datumDug(ms) { return new Date(ms).toLocaleDateString(I18n.locale(), { day: 'numeric', month: 'long', year: 'numeric' }); }
 
   /* ---------- mjesec ---------- */
   function mjesec(profil, mj, sada) {
@@ -175,11 +156,11 @@ var Prijedlozi = (function (A, N) {
       .concat(natal ? mjesecevPovratak(od, do_, natal, mj) : [])
       .concat(kretanja(od, do_, natal, mj, ['sun', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'], natal ? ['sun', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'] : []))
       .sort(function (a, b) { return a.ms - b.ms; });
-    var mladak = dog.filter(function (d) { return d.ime === 'Mlađak'; })[0], ustap = dog.filter(function (d) { return d.ime === 'Uštap'; })[0];
+    var mladak = dog.filter(function (d) { return d.kljuc === 'mladak'; })[0], ustap = dog.filter(function (d) { return d.kljuc === 'ustap'; })[0];
     var sazetak = [];
-    if (profil && profil.rodenje) sazetak.push('<b>Osobni mjesec ' + osobniMjesec(profil.rodenje, sada.getFullYear(), sada.getMonth() + 1) + ':</b> mjesec za ' + BROJ_TEMA[osobniMjesec(profil.rodenje, sada.getFullYear(), sada.getMonth() + 1)] + '.');
-    if (mladak) sazetak.push('<b>Sjeme mjeseca</b> pada u znak ' + Nebo.znak(mladak.znak) + (mladak.kuca ? ', u tvoju ' + mladak.kuca + '. kuću: ' + KUCE[mladak.kuca - 1] : ': ' + ZNAK_TEMA[mladak.znak]) + '.');
-    if (ustap) sazetak.push('<b>Vrhunac mjeseca</b> (uštap) pada u znak ' + Nebo.znak(ustap.znak) + (ustap.kuca ? ', u tvoju ' + ustap.kuca + '. kuću: ' + KUCE[ustap.kuca - 1] : ': ' + ZNAK_TEMA[ustap.znak]) + '.');
+    if (profil && profil.rodenje) { var om = osobniMjesec(profil.rodenje, sada.getFullYear(), sada.getMonth() + 1); sazetak.push(t('mj.osobni', { n: om, tema: t('broj.' + om) })); }
+    if (mladak) sazetak.push(t('mj.sjeme', mladak));
+    if (ustap) sazetak.push(t('mj.vrhunac', ustap));
     return { od: od, do_: do_, sazetak: sazetak, dogadaji: dog.map(function (d) { var o = opis(d); o.ms = d.ms; o.vrsta = d.vrsta; return o; }) };
   }
 
@@ -198,11 +179,9 @@ var Prijedlozi = (function (A, N) {
       .concat(kretanja(sr.ms, sljedeci.ms, natal, mj, ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto'], ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto'], 2 * DAN))
       .sort(function (a, b) { return a.ms - b.ms; });
     var sazetak = [
-      '<b>Sunčev povratak</b> ' + new Date(sr.ms).toLocaleDateString('hr-HR', { day: 'numeric', month: 'long', year: 'numeric' }) + ': ascendent godine u znaku ' + Nebo.znak(sr.asc) + ' ' + Nebo.glifZnaka(sr.asc) +
-        ' (' + ZNAK_TEMA[sr.asc] + ')' + (sr.kucaSunca ? '; Sunce godine sja u ' + sr.kucaSunca + '. kući: ' + KUCE[sr.kucaSunca - 1] : '') + '.',
-      r.bezVremena ? '' : '<b>Profekcija:</b> u ' + (dob + 1) + '. godini života (' + dob + ' navršenih) aktivna je tvoja ' + profKuca + '. kuća, ' + KUCE[profKuca - 1] +
-        ', u znaku ' + Nebo.znak(profZnak) + '. <b>Gospodar godine</b> je ' + Nebo.planet(gospodar) + ' ' + Nebo.glifPlaneta(gospodar) + ': prati njegove tranzite, kroz njih ti godina govori.',
-      '<b>Osobna godina ' + og + ':</b> godina za ' + BROJ_TEMA[og] + '.'
+      t('god.sr', { datum: datumDug(sr.ms), asc: sr.asc, glif: Nebo.glifZnaka(sr.asc), kuca: r.bezVremena ? null : sr.kucaSunca }),
+      r.bezVremena ? '' : t('god.prof', { dob: dob, kuca: profKuca, znak: profZnak, gospodar: gospodar, glif: Nebo.glifPlaneta(gospodar) }),
+      t('god.osobna', { n: og, tema: t('broj.' + og) })
     ].filter(Boolean);
     return { od: sr.ms, do_: sljedeci.ms, sazetak: sazetak, gospodar: gospodar, dogadaji: dog.map(function (d) { var o = opis(d); o.ms = d.ms; o.vrsta = d.vrsta; o.gospodar = d.planet === gospodar; return o; }) };
   }
@@ -220,5 +199,5 @@ var Prijedlozi = (function (A, N) {
     return l.join('\r\n');
   }
 
-  return { mjesec: mjesec, godina: godina, ics: ics, KUCE: KUCE };
+  return { mjesec: mjesec, godina: godina, ics: ics, datumDug: datumDug };
 })(Astronomy, Natal);

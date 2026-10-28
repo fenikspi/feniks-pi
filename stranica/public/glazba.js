@@ -119,12 +119,15 @@
 
   var gumb = document.createElement('button');
   gumb.type = 'button'; gumb.className = 'feniks-glazba';
+  // tekst na jeziku aplikacije ako postoji I18n (web-aplikacija), inače hrvatski (stranica)
+  function rijec(k, hr) { return window.I18n ? I18n.t(k) : hr; }
   function osvjezi() {
     gumb.setAttribute('aria-pressed', svira ? 'true' : 'false');
-    gumb.setAttribute('aria-label', svira ? 'Zaustavi glazbu' : 'Pusti drevnu glazbu');
-    gumb.title = svira ? 'Zaustavi glazbu' : 'Pusti drevnu glazbu';
-    gumb.textContent = svira ? '♪ glazba svira' : '♪ glazba';
+    gumb.setAttribute('aria-label', svira ? rijec('glazba.zaustavi', 'Zaustavi glazbu') : rijec('glazba.pusti', 'Pusti drevnu glazbu'));
+    gumb.title = gumb.getAttribute('aria-label');
+    gumb.textContent = svira ? rijec('glazba.svira', '♪ glazba svira') : rijec('glazba.gumb', '♪ glazba');
   }
+  if (window.I18n) I18n.promjena(function () { osvjezi(); });
   gumb.addEventListener('click', function () { svira ? zaustavi() : pokreni(); });
   var css = document.createElement('style');
   css.textContent = '.feniks-glazba{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;' +

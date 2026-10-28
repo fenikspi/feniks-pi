@@ -2,22 +2,20 @@
    planetarni sat i, ako postoji profil, tranziti na natalnu kartu. Sve se računa na uređaju (astronomy-engine, core.js). */
 var Nebo = (function (A, N) {
   'use strict';
-  var ZNAKOVI = ['Ovan', 'Bik', 'Blizanci', 'Rak', 'Lav', 'Djevica', 'Vaga', 'Škorpion', 'Strijelac', 'Jarac', 'Vodenjak', 'Ribe'];
   var GLIFOVI = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
-  var PLANETI = { sun: ['Sunce', '☉'], moon: ['Mjesec', '☽'], mercury: ['Merkur', '☿'], venus: ['Venera', '♀'], mars: ['Mars', '♂'],
-    jupiter: ['Jupiter', '♃'], saturn: ['Saturn', '♄'], uranus: ['Uran', '♅'], neptune: ['Neptun', '♆'], pluto: ['Pluton', '♇'],
-    node: ['Mjesečev čvor', '☊'], asc: ['Ascendent', 'AC'], mc: ['Sredina neba', 'MC'] };
+  // imena planeta i znakova dolaze iz jezika (I18n); ovdje samo glifovi
+  var PLANETI = { sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂', jupiter: '♃', saturn: '♄', uranus: '♅', neptune: '♆', pluto: '♇', node: '☊', asc: 'AC', mc: 'MC' };
   var VS = '︎';
   // Kaldejski red za planetarne sate i vladar dana (nedjelja = Sunce …)
   var KALDEJSKI = ['saturn', 'jupiter', 'mars', 'sun', 'venus', 'mercury', 'moon'];
   var VLADAR_DANA = ['sun', 'moon', 'mars', 'mercury', 'jupiter', 'venus', 'saturn'];
-  var ASPEKTI = [[0, 'konjunkcija', '☌'], [60, 'sekstil', '⚹'], [90, 'kvadrat', '□'], [120, 'trigon', '△'], [180, 'opozicija', '☍']];
+  var ASPEKTI = [[0, 'konjunkcija', '☌'], [60, 'sekstil', '⚹'], [90, 'kvadrat', '□'], [120, 'trigon', '△'], [180, 'opozicija', '☍']];   // ključevi aspekata (prijevod u I18n)
 
   function mijena(datum) {
     var k = A.MoonPhase(datum);                                  // 0 mlađak, 90 prva četvrt, 180 uštap, 270 zadnja četvrt
-    var ime = k < 22.5 || k >= 337.5 ? 'Mlađak' : k < 67.5 ? 'Mladi Mjesec raste' : k < 112.5 ? 'Prva četvrt' : k < 157.5 ? 'Mjesec raste prema uštapu'
-      : k < 202.5 ? 'Uštap' : k < 247.5 ? 'Mjesec se smanjuje' : k < 292.5 ? 'Zadnja četvrt' : 'Stari Mjesec';
-    return { kut: Math.round(k), ime: ime, raste: k < 180, osvijetljeno: Math.round(A.Illumination(A.Body.Moon, datum).phase_fraction * 100) };
+    var kljuc = k < 22.5 || k >= 337.5 ? 'mladak' : k < 67.5 ? 'mladi' : k < 112.5 ? 'prva' : k < 157.5 ? 'raste'
+      : k < 202.5 ? 'ustap' : k < 247.5 ? 'opada' : k < 292.5 ? 'zadnja' : 'stari';
+    return { kut: Math.round(k), kljuc: kljuc, raste: k < 180, osvijetljeno: Math.round(A.Illumination(A.Body.Moon, datum).phase_fraction * 100) };
   }
 
   // Planetarni sat: dan od izlaska do zalaska Sunca i noć do sljedećeg izlaska, svaki podijeljen na 12 jednakih sati.
@@ -31,7 +29,7 @@ var Nebo = (function (A, N) {
       var sat = Math.floor((datum - od) / ((do_ - od) / 12)), danUTjednu = izlazak.date.getDay();
       var prvi = KALDEJSKI.indexOf(VLADAR_DANA[danUTjednu]), redni = (danju ? 0 : 12) + sat;
       var vladar = KALDEJSKI[(prvi + redni) % 7];
-      return { vladar: vladar, ime: PLANETI[vladar][0], glif: PLANETI[vladar][1], danju: danju, redni: sat + 1, izlazak: izlazak.date, zalazak: zalazak.date };
+      return { vladar: vladar, glif: PLANETI[vladar] + '︎', danju: danju, redni: sat + 1, izlazak: izlazak.date, zalazak: zalazak.date };
     } catch (e) { return null; }
   }
 
@@ -53,8 +51,7 @@ var Nebo = (function (A, N) {
         var r = N.angDiff(t.lon, n.lon);
         ASPEKTI.forEach(function (a) {
           var o = Math.abs(r - a[0]);
-          if (o <= orbis) out.push({ t: t.id, n: n.id, aspekt: a[1], glif: a[2], orbis: Math.round(o * 10) / 10,
-            tekst: PLANETI[t.id][0] + ' ' + a[1] + ' natalni ' + PLANETI[n.id][0] + (n.house ? ' (' + n.house + '. kuća)' : '') });
+          if (o <= orbis) out.push({ t: t.id, n: n.id, aspekt: a[1], glif: a[2], orbis: Math.round(o * 10) / 10, kuca: n.house || null });
         });
       });
     });
@@ -69,13 +66,18 @@ var Nebo = (function (A, N) {
     });
     return {
       vrijeme: datum.toISOString(), polozaji: polozaji, mijena: mijena(datum), sat: planetarniSat(datum, mjesto.lat, mjesto.lon),
-      tranziti: tranziti(sada, nat).slice(0, 8).map(function (t) { return { tekst: t.tekst, glif: t.glif, orbis: t.orbis, t: t.t, n: t.n, aspekt: t.aspekt }; })
+      tranziti: tranziti(sada, nat).slice(0, 8).map(function (t) { return { glif: t.glif, orbis: t.orbis, t: t.t, n: t.n, aspekt: t.aspekt, kuca: t.kuca }; })
     };
   }
 
-  function znak(i) { return ZNAKOVI[i]; }
+  function znak(i) { return I18n.niz('znakovi', i); }
   function glifZnaka(i) { return GLIFOVI[i] + VS; }
-  function planet(id) { return PLANETI[id] ? PLANETI[id][0] : id; }
-  function glifPlaneta(id) { return PLANETI[id] ? PLANETI[id][1] + (PLANETI[id][1].length === 1 ? VS : '') : ''; }
-  return { trenutak: trenutak, mijena: mijena, planetarniSat: planetarniSat, natalna: natalna, tranziti: tranziti, znak: znak, glifZnaka: glifZnaka, planet: planet, glifPlaneta: glifPlaneta, ZNAKOVI: ZNAKOVI };
+  function planet(id) { return I18n.t('planet.' + id); }
+  function glifPlaneta(id) { return PLANETI[id] ? PLANETI[id] + (PLANETI[id].length === 1 ? VS : '') : ''; }
+  // Ime mijene i kratki opis tranzita na trenutnom jeziku (i za starije zapise koji su čuvali hrvatski naziv).
+  var STARE = { 'Mlađak': 'mladak', 'Mladi Mjesec raste': 'mladi', 'Prva četvrt': 'prva', 'Mjesec raste prema uštapu': 'raste', 'Uštap': 'ustap', 'Mjesec se smanjuje': 'opada', 'Zadnja četvrt': 'zadnja', 'Stari Mjesec': 'stari' };
+  function imeMijene(m) { return I18n.t('mijena.' + (m.kljuc || STARE[m.ime] || 'mladak')); }
+  function tranzitTekst(tr) { return I18n.t('tranzit.kratko', tr); }
+  return { trenutak: trenutak, mijena: mijena, planetarniSat: planetarniSat, natalna: natalna, tranziti: tranziti, znak: znak, glifZnaka: glifZnaka, planet: planet,
+    glifPlaneta: glifPlaneta, imeMijene: imeMijene, tranzitTekst: tranzitTekst };
 })(Astronomy, Natal);

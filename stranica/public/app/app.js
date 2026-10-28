@@ -10,7 +10,7 @@
     'Vukovar': [45.351, 19.002], 'Čakovec': [46.384, 16.434], 'Požega': [45.340, 17.685], 'Gospić': [44.546, 15.375], 'Virovitica': [45.832, 17.384],
     'Sarajevo': [43.856, 18.413], 'Mostar': [43.343, 17.808], 'Ljubljana': [46.056, 14.506], 'Beograd': [44.787, 20.457], 'Beč': [48.208, 16.373], 'München': [48.137, 11.575]
   };
-  var VRSTE = { san: 'San', znak: 'Znak', susret: 'Susret', sinkronicitet: 'Sinkronicitet', misao: 'Misao' };
+  var t = I18n.t;
 
   /* ---------- pohrana na uređaju ---------- */
   var baza = new Promise(function (ok, ne) {
@@ -37,7 +37,7 @@
   var stanje = { profil: null, zapisi: [] };
   function mjesto() { var p = stanje.profil, m = p && p.zivi && MJESTA[p.zivi] || MJESTA.Zagreb; return { lat: m[0], lon: m[1] }; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function datum(iso) { return new Date(iso).toLocaleString('hr-HR', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+  function datum(iso) { return new Date(iso).toLocaleString(I18n.locale(), { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
 
   /* ---------- sinkronicitet: simboli koji se ponavljaju ---------- */
   function ponavljanja(zapisi, dana) {
@@ -52,48 +52,30 @@
   function osobniDan(r, d) { return r ? zbroj(zbroj(r.d) + zbroj(r.m) + zbroj(d.getFullYear()) + zbroj(d.getMonth() + 1) + zbroj(d.getDate())) : null; }
 
   /* ---------- dnevna preporuka: zrcalo, ne zapovijed ---------- */
-  var MIJENA_SAVJET = {
-    'Mlađak': 'Vrijeme sjemena. Ne moraš znati kamo vodi; dovoljno je tiho imenovati jednu želju i pustiti je.',
-    'Mladi Mjesec raste': 'Ono što si posijao traži malo pažnje, ne napora. Prati što te samo od sebe privlači.',
-    'Prva četvrt': 'Prvi otpor na putu. Promotri ga bez borbe: možda pokazuje gdje se treba prepustiti, a ne gurati.',
-    'Mjesec raste prema uštapu': 'Stvari dozrijevaju. Dopusti im vrijeme; dotjeraj samo ono što se samo nudi.',
-    'Uštap': 'Puna svjetlost pokazuje ono što je bilo skriveno. Primijeti što ti se danas otkriva u snovima i susretima.',
-    'Mjesec se smanjuje': 'Vrijeme zahvalnosti i dijeljenja. Što si primio, pusti dalje.',
-    'Zadnja četvrt': 'Vrijeme otpuštanja. Što više ne nosi tvoj put, može otići bez žaljenja.',
-    'Stari Mjesec': 'Tišina prije novoga. Odmori se, sanjaj i zapisuj; odgovori dolaze u snu.'
-  };
-  var ZNAK_TEMA = ['hrabrost i početak', 'tijelo, zemlja i strpljenje', 'riječ, susret i radoznalost', 'dom, majka i osjećaji', 'srce, igra i stvaranje',
-    'red, zdravlje i služenje', 'ravnoteža i odnosi', 'dubina, preobrazba i tajna', 'smisao, put i daljine', 'oblik, trajnost i odgovornost',
-    'sloboda, zajednica i novo', 'snovi, suosjećanje i predanje'];
-  var SAT_SAVJET = { sun: 'jasnoću i lice prema svijetu', moon: 'osjećaje, snove i obitelj', mercury: 'riječi, pisanje i dogovore', venus: 'ljepotu, ljubav i pomirenje',
-    mars: 'odlučnost i tijelo', jupiter: 'širinu, učenje i darežljivost', saturn: 'red, granice i strpljenje' };
-  var BROJ_TEMA = { 1: 'početak', 2: 'suradnju i slušanje', 3: 'izražavanje', 4: 'temelje', 5: 'promjenu', 6: 'brigu i dom', 7: 'tišinu i unutarnji uvid', 8: 'snagu i plod rada', 9: 'završetak i otpuštanje', 11: 'nadahnuće', 22: 'gradnju velikoga' };
-
   function preporuka(nebo) {
     var mj = nebo.mijena, mjesec = nebo.polozaji.filter(function (p) { return p.id === 'moon'; })[0], dijelovi = [];
-    dijelovi.push('<p><b>' + esc(mj.ime) + '</b> · Mjesec u znaku ' + esc(Nebo.znak(mjesec.znak)) + ' ' + Nebo.glifZnaka(mjesec.znak) + ', tema dana: ' + ZNAK_TEMA[mjesec.znak] + '. ' + MIJENA_SAVJET[mj.ime] + '</p>');
+    dijelovi.push('<p>' + t('danas.mjesec', { mijena: esc(Nebo.imeMijene(mj)), znak: esc(Nebo.znak(mjesec.znak)), glif: Nebo.glifZnaka(mjesec.znak),
+      tema: I18n.niz('znakTema', mjesec.znak), savjet: t('savjet.' + mj.kljuc) }) + '</p>');
     if (nebo.tranziti.length) {
-      var t = nebo.tranziti[0];
-      dijelovi.push('<p><b>Na tvojoj karti:</b> ' + esc(t.tekst) + ' ' + t.glif + '. ' +
-        ({ konjunkcija: 'Nova snaga stapa se s tim dijelom tebe.', sekstil: 'Otvaraju se mala vrata; dovoljno je primijetiti ih.', kvadrat: 'Napetost je poziv na promjenu, ne na borbu.',
-          trigon: 'Tok je lagan; prepusti mu se.', opozicija: 'Netko ili nešto izvana zrcali ti ono što je u tebi.' })[t.aspekt] + '</p>');
+      var tr = nebo.tranziti[0];
+      dijelovi.push('<p>' + t('danas.karta', { tranzit: esc(Nebo.tranzitTekst(tr)), glif: tr.glif, zrcalo: t('zrcalo.' + tr.aspekt) }) + '</p>');
     }
     var mk = izracun[kljuc('mjesec')];
     if (mk) { var danas = mk.dogadaji.filter(function (d) { return istiDan(d.ms, Date.now()); });
-      if (danas.length) dijelovi.push('<p><b>Danas na nebu:</b> ' + danas.map(function (d) { return esc(d.naslov); }).join(' · ') + '.</p>'); }
+      if (danas.length) dijelovi.push('<p>' + t('danas.nebo', { lista: danas.map(function (d) { return esc(d.naslov); }).join(' · ') }) + '</p>'); }
     var od = osobniDan(stanje.profil && stanje.profil.rodenje, new Date());
-    if (od) dijelovi.push('<p><b>Osobni dan ' + od + ':</b> dan za ' + BROJ_TEMA[od] + '.</p>');
-    if (nebo.sat) dijelovi.push('<p><b>Planetarni sat ' + esc(nebo.sat.ime) + ' ' + nebo.sat.glif + ':</b> sada je dobro vrijeme za ' + SAT_SAVJET[nebo.sat.vladar] + '.</p>');
+    if (od) dijelovi.push('<p>' + t('danas.osobni', { n: od, tema: t('broj.' + od) }) + '</p>');
+    if (nebo.sat) dijelovi.push('<p>' + t('danas.sat', { planet: esc(Nebo.planet(nebo.sat.vladar)), glif: nebo.sat.glif, savjet: t('sat.' + nebo.sat.vladar) }) + '</p>');
     var sink = sinkroniciteti(stanje.zapisi), pon = ponavljanja(stanje.zapisi, 30);
-    if (sink.length) dijelovi.push('<p><b>Sinkronicitet:</b> simbol <i>' + esc(sink[0].simbol) + '</i> javio se ' + sink[0].puta + ' puta u sedam dana. Prati ga: kamo te vodi?</p>');
-    else if (pon.length && pon[0].puta > 1) dijelovi.push('<p><b>Simbol koji se vraća:</b> <i>' + esc(pon[0].simbol) + '</i> (' + pon[0].puta + ' puta ovaj mjesec).</p>');
-    else dijelovi.push('<p class="tiho">Kad zapisuješ snove i znakove, ovdje će se pokazivati simboli koji se vraćaju i sinkroniciteti.</p>');
+    if (sink.length) dijelovi.push('<p>' + t('danas.sink', { simbol: esc(Simboli.ime(sink[0].simbol)), n: sink[0].puta }) + '</p>');
+    else if (pon.length && pon[0].puta > 1) dijelovi.push('<p>' + t('danas.vraca', { simbol: esc(Simboli.ime(pon[0].simbol)), n: pon[0].puta }) + '</p>');
+    else dijelovi.push('<p class="tiho">' + t('danas.prazno') + '</p>');
     return dijelovi.join('');
   }
 
   /* ---------- mjesec i godina ---------- */
   var izracun = {};                                   // predmemorija po profilu i danu
-  function kljuc(vrsta) { return vrsta + '|' + JSON.stringify(stanje.profil && stanje.profil.rodenje) + '|' + (stanje.profil && stanje.profil.zivi) + '|' + new Date().toDateString(); }
+  function kljuc(vrsta) { return vrsta + '|' + I18n.jezik() + '|' + JSON.stringify(stanje.profil && stanje.profil.rodenje) + '|' + (stanje.profil && stanje.profil.zivi) + '|' + new Date().toDateString(); }
   function izracunaj(vrsta) {
     var k = kljuc(vrsta);
     if (!izracun[k]) izracun[k] = vrsta === 'mjesec' ? Prijedlozi.mjesec(stanje.profil, mjesto()) : Prijedlozi.godina(stanje.profil, mjesto());
@@ -106,11 +88,11 @@
     function stavke(lista) { return lista.map(function (d) {
       var kl = istiDan(d.ms, sad) ? 'danas' : d.ms < sad - 86400000 ? 'proslo' : '';
       if (d.gospodar) kl += ' gospodar';
-      return '<li class="' + kl + '"><time>' + new Date(d.ms).toLocaleDateString('hr-HR', { day: 'numeric', month: 'short', year: el.id === 'godina-dogadaji' ? 'numeric' : undefined }) +
+      return '<li class="' + kl + '"><time>' + new Date(d.ms).toLocaleDateString(I18n.locale(), { day: 'numeric', month: 'short', year: el.id === 'godina-dogadaji' ? 'numeric' : undefined }) +
         '</time><div><b>' + esc(d.naslov) + '</b><p>' + esc(d.tekst) + '</p></div></li>';
     }).join(''); }
-    el.innerHTML = (stavke(dalje) || '<li class="tiho">Do kraja razdoblja nema posebnih događaja.</li>') +
-      (prosli.length ? '<li class="ranije"><details><summary>Ranije (' + prosli.length + ')</summary><ol class="dogadaji">' + stavke(prosli) + '</ol></details></li>' : '');
+    el.innerHTML = (stavke(dalje) || '<li class="tiho">' + t('ui.nemaDog') + '</li>') +
+      (prosli.length ? '<li class="ranije"><details><summary>' + t('ui.ranije', { n: prosli.length }) + '</summary><ol class="dogadaji">' + stavke(prosli) + '</ol></details></li>' : '');
   }
   function preuzmiIcs(dog, ime) {
     var a = document.createElement('a');
@@ -120,20 +102,20 @@
   function prikaziMjesec() {
     setTimeout(function () {
       var M = izracunaj('mjesec');
-      $('#mjesec-naslov').textContent = new Date().toLocaleDateString('hr-HR', { month: 'long', year: 'numeric' }).replace(/^./, function (c) { return c.toUpperCase(); });
-      $('#mjesec-sazetak').innerHTML = M.sazetak.map(function (s) { return '<p>' + s + '</p>'; }).join('') || '<p class="tiho">Upiši datum rođenja u profil za osobni mjesec i kuće.</p>';
+      $('#mjesec-naslov').textContent = new Date().toLocaleDateString(I18n.locale(), { month: 'long', year: 'numeric' }).replace(/^./, function (c) { return c.toUpperCase(); });
+      $('#mjesec-sazetak').innerHTML = M.sazetak.map(function (s) { return '<p>' + s + '</p>'; }).join('') || '<p class="tiho">' + t('mj.bezProfila') + '</p>';
       listaDogadaja($('#mjesec-dogadaji'), M.dogadaji);
-      var b = $('#mjesec-ics'); b.hidden = false; b.onclick = function () { preuzmiIcs(M.dogadaji.filter(function (d) { return d.ms > Date.now() - 86400000; }), 'mjesec'); };
+      var b = $('#mjesec-ics'); b.hidden = false; b.onclick = function () { preuzmiIcs(M.dogadaji.filter(function (d) { return d.ms > Date.now() - 86400000; }), t('ics.mjesec')); };
     }, 30);
   }
   function prikaziGodinu() {
-    if (!stanje.profil || !stanje.profil.rodenje) { $('#godina-sazetak').innerHTML = '<p class="tiho">Za tvoju godinu (Sunčev povratak, profekcija, osobna godina) upiši datum, vrijeme i mjesto rođenja u profil.</p>'; $('#godina-dogadaji').innerHTML = ''; return; }
+    if (!stanje.profil || !stanje.profil.rodenje) { $('#godina-sazetak').innerHTML = '<p class="tiho">' + t('god.bezProfila') + '</p>'; $('#godina-dogadaji').innerHTML = ''; return; }
     setTimeout(function () {
       var G = izracunaj('godina');
-      $('#godina-naslov').textContent = 'Tvoja godina: ' + new Date(G.od).toLocaleDateString('hr-HR', { day: 'numeric', month: 'long', year: 'numeric' }) + ' – ' + new Date(G.do_).toLocaleDateString('hr-HR', { day: 'numeric', month: 'long', year: 'numeric' });
+      $('#godina-naslov').textContent = t('god.naslov', { od: Prijedlozi.datumDug(G.od), do: Prijedlozi.datumDug(G.do_) });
       $('#godina-sazetak').innerHTML = G.sazetak.map(function (s) { return '<p>' + s + '</p>'; }).join('');
       listaDogadaja($('#godina-dogadaji'), G.dogadaji);
-      var b = $('#godina-ics'); b.hidden = false; b.onclick = function () { preuzmiIcs(G.dogadaji.filter(function (d) { return d.ms > Date.now() - 86400000; }), 'godina'); };
+      var b = $('#godina-ics'); b.hidden = false; b.onclick = function () { preuzmiIcs(G.dogadaji.filter(function (d) { return d.ms > Date.now() - 86400000; }), t('ics.godina')); };
     }, 30);
   }
 
@@ -144,27 +126,28 @@
     $('#danas-nebo').innerHTML = nebo.polozaji.map(function (p) {
       return '<li><span class="g">' + Nebo.glifPlaneta(p.id) + '</span> ' + esc(Nebo.planet(p.id)) + ' <span class="tiho">' + esc(Nebo.znak(p.znak)) + ' ' + p.stupanj + '°' + (p.retro ? ' ℞' : '') + '</span></li>';
     }).join('');
-    $('#pozdrav').textContent = stanje.profil && stanje.profil.ime ? 'Pozdrav, ' + stanje.profil.ime : 'Dobro došli';
+    $('#pozdrav').textContent = stanje.profil && stanje.profil.ime ? t('ui.pozdravIme', { ime: stanje.profil.ime }) : t('ui.pozdrav');
   }
 
   function prikaziDnevnik() {
     var sink = sinkroniciteti(stanje.zapisi), pon = ponavljanja(stanje.zapisi, 30);
     $('#ponavljanja').innerHTML = pon.length ? pon.slice(0, 12).map(function (p) {
       var s = sink.some(function (x) { return x.simbol === p.simbol; });
-      return '<button type="button" class="cip' + (s ? ' sink' : '') + '" data-simbol="' + esc(p.simbol) + '">' + esc(p.simbol) + ' <b>' + p.puta + '</b></button>';
-    }).join('') : '<span class="tiho">Još nema simbola. Zapiši prvi san ili znak.</span>';
+      return '<button type="button" class="cip' + (s ? ' sink' : '') + '" data-simbol="' + esc(p.simbol) + '">' + esc(Simboli.ime(p.simbol)) + ' <b>' + p.puta + '</b></button>';
+    }).join('') : '<span class="tiho">' + t('dn.nemaSimbola') + '</span>';
     var filtar = stanje.filtar;
     var lista = stanje.zapisi.filter(function (z) { return !filtar || (z.simboli || []).indexOf(filtar) >= 0; });
-    $('#filtar').hidden = !filtar; $('#filtar-ime').textContent = filtar || '';
+    $('#filtar').hidden = !filtar; $('#filtar-ime').textContent = filtar ? Simboli.ime(filtar) : '';
     $('#zapisi').innerHTML = lista.map(function (z) {
       var n = z.nebo || {}, m = (n.polozaji || []).filter(function (p) { return p.id === 'moon'; })[0];
-      return '<article class="zapis"><header><span class="oznaka">' + esc(VRSTE[z.vrsta] || z.vrsta) + '</span> <time>' + esc(datum(z.vrijeme)) + '</time>' +
-        '<button type="button" class="brisi" data-id="' + z.id + '" aria-label="Obriši zapis">×</button></header>' +
+      return '<article class="zapis"><header><span class="oznaka">' + esc(t('vrsta.' + z.vrsta)) + '</span> <time>' + esc(datum(z.vrijeme)) + '</time>' +
+        '<button type="button" class="brisi" data-id="' + z.id + '" aria-label="' + esc(t('dn.obrisi')) + '">×</button></header>' +
         '<p>' + esc(z.tekst).replace(/\n/g, '<br>') + '</p>' +
-        ((z.simboli || []).length ? '<p class="simboli">' + z.simboli.map(function (s) { return '<span class="cip">' + esc(s) + '</span>'; }).join('') + '</p>' : '') +
-        '<p class="nebo-zapisa tiho">' + (n.mijena ? esc(n.mijena.ime) : '') + (m ? ' · Mjesec u ' + esc(Nebo.znak(m.znak)) : '') + (n.sat ? ' · sat ' + esc(n.sat.ime) : '') +
-        ((n.tranziti || []).length ? ' · ' + esc(n.tranziti[0].tekst) : '') + '</p></article>';
-    }).join('') || (filtar ? '' : '<p class="tiho">Dnevnik je prazan.</p>');
+        ((z.simboli || []).length ? '<p class="simboli">' + z.simboli.map(function (s) { return '<span class="cip">' + esc(Simboli.ime(s)) + '</span>'; }).join('') + '</p>' : '') +
+        '<p class="nebo-zapisa tiho">' + (n.mijena ? esc(Nebo.imeMijene(n.mijena)) : '') + (m ? ' · ' + esc(t('dn.mjesecU', { znak: Nebo.znak(m.znak) })) : '') +
+        (n.sat ? ' · ' + esc(t('dn.sat', { planet: Nebo.planet(n.sat.vladar) })) : '') +
+        ((n.tranziti || []).length ? ' · ' + esc(n.tranziti[0].t ? Nebo.tranzitTekst(n.tranziti[0]) : n.tranziti[0].tekst) : '') + '</p></article>';
+    }).join('') || (filtar ? '' : '<p class="tiho">' + t('dn.prazan') + '</p>');
   }
 
   function prikaziProfil() {
@@ -174,6 +157,11 @@
     f.mjesto.value = r.mjesto || 'Zagreb'; f.zivi.value = p.zivi || 'Zagreb';
   }
   function osvjezi() { prikaziDanas(); prikaziDnevnik(); }
+  // promjena jezika: sve se ponovno ispisuje na novom jeziku
+  I18n.promjena(function () {
+    osvjezi(); var ak = document.querySelector('[role=tab][aria-selected=true]');
+    if (ak && ak.dataset.t === 'mjesec') prikaziMjesec(); if (ak && ak.dataset.t === 'godina') prikaziGodinu();
+  });
 
   /* ---------- događaji ---------- */
   function tab(ime) {
@@ -189,7 +177,7 @@
   var unos = $('#unos');
   unos.tekst.addEventListener('input', function () {
     var s = Simboli.uTekstu(unos.tekst.value);
-    $('#prepoznato').innerHTML = s.length ? 'Prepoznati simboli: ' + s.map(function (x) { return '<span class="cip">' + esc(x) + '</span>'; }).join('') : '';
+    $('#prepoznato').innerHTML = s.length ? esc(t('dn.prepoznati')) + ' ' + s.map(function (x) { return '<span class="cip">' + esc(Simboli.ime(x)) + '</span>'; }).join('') : '';
   });
   unos.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -199,36 +187,36 @@
     var sada = new Date();
     var z = { id: sada.getTime().toString(36) + Math.random().toString(36).slice(2, 6), vrijeme: sada.toISOString(), vrsta: unos.vrsta.value, tekst: tekst, simboli: simboli,
       nebo: Nebo.trenutak(sada, mjesto(), stanje.profil) };
-    Pohrana.spremi(z).then(function () { stanje.zapisi.unshift(z); unos.reset(); $('#prepoznato').innerHTML = ''; osvjezi(); $('#spremljeno').textContent = 'Zapisano, s nebom ovog trenutka.'; setTimeout(function () { $('#spremljeno').textContent = ''; }, 4000); });
+    Pohrana.spremi(z).then(function () { stanje.zapisi.unshift(z); unos.reset(); $('#prepoznato').innerHTML = ''; osvjezi(); $('#spremljeno').textContent = t('dn.spremljeno'); setTimeout(function () { $('#spremljeno').textContent = ''; }, 4000); });
   });
   $('#zapisi').addEventListener('click', function (e) {
     var b = e.target.closest('.brisi'); if (!b) return;
-    if (b.dataset.potvrda !== '1') { b.dataset.potvrda = '1'; b.textContent = 'Obriši?'; setTimeout(function () { b.dataset.potvrda = ''; b.textContent = '×'; }, 3000); return; }
+    if (b.dataset.potvrda !== '1') { b.dataset.potvrda = '1'; b.textContent = t('dn.obrisiPitanje'); setTimeout(function () { b.dataset.potvrda = ''; b.textContent = '×'; }, 3000); return; }
     Pohrana.obrisi(b.dataset.id).then(function () { stanje.zapisi = stanje.zapisi.filter(function (z) { return z.id !== b.dataset.id; }); osvjezi(); });
   });
   $('#ponavljanja').addEventListener('click', function (e) { var b = e.target.closest('[data-simbol]'); if (!b) return; stanje.filtar = b.dataset.simbol; prikaziDnevnik(); });
   $('#filtar-makni').addEventListener('click', function () { stanje.filtar = null; prikaziDnevnik(); });
 
-  var sel = Object.keys(MJESTA).sort(function (a, b) { return a.localeCompare(b, 'hr'); }).map(function (m) { return '<option>' + m + '</option>'; }).join('');
+  var sel = Object.keys(MJESTA).sort(function (a, b) { return a.localeCompare(b, I18n.locale()); }).map(function (m) { return '<option>' + m + '</option>'; }).join('');
   $('#profil').mjesto.innerHTML = sel; $('#profil').zivi.innerHTML = sel;
   $('#profil').addEventListener('submit', function (e) {
     e.preventDefault();
     var f = e.target, d = f.datum.value.split('-'), v = (f.vrijeme.value || '12:00').split(':'), m = MJESTA[f.mjesto.value];
     var p = { ime: f.ime.value.trim(), zivi: f.zivi.value,
       rodenje: d.length === 3 ? { g: +d[0], m: +d[1], d: +d[2], h: +v[0], min: +v[1], mjesto: f.mjesto.value, lat: m[0], lon: m[1], zona: 'Europe/Zagreb', bezVremena: !f.vrijeme.value } : null };
-    Pohrana.spremiProfil(p).then(function () { stanje.profil = p; osvjezi(); setTimeout(function () { izracunaj('mjesec'); prikaziDanas(); }, 50); $('#profil-spremljeno').textContent = 'Spremljeno na ovom uređaju.'; });
+    Pohrana.spremiProfil(p).then(function () { stanje.profil = p; osvjezi(); setTimeout(function () { izracunaj('mjesec'); prikaziDanas(); }, 50); $('#profil-spremljeno').textContent = t('pr.spremljeno'); });
   });
   $('#izvoz').addEventListener('click', function () {
     Pohrana.sve().then(function (r) {
       var json = JSON.stringify({ feniksPi: 1, izvezeno: new Date().toISOString(), profil: r[0] || null, zapisi: r[1] }, null, 2);
       var t = $('#izvoz-tekst'); t.hidden = false; t.value = json; t.select();
-      $('#izvoz-poruka').textContent = 'Kopiraj tekst i spremi ga kao sigurnosnu kopiju.';
+      $('#izvoz-poruka').textContent = t('pr.izvezeno');
     });
   });
   $('#brisi-sve').addEventListener('click', function (e) {
     var b = e.target;
-    if (b.dataset.potvrda !== '1') { b.dataset.potvrda = '1'; b.textContent = 'Sigurno? Klikni još jednom'; return; }
-    Pohrana.obrisiSve().then(function () { stanje = { profil: null, zapisi: [] }; b.dataset.potvrda = ''; b.textContent = 'Obriši sve podatke s ovog uređaja'; prikaziProfil(); osvjezi(); });
+    if (b.dataset.potvrda !== '1') { b.dataset.potvrda = '1'; b.textContent = t('pr.sigurno'); return; }
+    Pohrana.obrisiSve().then(function () { stanje = { profil: null, zapisi: [] }; b.dataset.potvrda = ''; b.textContent = t('pr.brisi'); prikaziProfil(); osvjezi(); });
   });
 
   Pohrana.sve().then(function (r) {

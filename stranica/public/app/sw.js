@@ -1,6 +1,6 @@
 /* Feniks π: rad bez interneta. Sprema aplikaciju u predmemoriju uređaja; podaci korisnika su u IndexedDB, ne ovdje. */
-var VERZIJA = 'feniks-app-2';
-var DATOTEKE = ['./', 'index.html', 'app.js', 'nebo.js', 'prijedlozi.js', 'simboli.js', 'core.js', 'asteroids.js', 'astronomy.js', 'manifest.webmanifest', 'ikona-192.png', 'ikona-512.png',
+var VERZIJA = 'feniks-app-3';
+var DATOTEKE = ['./', 'index.html', 'app.js', 'i18n.js', 'jezici/hr.js', 'jezici/en.js', 'jezici/de.js', 'jezici/it.js', 'jezici/es.js', 'jezici/fr.js', 'nebo.js', 'prijedlozi.js', 'simboli.js', 'core.js', 'asteroids.js', 'astronomy.js', 'manifest.webmanifest', 'ikona-192.png', 'ikona-512.png',
   '/stil.css', '/fontovi/fontovi.css', '/glazba.js', '/favicon.ico'];
 self.addEventListener('install', function (e) { e.waitUntil(caches.open(VERZIJA).then(function (c) { return c.addAll(DATOTEKE); }).then(function () { return self.skipWaiting(); })); });
 self.addEventListener('activate', function (e) {
