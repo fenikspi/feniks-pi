@@ -49,6 +49,8 @@ button.cip { cursor: pointer; font-family: var(--f-tijelo); }
 .dogadaji b { font-weight: 500; }
 .dogadaji p { margin: 2px 0 0; color: var(--tekst); font-size: .95rem; }
 @media (max-width: 520px) { .dogadaji li { grid-template-columns: 1fr; } }
+.prekidac { display: flex; gap: 10px; align-items: center; color: var(--ink); font-size: 1rem; margin: 6px 0; cursor: pointer; }
+.prekidac input { width: 20px; height: 20px; accent-color: var(--zlato); }
 .jezik { width: auto; padding: 4px 8px; font-size: .9rem; color: var(--muted); }
 #izvoz-tekst { min-height: 160px; font-family: monospace; font-size: .8rem; margin-top: 10px; }
 </style>
@@ -129,6 +131,11 @@ button.cip { cursor: pointer; font-family: var(--f-tijelo); }
       <button class="gumb" type="submit" data-i18n="pr.spremi">Spremi</button>
       <div id="profil-spremljeno" aria-live="polite"></div>
     </form>
+    <div class="ploca">
+      <h2 data-i18n="pr.doprinosNaslov">Doprinos simboličkoj knjižnici</h2>
+      <label class="prekidac"><input type="checkbox" id="doprinos"> <span data-i18n="pr.doprinos">Doprinesi anonimne obrasce</span></label>
+      <p class="tiho" data-i18n-html="pr.doprinosOpis">Zadano isključeno. Kad uključiš, nakon zapisa šalje se samo apstraktni obrazac (simboli, Mjesečev znak i mijena, glavni tranzit), bez imena, datuma, mjesta i teksta. Tako Feniks uči tumačiti za sve. <a href="/privatnost.html#5-doprinos">Više o tome</a></p>
+    </div>
     <div class="ploca">
       <h2 data-i18n="pr.podaci">Tvoji podaci</h2>
       <p class="tiho" data-i18n="pr.podaciOpis">Izvezi sve kao tekst za sigurnosnu kopiju ili obriši sve s ovog uređaja.</p>

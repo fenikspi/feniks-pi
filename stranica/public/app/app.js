@@ -30,11 +30,24 @@
     obrisi: function (id) { return tx('zapisi', 'readwrite', function (s) { s.delete(id); }); },
     profil: function () { return tx('postavke', 'readonly', function (s) { return s.get('profil'); }); },
     spremiProfil: function (p) { return tx('postavke', 'readwrite', function (s) { s.put(p, 'profil'); }); },
+    postavka: function (k) { return tx('postavke', 'readonly', function (s) { return s.get(k); }); },
+    spremiPostavku: function (k, v) { return tx('postavke', 'readwrite', function (s) { s.put(v, k); }); },
     sve: function () { return Promise.all([this.profil(), this.zapisi()]); },
     obrisiSve: function () { return Promise.all([tx('zapisi', 'readwrite', function (s) { s.clear(); }), tx('postavke', 'readwrite', function (s) { s.clear(); })]); }
   };
 
-  var stanje = { profil: null, zapisi: [] };
+  var stanje = { profil: null, zapisi: [], doprinos: false };
+
+  /* ---------- doprinos anonimnih obrazaca (samo uz pristanak, zadano isključen) ---------- */
+  // Šalje se samo apstraktni obrazac: simboli, vrsta zapisa, Mjesečev znak i mijena, glavni tranzit. Nikad tekst, ime, datumi ni mjesto.
+  var ADRESA = location.protocol === 'https:' && /fenikspi\.com$/i.test(location.hostname) ? '/api/obrazac' : 'https://fenikspi.com/api/obrazac';
+  function posaljiObrazac(z) {
+    if (!stanje.doprinos || !z.simboli.length) return;
+    var n = z.nebo || {}, m = (n.polozaji || []).filter(function (p) { return p.id === 'moon'; })[0], tr = (n.tranziti || [])[0];
+    var o = { simboli: z.simboli.slice(0, 12), vrsta: z.vrsta, mjesec: m ? { znak: m.znak, mijena: n.mijena && n.mijena.kljuc } : null,
+      tranzit: tr ? { t: tr.t, aspekt: tr.aspekt, n: tr.n, kuca: tr.kuca || null } : null };
+    try { fetch(ADRESA, { method: 'POST', body: JSON.stringify(o), headers: { 'Content-Type': 'text/plain' }, credentials: 'omit', referrerPolicy: 'no-referrer', keepalive: true }).catch(function () {}); } catch (e) {}
+  }
   function mjesto() { var p = stanje.profil, m = p && p.zivi && MJESTA[p.zivi] || MJESTA.Zagreb; return { lat: m[0], lon: m[1] }; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function datum(iso) { return new Date(iso).toLocaleString(I18n.locale(), { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
@@ -187,7 +200,7 @@
     var sada = new Date();
     var z = { id: sada.getTime().toString(36) + Math.random().toString(36).slice(2, 6), vrijeme: sada.toISOString(), vrsta: unos.vrsta.value, tekst: tekst, simboli: simboli,
       nebo: Nebo.trenutak(sada, mjesto(), stanje.profil) };
-    Pohrana.spremi(z).then(function () { stanje.zapisi.unshift(z); unos.reset(); $('#prepoznato').innerHTML = ''; osvjezi(); $('#spremljeno').textContent = t('dn.spremljeno'); setTimeout(function () { $('#spremljeno').textContent = ''; }, 4000); });
+    Pohrana.spremi(z).then(function () { stanje.zapisi.unshift(z); posaljiObrazac(z); unos.reset(); $('#prepoznato').innerHTML = ''; osvjezi(); $('#spremljeno').textContent = t('dn.spremljeno'); setTimeout(function () { $('#spremljeno').textContent = ''; }, 4000); });
   });
   $('#zapisi').addEventListener('click', function (e) {
     var b = e.target.closest('.brisi'); if (!b) return;
@@ -218,6 +231,11 @@
     if (b.dataset.potvrda !== '1') { b.dataset.potvrda = '1'; b.textContent = t('pr.sigurno'); return; }
     Pohrana.obrisiSve().then(function () { stanje = { profil: null, zapisi: [] }; b.dataset.potvrda = ''; b.textContent = t('pr.brisi'); prikaziProfil(); osvjezi(); });
   });
+
+  $('#doprinos').addEventListener('change', function (e) {
+    stanje.doprinos = e.target.checked; Pohrana.spremiPostavku('doprinos', stanje.doprinos);
+  });
+  Pohrana.postavka('doprinos').then(function (v) { stanje.doprinos = v === true; $('#doprinos').checked = stanje.doprinos; });
 
   Pohrana.sve().then(function (r) {
     stanje.profil = r[0] || null; stanje.zapisi = r[1] || [];

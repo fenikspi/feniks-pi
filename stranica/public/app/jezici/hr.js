@@ -96,6 +96,8 @@
     'pr.naslov': 'Tvoj profil', 'pr.opis': 'Podaci o rođenju služe za tranzite na tvoju kartu i osobni dan. Ostaju samo na ovom uređaju.',
     'pr.ime': 'Ime ili nadimak', 'pr.datum': 'Datum rođenja', 'pr.vrijeme': 'Vrijeme rođenja (ako znaš)', 'pr.mjesto': 'Mjesto rođenja',
     'pr.zivi': 'Gdje živiš (za nebo i planetarne sate)', 'pr.spremi': 'Spremi', 'pr.spremljeno': 'Spremljeno na ovom uređaju.',
+    'pr.doprinosNaslov': "Doprinos simboličkoj knjižnici", 'pr.doprinos': "Doprinesi anonimne obrasce",
+    'pr.doprinosOpis': "Zadano isključeno. Kad uključiš, nakon zapisa šalje se samo apstraktni obrazac (simboli, Mjesečev znak i mijena, glavni tranzit), bez imena, datuma, mjesta i teksta. Tako Feniks uči tumačiti za sve. <a href=\"/privatnost.html#5-doprinos\">Više o tome</a>",
     'pr.podaci': 'Tvoji podaci', 'pr.podaciOpis': 'Izvezi sve kao tekst za sigurnosnu kopiju ili obriši sve s ovog uređaja.',
     'pr.izvezi': 'Izvezi sve podatke', 'pr.izvezeno': 'Kopiraj tekst i spremi ga kao sigurnosnu kopiju.', 'pr.brisi': 'Obriši sve podatke s ovog uređaja',
     'pr.sigurno': 'Sigurno? Klikni još jednom', 'pr.izvozAria': 'Izvezeni podaci',

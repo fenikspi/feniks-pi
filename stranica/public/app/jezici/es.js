@@ -77,6 +77,8 @@
     'pr.naslov': 'Tu perfil', 'pr.opis': 'Los datos de nacimiento sirven para los tránsitos a tu carta y tu día personal. Se quedan solo en este dispositivo.',
     'pr.ime': 'Nombre o apodo', 'pr.datum': 'Fecha de nacimiento', 'pr.vrijeme': 'Hora de nacimiento (si la sabes)', 'pr.mjesto': 'Lugar de nacimiento',
     'pr.zivi': 'Dónde vives (para el cielo y las horas planetarias)', 'pr.spremi': 'Guardar', 'pr.spremljeno': 'Guardado en este dispositivo.',
+    'pr.doprinosNaslov': "Contribución a la biblioteca de símbolos", 'pr.doprinos': "Contribuir con patrones anónimos",
+    'pr.doprinosOpis': "Desactivado por defecto. Si lo activas, tras cada entrada solo se envía un patrón abstracto (símbolos, signo y fase de la Luna, tránsito principal), sin nombre, fechas, lugar ni texto. Así Feniks aprende a interpretar para todos. <a href=\"/privatnost.html#5-doprinos\">Más información</a>",
     'pr.podaci': 'Tus datos', 'pr.podaciOpis': 'Exporta todo como texto para una copia de seguridad o borra todo de este dispositivo.',
     'pr.izvezi': 'Exportar todos los datos', 'pr.izvezeno': 'Copia el texto y guárdalo como copia de seguridad.', 'pr.brisi': 'Borrar todos los datos de este dispositivo',
     'pr.sigurno': '¿Seguro? Haz clic otra vez', 'pr.izvozAria': 'Datos exportados',

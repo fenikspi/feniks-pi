@@ -89,6 +89,8 @@
     'pr.naslov': 'Your profile', 'pr.opis': 'Birth data is used for transits to your chart and your personal day. It stays only on this device.',
     'pr.ime': 'Name or nickname', 'pr.datum': 'Date of birth', 'pr.vrijeme': 'Time of birth (if you know it)', 'pr.mjesto': 'Place of birth',
     'pr.zivi': 'Where you live (for the sky and planetary hours)', 'pr.spremi': 'Save', 'pr.spremljeno': 'Saved on this device.',
+    'pr.doprinosNaslov': "Contributing to the symbol library", 'pr.doprinos': "Contribute anonymous patterns",
+    'pr.doprinosOpis': "Off by default. When on, after each entry only an abstract pattern is sent (symbols, Moon sign and phase, main transit), with no name, dates, place or text. This is how Feniks learns to interpret for everyone. <a href=\"/privatnost.html#5-doprinos\">More about this</a>",
     'pr.podaci': 'Your data', 'pr.podaciOpis': 'Export everything as text for a backup or delete everything from this device.',
     'pr.izvezi': 'Export all data', 'pr.izvezeno': 'Copy the text and keep it as a backup.', 'pr.brisi': 'Delete all data from this device',
     'pr.sigurno': 'Are you sure? Click once more', 'pr.izvozAria': 'Exported data',

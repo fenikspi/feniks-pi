@@ -1,0 +1,107 @@
+/* Feniks π: slovenščina. Funkcije služijo za sklone in spol (z natalnim Merkurjem, z natalno Venero, retrogradna Venera). */
+(function () {
+  var S_KOM = { sun: 'Soncem', moon: 'Luno', mercury: 'Merkurjem', venus: 'Venero', mars: 'Marsom', jupiter: 'Jupitrom', saturn: 'Saturnom',
+    uranus: 'Uranom', neptune: 'Neptunom', pluto: 'Plutonom', node: 'Luninim vozlom', asc: 'ascendentom', mc: 'sredino neba' };
+  var ASPEKT_V = { konjunkcija: 'v konjunkciji', sekstil: 'v sekstilu', kvadrat: 'v kvadratu', trigon: 'v trigonu', opozicija: 'v opoziciji' };
+  var ZENSKI = { moon: 1, venus: 1, mc: 1 }, SREDNJI = { sun: 1 };
+  function pridevnik(p, m, z, s) { return ZENSKI[p] ? z : SREDNJI[p] ? s : m; }
+  function hisa(k, t) { return k ? ' v tvoji ' + k + '. hiši (' + t('kuce')[k - 1] + ')' : ''; }
+
+  I18n.dodaj('sl', {
+    /* --- podatki --- */
+    znakovi: ['Oven', 'Bik', 'Dvojčka', 'Rak', 'Lev', 'Devica', 'Tehtnica', 'Škorpijon', 'Strelec', 'Kozorog', 'Vodnar', 'Ribi'],
+    znakTema: ['pogum in začetek', 'telo, zemlja in potrpežljivost', 'beseda, srečanje in radovednost', 'dom, mati in čustva', 'srce, igra in ustvarjanje',
+      'red, zdravje in služenje', 'ravnovesje in odnosi', 'globina, preobrazba in skrivnost', 'smisel, pot in daljave', 'oblika, trajnost in odgovornost',
+      'svoboda, skupnost in novo', 'sanje, sočutje in predanost'],
+    kuce: ['jaz, telo in novi začetki', 'vrednote, sredstva in občutek varnosti', 'beseda, učenje, bratje in sestre ter kratke poti', 'dom, korenine in družina',
+      'ustvarjanje, ljubezen, otroci in veselje', 'delo, zdravje in vsakdanji red', 'partnerstva in tesni odnosi', 'preobrazba, globina in skupne dobrine',
+      'smisel, vera, učitelji in dolge poti', 'poklicanost, ugled in pot v svetu', 'prijatelji, skupnost in upi', 'tišina, sanje, skrito in predanost'],
+    'planet.sun': 'Sonce', 'planet.moon': 'Luna', 'planet.mercury': 'Merkur', 'planet.venus': 'Venera', 'planet.mars': 'Mars', 'planet.jupiter': 'Jupiter',
+    'planet.saturn': 'Saturn', 'planet.uranus': 'Uran', 'planet.neptune': 'Neptun', 'planet.pluto': 'Pluton', 'planet.node': 'Lunin vozel',
+    'planet.asc': 'Ascendent', 'planet.mc': 'Sredina neba',
+    'tema.sun': 'zavest, voljo in življenjsko moč', 'tema.moon': 'čustva, potrebe in sanje', 'tema.mercury': 'misli, besede in potovanja', 'tema.venus': 'ljubezen, lepoto in vrednote',
+    'tema.mars': 'odločnost, željo in delovanje', 'tema.jupiter': 'rast, vero in darove', 'tema.saturn': 'obliko, meje in zrelost', 'tema.uranus': 'prebujenje, svobodo in presenečenja',
+    'tema.neptune': 'sanje, domišljijo in raztapljanje meja', 'tema.pluto': 'globoko preobrazbo in moč',
+    'mijena.mladak': 'Mlaj', 'mijena.mladi': 'Mlada luna raste', 'mijena.prva': 'Prvi krajec', 'mijena.raste': 'Luna raste proti ščipu',
+    'mijena.ustap': 'Ščip', 'mijena.opada': 'Luna pojema', 'mijena.zadnja': 'Zadnji krajec', 'mijena.stari': 'Stara luna',
+    'savjet.mladak': 'Čas semen. Ni ti treba vedeti, kam vodi; dovolj je, da tiho poimenuješ eno željo in jo spustiš.',
+    'savjet.mladi': 'Kar je posejano, potrebuje malo pozornosti, ne napora. Opazuj, kaj te privlači samo od sebe.',
+    'savjet.prva': 'Prvi odpor na poti. Opazuj ga brez boja: morda kaže, kje se je treba prepustiti, ne pa riniti.',
+    'savjet.raste': 'Stvari zorijo. Daj jim čas; izpili le tisto, kar se ponuja samo.',
+    'savjet.ustap': 'Polna svetloba razkrije, kar je bilo skrito. Opazi, kaj se ti danes razkriva v sanjah in srečanjih.',
+    'savjet.opada': 'Čas hvaležnosti in deljenja. Kar ti je bilo dano, podaj naprej.',
+    'savjet.zadnja': 'Čas spuščanja. Kar ne nosi več tvoje poti, lahko odide brez obžalovanja.',
+    'savjet.stari': 'Tišina pred novim. Počivaj, sanjaj in zapisuj; odgovori pridejo v snu.',
+    'kratko.mladak': 'Seme: tiho poimenuj en namen in ga spusti.', 'kratko.prva': 'Prvi odpor; opazuj ga brez boja.',
+    'kratko.ustap': 'Svetloba razkriva skrito; opazi, kaj se ti kaže.', 'kratko.zadnja': 'Spusti, kar ne nosi več tvoje poti.',
+    'aspekt.konjunkcija': 'konjunkcija', 'aspekt.sekstil': 'sekstil', 'aspekt.kvadrat': 'kvadrat', 'aspekt.trigon': 'trigon', 'aspekt.opozicija': 'opozicija',
+    'zrcalo.konjunkcija': 'Nov začetek v tem delu tebe.', 'zrcalo.sekstil': 'Majhna vrata; dovolj je, da jih opaziš.', 'zrcalo.kvadrat': 'Napetost, ki prosi za spremembo, ne za boj.',
+    'zrcalo.trigon': 'Tok je lahek; prepusti se mu.', 'zrcalo.opozicija': 'Svet zunaj zrcali, kar je v tebi.',
+    'sat.sun': 'jasnost in obraz, obrnjen v svet', 'sat.moon': 'čustva, sanje in družino', 'sat.mercury': 'besede, pisanje in dogovore', 'sat.venus': 'lepoto, ljubezen in spravo',
+    'sat.mars': 'odločnost in telo', 'sat.jupiter': 'širino, učenje in velikodušnost', 'sat.saturn': 'red, meje in potrpežljivost',
+    'broj.1': 'začetke', 'broj.2': 'sodelovanje in poslušanje', 'broj.3': 'izražanje', 'broj.4': 'temelje', 'broj.5': 'spremembo', 'broj.6': 'skrb in dom',
+    'broj.7': 'tišino in notranji uvid', 'broj.8': 'moč in sad dela', 'broj.9': 'zaključek in spuščanje', 'broj.11': 'navdih', 'broj.22': 'gradnjo velikega',
+    'vrsta.san': 'Sanje', 'vrsta.znak': 'Znamenje', 'vrsta.susret': 'Srečanje', 'vrsta.sinkronicitet': 'Sinhroniciteta', 'vrsta.misao': 'Misel',
+
+    /* --- stavki --- */
+    'tranzit.kratko': function (p, t) { return t('planet.' + p.t) + ' ' + t('aspekt.' + p.aspekt) + ' ' + pridevnik(p.n, 'natalni ', 'natalna ', 'natalno ') + t('planet.' + p.n) + (p.kuca ? ' (' + p.kuca + '. hiša)' : ''); },
+    'danas.mjesec': '<b>{mijena}</b> · Luna v znamenju {znak} {glif}, tema dneva: {tema}. {savjet}',
+    'danas.karta': '<b>Na tvoji karti:</b> {tranzit} {glif}. {zrcalo}',
+    'danas.nebo': '<b>Danes na nebu:</b> {lista}.',
+    'danas.osobni': '<b>Osebni dan {n}:</b> dan za {tema}.',
+    'danas.sat': '<b>Planetarna ura planeta {planet} {glif}:</b> zdaj je dober čas za {savjet}.',
+    'danas.sink': '<b>Sinhroniciteta:</b> simbol <i>{simbol}</i> se je v sedmih dneh pojavil {n}-krat. Sledi mu: kam te vodi?',
+    'danas.vraca': '<b>Simbol, ki se vrača:</b> <i>{simbol}</i> ({n}-krat ta mesec).',
+    'danas.prazno': 'Ko zapisuješ sanje in znamenja, se bodo tu kazali simboli, ki se vračajo, in sinhronicitete.',
+    'dog.mijena.naslov': '{mijena} v znamenju {znak} {glif}',
+    'dog.mijena.tekst': function (p, t) { return 'Tema: ' + t('znakTema')[p.znak] + hisa(p.kuca, t) + '. ' + t('kratko.' + p.kljuc); },
+    'dog.povratak.naslov': 'Lunin povratek',
+    'dog.povratak.tekst': 'Luna se vrača na mesto, kjer je bila ob tvojem rojstvu: nov čustveni krog štirih tednov. Ascendent povratka v znamenju {znak} ga obarva s temo: {tema}.',
+    'dog.ulazak.naslov': function (p, t) { return t('planet.' + p.planet) + (p.retro ? ' se vrne v znamenje ' : ' vstopi v znamenje ') + t('znakovi')[p.znak] + ' ' + p.glif; },
+    'dog.ulazak.tekst': function (p, t) { return 'Za ' + t('tema.' + p.planet) + ' se začenja čas teme: ' + t('znakTema')[p.znak] + '.'; },
+    'dog.postaja.naslov': function (p, t) { return t('planet.' + p.planet) + (p.retro ? ' postane ' + pridevnik(p.planet, 'retrograden', 'retrogradna', 'retrogradno') : ' spet gre naprej') + ' (' + t('znakovi')[p.znak] + ')'; },
+    'dog.postaja.tekst': function (p, t) { return p.retro ? 'Čas je, da ' + t('tema.' + p.planet) + ' obrneš navznoter: premisli znova, ne hiti.' : 'Kar je zorelo v notranjosti, se zdaj sme pokazati.'; },
+    'dog.tranzit.naslov': function (p, t) { return t('planet.' + p.planet) + ' ' + t('aspekt.' + p.aspekt) + ' ' + pridevnik(p.natal, 'natalni ', 'natalna ', 'natalno ') + t('planet.' + p.natal) + ' ' + p.glif; },
+    'dog.tranzit.tekst': function (p, t) {
+      return pridevnik(p.planet, 'Tranzitni ', 'Tranzitna ', 'Tranzitno ') + t('planet.' + p.planet) + ' (' + t('tema.' + p.planet) + ') je ' + ASPEKT_V[p.aspekt] +
+        (ZENSKI[p.natal] ? ' s tvojo natalno ' : ' s tvojim natalnim ') + S_KOM[p.natal] + hisa(p.kuca, t) + '. ' + t('zrcalo.' + p.aspekt);
+    },
+    'dog.pomrcina.mjesec': 'Lunin mrk', 'dog.pomrcina.sunce': 'Sončev mrk',
+    'dog.pomrcina.naslov': '{ime} v znamenju {znak}',
+    'dog.pomrcina.tekst': function (p, t) { return 'Mrki odpirajo in zapirajo poglavja' + hisa(p.kuca, t) + '. Ničesar ni treba siliti; opazuj, kaj se samo spreminja na področju: ' + t('znakTema')[p.znak] + '.'; },
+    'mj.osobni': '<b>Osebni mesec {n}:</b> mesec za {tema}.',
+    'mj.sjeme': function (p, t) { return '<b>Seme meseca</b> pade v znamenje ' + t('znakovi')[p.znak] + (p.kuca ? ', v tvojo ' + p.kuca + '. hišo: ' + t('kuce')[p.kuca - 1] : ': ' + t('znakTema')[p.znak]) + '.'; },
+    'mj.vrhunac': function (p, t) { return '<b>Vrhunec meseca</b> (ščip) pade v znamenje ' + t('znakovi')[p.znak] + (p.kuca ? ', v tvojo ' + p.kuca + '. hišo: ' + t('kuce')[p.kuca - 1] : ': ' + t('znakTema')[p.znak]) + '.'; },
+    'god.sr': function (p, t) { return '<b>Sončev povratek</b> ' + p.datum + ': ascendent leta v znamenju ' + t('znakovi')[p.asc] + ' ' + p.glif + ' (' + t('znakTema')[p.asc] + ')' + (p.kuca ? '; Sonce leta sije v ' + p.kuca + '. hiši: ' + t('kuce')[p.kuca - 1] : '') + '.'; },
+    'god.prof': function (p, t) { return '<b>Profekcija:</b> v ' + (p.dob + 1) + '. letu življenja (dopolnjenih let: ' + p.dob + ') je aktivna tvoja ' + p.kuca + '. hiša: ' + t('kuce')[p.kuca - 1] + ', v znamenju ' + t('znakovi')[p.znak] + '. <b>Gospodar leta</b> je ' + t('planet.' + p.gospodar) + ' ' + p.glif + ': spremljaj ' + (ZENSKI[p.gospodar] ? 'njene' : 'njegove') + ' tranzite, skozi njih ti govori leto.'; },
+    'god.osobna': '<b>Osebno leto {n}:</b> leto za {tema}.',
+    'god.naslov': 'Tvoje leto: {od} – {do}',
+
+    /* --- vmesnik --- */
+    'ui.opis': 'Vse, kar tu vpišeš, ostane samo na tej napravi.',
+    'ui.pozdrav': 'Dobrodošli', 'ui.pozdravIme': 'Živjo, {ime}',
+    'nav.pocetna': 'Domov', 'nav.preuzmi': 'Prenesi', 'nav.privatnost': 'Zasebnost', 'nav.jezik': 'Jezik',
+    'tab.danas': 'Danes', 'tab.mjesec': 'Mesec', 'tab.godina': 'Leto', 'tab.dnevnik': 'Dnevnik simbolike in sinhronicitete', 'tab.profil': 'Profil',
+    'danas.naslov': 'Priporočilo dneva', 'danas.neboSada': 'Nebo zdaj',
+    'mj.naslov': 'Ta mesec', 'mj.racunam': 'Računam nebo meseca…', 'mj.donosi': 'Kaj prinaša', 'mj.bezProfila': 'V profil vpiši datum rojstva za osebni mesec in hiše.',
+    'god.naslovPrazan': 'Tvoje leto', 'god.racunam': 'Računam tvoje leto…', 'god.trenuci': 'Veliki trenutki leta',
+    'god.trenuciOpis': 'Mrki, vstopi in postaje počasnih planetov ter njihovi natančni tranziti na tvojo karto. Poudarjen je gospodar leta.',
+    'god.bezProfila': 'Za tvoje leto (Sončev povratek, profekcija, osebno leto) vpiši v profil datum, uro in kraj rojstva.',
+    'ui.ics': 'Dodaj v koledar (.ics)', 'ui.nemaDog': 'Do konca obdobja ni posebnih dogodkov.', 'ui.ranije': 'Prej ({n})',
+    'ics.mjesec': 'mesec', 'ics.godina': 'leto',
+    'dn.novi': 'Nov zapis', 'dn.sto': 'Kaj se je zgodilo', 'dn.dodatni': 'Dodatni simboli (ločeni z vejico)', 'dn.dodatniPh': 'npr. ključ, sova',
+    'dn.zapis': 'Zapis', 'dn.zapisPh': 'S svojimi besedami opiši sanje, znamenje ali srečanje…', 'dn.zapisi': 'Zapiši z nebom tega trenutka',
+    'dn.vrsta.sinkronicitet': 'Sinhroniciteta (smiselno naključje)',
+    'dn.vracaju': 'Simboli, ki se vračajo', 'dn.vracajuOpis': 'Zadnjih 30 dni. Poudarjene so sinhronicitete: simbol, ki se je v sedmih dneh pojavil trikrat ali večkrat.',
+    'dn.zapisiNaslov': 'Zapisi', 'dn.samo': 'Samo zapisi s simbolom', 'dn.prikaziSve': 'prikaži vse',
+    'dn.prepoznati': 'Prepoznani simboli:', 'dn.spremljeno': 'Zapisano, z nebom tega trenutka.', 'dn.nemaSimbola': 'Simbolov še ni. Zapiši prve sanje ali znamenje.',
+    'dn.prazan': 'Dnevnik je prazen.', 'dn.obrisi': 'Izbriši zapis', 'dn.obrisiPitanje': 'Izbrišem?', 'dn.mjesecU': 'Luna v znamenju {znak}', 'dn.sat': 'ura planeta {planet}',
+    'pr.naslov': 'Tvoj profil', 'pr.opis': 'Podatki o rojstvu služijo za tranzite na tvojo karto in osebni dan. Ostanejo samo na tej napravi.',
+    'pr.ime': 'Ime ali vzdevek', 'pr.datum': 'Datum rojstva', 'pr.vrijeme': 'Ura rojstva (če jo veš)', 'pr.mjesto': 'Kraj rojstva',
+    'pr.zivi': 'Kje živiš (za nebo in planetarne ure)', 'pr.spremi': 'Shrani', 'pr.spremljeno': 'Shranjeno na tej napravi.',
+    'pr.podaci': 'Tvoji podatki', 'pr.podaciOpis': 'Izvozi vse kot besedilo za varnostno kopijo ali izbriši vse s te naprave.',
+    'pr.izvezi': 'Izvozi vse podatke', 'pr.izvezeno': 'Kopiraj besedilo in ga shrani kot varnostno kopijo.', 'pr.brisi': 'Izbriši vse podatke s te naprave',
+    'pr.sigurno': 'Res? Klikni še enkrat', 'pr.izvozAria': 'Izvoženi podatki',
+    'glazba.pusti': 'Predvajaj starodavno glasbo', 'glazba.zaustavi': 'Ustavi glasbo', 'glazba.gumb': '♪ glasba', 'glazba.svira': '♪ glasba igra'
+  });
+})();

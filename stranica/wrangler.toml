@@ -1,6 +1,7 @@
 # Feniks π, javna stranica: statične datoteke iz ./public na feniksPi.com i www.feniksPi.com
 name = "feniks-pi"
 compatibility_date = "2026-10-01"
+main = "src/worker.js"
 workers_dev = false
 routes = [
   { pattern = "feniksPi.com", custom_domain = true },
@@ -9,4 +10,14 @@ routes = [
 
 [assets]
 directory = "./public"
+binding = "ASSETS"
 not_found_handling = "404-page"
+
+# anonimni simbolički obrasci (doprinos uz pristanak, bez osobnih podataka)
+[[d1_databases]]
+binding = "OBRASCI"
+database_name = "feniks-obrasci"
+database_id = "7587bd83-2ce5-406b-86e0-2edb6487c8e9"
+
+[observability]
+enabled = false
