@@ -54,6 +54,7 @@ var I18n = (function () {
     if (r.cir || izvedeni[trenutni]) v = Array.isArray(v) ? v.map(cirilica) : cirilica(v);
     return v;
   }
+  function ima(kljuc) { return !!dohvati(trenutni, kljuc); }
   function niz(kljuc, i) { var v = t(kljuc); return Array.isArray(v) ? v[i] : v; }
 
   // Statični tekstovi u HTML-u: data-i18n (tekst), data-i18n-html, data-i18n-ph (placeholder), data-i18n-aria, data-i18n-title.
@@ -84,7 +85,7 @@ var I18n = (function () {
 
   trenutni = prepoznaj();
   return {
-    t: t, niz: niz, prevedi: prevedi, pismo: function (s) { return izvedeni[trenutni] ? cirilica(s) : s; }, postavi: postavi, izbornik: izbornik, JEZICI: JEZICI,
+    t: t, niz: niz, ima: ima, prevedi: prevedi, pismo: function (s) { return izvedeni[trenutni] ? cirilica(s) : s; }, postavi: postavi, izbornik: izbornik, JEZICI: JEZICI,
     dodaj: function (jezik, rjecnik) { T[jezik] = Object.assign(T[jezik] || {}, rjecnik); },
     jezik: function () { return trenutni; },
     locale: function () { return JEZICI[trenutni][1]; },

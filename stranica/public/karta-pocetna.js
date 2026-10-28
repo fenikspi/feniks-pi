@@ -31,7 +31,7 @@
 
   function podaci() {
     var d = forma.datum.value.split('-'), bez = forma.neznam.checked, v = (forma.vrijeme.value || '12:00').split(':');
-    if (d.length !== 3 || (!bez && !forma.vrijeme.value)) return null;
+    if (d.length !== 3 || (!bez && !forma.vrijeme.value) || !forma.spol.value) return null;
     var m;
     if (forma.rucno.checked) {
       var la = parseFloat(String(forma.lat.value).replace(',', '.')), lo = parseFloat(String(forma.lon.value).replace(',', '.'));
@@ -40,7 +40,7 @@
     } else if (odabranoMjesto) m = { ime: odabranoMjesto.ime + ', ' + odabranoMjesto.zemlja, lat: odabranoMjesto.lat, lon: odabranoMjesto.lon, zona: odabranoMjesto.zona };
     else m = Mjesta.dohvati(forma.mjesto.value.split(',')[0].trim());   // upisano ime s kratkog popisa (bez odabira)
     if (!m) return null;
-    return { g: +d[0], m: +d[1], d: +d[2], h: +v[0], min: +v[1], bezVremena: bez, lat: m.lat, lon: m.lon, zona: m.zona, mjesto: m.ime, ime: forma.ime.value.trim() };
+    return { g: +d[0], m: +d[1], d: +d[2], h: +v[0], min: +v[1], bezVremena: bez, lat: m.lat, lon: m.lon, zona: m.zona, mjesto: m.ime, ime: forma.ime.value.trim(), spol: forma.spol.value };
   }
 
   var zadnje = null;
@@ -102,7 +102,7 @@
   function spremiUAplikaciju(e) {
     if (!zadnje) return;
     e.preventDefault();
-    var r = zadnje.r, p = { ime: r.ime, zivi: { ime: r.mjesto, lat: r.lat, lon: r.lon, zona: r.zona },
+    var r = zadnje.r, p = { ime: r.ime, spol: r.spol, zivi: { ime: r.mjesto, lat: r.lat, lon: r.lon, zona: r.zona },
       rodenje: { g: r.g, m: r.m, d: r.d, h: r.h, min: r.min, mjesto: r.mjesto, lat: r.lat, lon: r.lon, zona: r.zona, bezVremena: r.bezVremena } };
     var z = indexedDB.open('feniks-pi', 1);
     z.onupgradeneeded = function () { var db = z.result; db.createObjectStore('zapisi', { keyPath: 'id' }); db.createObjectStore('postavke'); };

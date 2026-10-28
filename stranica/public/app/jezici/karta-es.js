@@ -96,6 +96,7 @@ I18n.dodaj('es', {
       '. El elemento que te sostiene es ' + p.el.toLowerCase() + ', y el número ' + p.broj + ' muestra cómo caminas. Nada hay que forzar: sigue las señales que se repiten, anota tus sueños y sincronicidades, y el camino se irá mostrando solo, paso a paso.';
   },
   'nat.forma.naslov': 'Tu carta natal: calcúlala ahora', 'nat.forma.opis': 'Introduce la fecha, la hora y el lugar de nacimiento. Todo se calcula en tu navegador; tus datos no van a ninguna parte.',
+  "nat.forma.spol": "Sexo", "nat.forma.zensko": "Mujer", "nat.forma.musko": "Hombre", "nat.forma.odaberi": "Elige…",
   'nat.forma.ime': 'Nombre (opcional)', 'nat.forma.datum': 'Fecha de nacimiento', 'nat.forma.vrijeme': 'Hora de nacimiento', 'nat.forma.neznam': 'No sé mi hora de nacimiento',
   'nat.forma.mjesto': 'Lugar de nacimiento', 'nat.forma.drugo': 'Otro lugar (coordenadas)…', 'nat.forma.lat': 'Latitud (p. ej. 40.42)', 'nat.forma.lon': 'Longitud (p. ej. -3.70)',
   'nat.forma.zona': 'Zona horaria', 'nat.forma.gumb': 'Calcular la carta y la lectura profunda', 'nat.forma.racunam': 'Calculando…', 'nat.forma.greska': 'Revisa la fecha, la hora y el lugar.',

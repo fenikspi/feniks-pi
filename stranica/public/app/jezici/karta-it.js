@@ -96,6 +96,7 @@ I18n.dodaj('it', {
       ". L'elemento che ti porta è " + p.el.toLowerCase() + ", e il numero " + p.broj + " mostra come cammini. Nulla va forzato: segui i segni che si ripetono, annota i sogni e le sincronicità, e il cammino si rivelerà da sé, passo dopo passo.";
   },
   "nat.forma.naslov": "Il tuo tema natale: calcolalo ora", "nat.forma.opis": "Inserisci data, ora e luogo di nascita. Tutto viene calcolato nel tuo browser; i tuoi dati non vanno da nessuna parte.",
+  "nat.forma.spol": "Sesso", "nat.forma.zensko": "Femmina", "nat.forma.musko": "Maschio", "nat.forma.odaberi": "Scegli…",
   "nat.forma.ime": "Nome (facoltativo)", "nat.forma.datum": "Data di nascita", "nat.forma.vrijeme": "Ora di nascita", "nat.forma.neznam": "Non conosco l'ora di nascita",
   "nat.forma.mjesto": "Luogo di nascita", "nat.forma.drugo": "Altro luogo (coordinate)…", "nat.forma.lat": "Latitudine (es. 41.90)", "nat.forma.lon": "Longitudine (es. 12.50)",
   "nat.forma.zona": "Fuso orario", "nat.forma.gumb": "Calcola il tema e la lettura profonda", "nat.forma.racunam": "Calcolo in corso…", "nat.forma.greska": "Controlla data, ora e luogo.",

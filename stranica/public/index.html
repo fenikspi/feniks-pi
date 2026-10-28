@@ -109,6 +109,7 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
     <p class="uvod2" data-i18n="nat.forma.opis">Upiši datum, vrijeme i mjesto rođenja. Sve se računa u tvom pregledniku; podaci ne odlaze nikamo.</p>
     <form id="karta-forma" class="karta-forma" autocomplete="off">
       <label><span data-i18n="nat.forma.ime">Ime (neobavezno)</span><input name="ime" maxlength="60"></label>
+      <label><span data-i18n="nat.forma.spol">Spol</span><select name="spol" required><option value="" data-i18n="nat.forma.odaberi">Odaberi…</option><option value="z" data-i18n="nat.forma.zensko">Žensko</option><option value="m" data-i18n="nat.forma.musko">Muško</option></select></label>
       <label><span data-i18n="nat.forma.datum">Datum rođenja</span><input name="datum" type="date" required min="1800-01-01" max="2100-12-31"></label>
       <label><span data-i18n="nat.forma.vrijeme">Vrijeme rođenja</span><input name="vrijeme" type="time"></label>
       <label class="karta-check"><input name="neznam" type="checkbox"> <span data-i18n="nat.forma.neznam">Ne znam vrijeme rođenja</span></label>

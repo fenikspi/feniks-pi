@@ -31,15 +31,18 @@ var Citanje = (function (N) {
 
   function procitaj(k) {
     var o = k.o, r = k.r, dijelovi = [];
+    // rod: tekst se obraća u ženskom rodu (ključ@z) kad je odabrano „žensko”, inače u muškom, po tradiciji jezika
+    var zensko = r.spol === 'z', rod = function (kljuc) { return zensko && I18n.ima(kljuc + '@z') ? kljuc + '@z' : kljuc; };
+    var t = function (kljuc, p) { return I18n.t(rod(kljuc), p); }, niz = function (kljuc, i) { return I18n.niz(rod(kljuc), i); };
     function dio(naslov, html) { dijelovi.push({ naslov: naslov, html: html }); }
 
     // 1. tri stupa
     var s = o.sun, m = o.moon;
     dio(t('nat.sunce.naslov', { znak: Nebo.znak(s.sign), glif: Nebo.glifZnaka(s.sign) }),
-      '<p>' + I18n.niz('nat.sunceZnak', s.sign) + '</p>' + (k.kuce ? '<p>' + t('nat.uKuci', { planet: t('planet.sun'), n: s.house, tema: I18n.niz('kuce', s.house - 1) }) + '</p>' : ''));
+      '<p>' + niz('nat.sunceZnak', s.sign) + '</p>' + (k.kuce ? '<p>' + t('nat.uKuci', { planet: t('planet.sun'), n: s.house, tema: niz('kuce', s.house - 1) }) + '</p>' : ''));
     dio(t('nat.mjesec.naslov', { znak: Nebo.znak(m.sign), glif: Nebo.glifZnaka(m.sign) }),
-      '<p>' + I18n.niz('nat.mjesecZnak', m.sign) + '</p>' + (k.kuce ? '<p>' + t('nat.uKuci', { planet: t('planet.moon'), n: m.house, tema: I18n.niz('kuce', m.house - 1) }) + '</p>' : ''));
-    if (k.kuce) dio(t('nat.asc.naslov', { znak: Nebo.znak(o.asc.sign), glif: Nebo.glifZnaka(o.asc.sign) }), '<p>' + I18n.niz('nat.ascZnak', o.asc.sign) + '</p>');
+      '<p>' + niz('nat.mjesecZnak', m.sign) + '</p>' + (k.kuce ? '<p>' + t('nat.uKuci', { planet: t('planet.moon'), n: m.house, tema: niz('kuce', m.house - 1) }) + '</p>' : ''));
+    if (k.kuce) dio(t('nat.asc.naslov', { znak: Nebo.znak(o.asc.sign), glif: Nebo.glifZnaka(o.asc.sign) }), '<p>' + niz('nat.ascZnak', o.asc.sign) + '</p>');
     else dio(t('nat.asc.naslovBez'), '<p>' + t('nat.asc.bez') + '</p>');
 
     // 2. elementi i kvalitete (Sunce, Mjesec i ascendent vrijede dvostruko)
@@ -54,7 +57,7 @@ var Citanje = (function (N) {
       (el[e0] <= 1 ? '<p>' + t('nat.el.manjak', { el: t('nat.el.' + ELEMENT[e0]), opis: t('nat.elManjak.' + ELEMENT[e0]) }) + '</p>' : '') +
       '<p>' + t('nat.kv.vlada', { kv: t('nat.kv.' + KVALITETA[q1]), opis: t('nat.kvOpis.' + KVALITETA[q1]) }) + '</p>' +
       // peti element: eter (Platon: dodekaedar, cjelina neba; vedski: akaša, nositelj Jupiter po Parašari)
-      '<p>' + t('nat.eter', { znak: Nebo.znak(o.jupiter.sign), kuca: k.kuce && o.jupiter.house ? t('nat.eterKuca', { n: o.jupiter.house, tema: I18n.niz('kuce', o.jupiter.house - 1) }) : '' }) + '</p>');
+      '<p>' + t('nat.eter', { znak: Nebo.znak(o.jupiter.sign), kuca: k.kuce && o.jupiter.house ? t('nat.eterKuca', { n: o.jupiter.house, tema: niz('kuce', o.jupiter.house - 1) }) : '' }) + '</p>');
 
     // 3. najjači aspekti
     var glavni = k.aspekti.filter(function (a) { return ASPEKT[a.type]; }).slice(0, 6);
@@ -93,8 +96,8 @@ var Citanje = (function (N) {
     }
 
     // 7. put i prepuštanje
-    dio(t('nat.put.naslov'), '<p>' + t('nat.put', { sunce: I18n.niz('znakTema', s.sign), mjesec: I18n.niz('znakTema', m.sign),
-      asc: k.kuce ? I18n.niz('znakTema', o.asc.sign) : null, el: t('nat.el.' + ELEMENT[e1]), broj: zp }) + '</p>');
+    dio(t('nat.put.naslov'), '<p>' + t('nat.put', { sunce: niz('znakTema', s.sign), mjesec: niz('znakTema', m.sign),
+      asc: k.kuce ? niz('znakTema', o.asc.sign) : null, el: t('nat.el.' + ELEMENT[e1]), broj: zp }) + '</p>');
 
     var tablica = PLANETI.concat(k.kuce ? ['asc', 'mc'] : []).map(function (id) {
       return { id: id, glif: Nebo.glifPlaneta(id), ime: t('planet.' + id), polozaj: polozaj(o[id], k.kuce) };

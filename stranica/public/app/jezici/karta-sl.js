@@ -96,6 +96,7 @@ I18n.dodaj('sl', {
       '. Element, ki te nosi, je ' + p.el.toLowerCase() + ', število ' + p.broj + ' pa kaže, kako hodiš. Ničesar ni treba siliti: sledi znamenjem, ki se ponavljajo, zapisuj sanje in sinhronicitete, in pot se bo pokazala sama, korak za korakom.';
   },
   'nat.forma.naslov': 'Tvoja natalna karta: izračunaj jo zdaj', 'nat.forma.opis': 'Vpiši datum, uro in kraj rojstva. Vse se izračuna v tvojem brskalniku; podatki ne gredo nikamor.',
+  'nat.forma.spol': 'Spol', 'nat.forma.zensko': 'Ženski', 'nat.forma.musko': 'Moški', 'nat.forma.odaberi': 'Izberi…',
   'nat.forma.ime': 'Ime (neobvezno)', 'nat.forma.datum': 'Datum rojstva', 'nat.forma.vrijeme': 'Ura rojstva', 'nat.forma.neznam': 'Ne poznam ure rojstva',
   'nat.forma.mjesto': 'Kraj rojstva', 'nat.forma.drugo': 'Drug kraj (koordinate)…', 'nat.forma.lat': 'Širina (npr. 46.06)', 'nat.forma.lon': 'Dolžina (npr. 14.51)',
   'nat.forma.zona': 'Časovni pas', 'nat.forma.gumb': 'Izračunaj karto in poglobljeno branje', 'nat.forma.racunam': 'Računam…', 'nat.forma.greska': 'Preveri datum, uro in kraj.',

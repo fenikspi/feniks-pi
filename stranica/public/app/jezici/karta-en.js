@@ -132,6 +132,7 @@ I18n.dodaj('en', {
   "kin.elOpis.metal": "Metal cuts and shapes: your path is clarity, justice and completion.",
   "kin.elOpis.voda": "Water flows and penetrates: your path is wisdom, adaptability and depth.",
   'nat.forma.naslov': 'Your natal chart: calculate it now', 'nat.forma.opis': 'Enter your date, time and place of birth. Everything is calculated in your browser; your data goes nowhere.',
+  'nat.forma.spol': 'Sex', 'nat.forma.zensko': 'Female', 'nat.forma.musko': 'Male', 'nat.forma.odaberi': 'Choose…',
   'nat.forma.ime': 'Name (optional)', 'nat.forma.datum': 'Date of birth', 'nat.forma.vrijeme': 'Time of birth', 'nat.forma.neznam': 'I don\'t know my birth time',
   'nat.forma.mjestoPh': 'Type a city, e.g. London', 'nat.forma.mjesto': 'Place of birth', 'nat.forma.drugo': 'Other place (coordinates)…', 'nat.forma.lat': 'Latitude (e.g. 51.51)', 'nat.forma.lon': 'Longitude (e.g. -0.13)',
   'nat.forma.zona': 'Time zone', 'nat.forma.gumb': 'Calculate chart and deep reading', 'nat.forma.racunam': 'Calculating…', 'nat.forma.greska': 'Check the date, time and place.',

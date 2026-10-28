@@ -96,6 +96,7 @@ I18n.dodaj('fr', {
       ". L'élément qui te porte est " + p.el.toLowerCase() + ", et le nombre " + p.broj + " montre comment tu marches. Rien n'est à forcer : suis les signes qui se répètent, note tes rêves et tes synchronicités, et le chemin se révélera de lui-même, pas à pas.";
   },
   "nat.forma.naslov": "Ton thème natal : calcule-le maintenant", "nat.forma.opis": "Saisis ta date, ton heure et ton lieu de naissance. Tout est calculé dans ton navigateur ; tes données ne vont nulle part.",
+  "nat.forma.spol": "Sexe", "nat.forma.zensko": "Femme", "nat.forma.musko": "Homme", "nat.forma.odaberi": "Choisir…",
   "nat.forma.ime": "Prénom (facultatif)", "nat.forma.datum": "Date de naissance", "nat.forma.vrijeme": "Heure de naissance", "nat.forma.neznam": "Je ne connais pas mon heure de naissance",
   "nat.forma.mjesto": "Lieu de naissance", "nat.forma.drugo": "Autre lieu (coordonnées)…", "nat.forma.lat": "Latitude (ex. 48.86)", "nat.forma.lon": "Longitude (ex. 2.35)",
   "nat.forma.zona": "Fuseau horaire", "nat.forma.gumb": "Calculer le thème et la lecture approfondie", "nat.forma.racunam": "Calcul en cours…", "nat.forma.greska": "Vérifie la date, l'heure et le lieu.",

@@ -96,6 +96,7 @@ I18n.dodaj('de', {
       '. Das Element, das dich trägt, ist ' + p.el + ', und die Zahl ' + p.broj + ' zeigt, wie du gehst. Nichts muss erzwungen werden: Folge den Zeichen, die sich wiederholen, schreibe deine Träume und Synchronizitäten auf, und der Weg zeigt sich von selbst, Schritt für Schritt.';
   },
   'nat.forma.naslov': 'Dein Geburtshoroskop: jetzt berechnen', 'nat.forma.opis': 'Gib Datum, Uhrzeit und Ort deiner Geburt ein. Alles wird in deinem Browser berechnet; deine Daten gehen nirgendwohin.',
+  'nat.forma.spol': 'Geschlecht', 'nat.forma.zensko': 'weiblich', 'nat.forma.musko': 'männlich', 'nat.forma.odaberi': 'Bitte wählen…',
   'nat.forma.ime': 'Name (optional)', 'nat.forma.datum': 'Geburtsdatum', 'nat.forma.vrijeme': 'Geburtszeit', 'nat.forma.neznam': 'Ich kenne meine Geburtszeit nicht',
   'nat.forma.mjesto': 'Geburtsort', 'nat.forma.drugo': 'Anderer Ort (Koordinaten)…', 'nat.forma.lat': 'Breite (z. B. 52.52)', 'nat.forma.lon': 'Länge (z. B. 13.40)',
   'nat.forma.zona': 'Zeitzone', 'nat.forma.gumb': 'Horoskop und tiefe Deutung berechnen', 'nat.forma.racunam': 'Berechne…', 'nat.forma.greska': 'Prüfe Datum, Uhrzeit und Ort.',
