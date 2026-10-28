@@ -1,7 +1,7 @@
 /* Feniks π: natal chart and deep reading texts (English). */
 I18n.dodaj('en', {
   'nat.naslov': 'Natal chart {ime}', 'nat.sazetak': 'Sun in {sunce} · Moon in {mjesec} · Ascendant {asc}',
-  'nat.kucaBr': 'house {n}', 'nat.uKuci': '{planet} in house {n}: your path is felt most strongly through {tema}.',
+  'nat.kucaBr': 'house {n}', 'nat.uKuci': '{planet} in house {n} ({tema}): this is where your path is felt most strongly.',
   'nat.rodenTekst': 'Birth: {datum} at {vrijeme}, {mjesto}',
   'nat.sunce.naslov': 'Sun in {znak} {glif}: who you are',
   'nat.mjesec.naslov': 'Moon in {znak} {glif}: what your soul needs',
@@ -61,7 +61,7 @@ I18n.dodaj('en', {
   'nat.tema.sun': 'awareness and will', 'nat.tema.moon': 'feelings and needs', 'nat.tema.mercury': 'thoughts and words', 'nat.tema.venus': 'love and values',
   'nat.tema.mars': 'desire and action', 'nat.tema.jupiter': 'growth and faith', 'nat.tema.saturn': 'boundaries and maturity', 'nat.tema.uranus': 'freedom and awakening',
   'nat.tema.neptune': 'dreams and compassion', 'nat.tema.pluto': 'transformation and power', 'nat.tema.asc': 'how you show up in the world', 'nat.tema.mc': 'your calling',
-  'nat.aspekt': '{a} and {b}: {zrcalo}',
+  'nat.aspekt': '<i>{a}</i> ↔ <i>{b}</i>: {zrcalo}',
   'nat.aspektZrcalo.konjunkcija': 'fused into one force, you cannot separate them.', 'nat.aspektZrcalo.sekstil': 'they encourage each other when you give them a chance.',
   'nat.aspektZrcalo.kvadrat': 'they rub and create a tension from which your greatest strength grows.', 'nat.aspektZrcalo.trigon': 'they flow in harmony; a gift you may use without effort.',
   'nat.aspektZrcalo.opozicija': 'they face each other; the path lies in balance, not in choosing.',

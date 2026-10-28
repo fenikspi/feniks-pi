@@ -1,7 +1,7 @@
 /* Feniks π: tekstovi natalne karte i dubokog čitanja (hrvatski). */
 I18n.dodaj('hr', {
   'nat.naslov': 'Natalna karta {ime}', 'nat.sazetak': 'Sunce u znaku {sunce} · Mjesec u znaku {mjesec} · Ascendent {asc}',
-  'nat.kucaBr': '{n}. kuća', 'nat.uKuci': '{planet} u {n}. kući: tvoj se put ovdje najjače osjeća kroz {tema}.',
+  'nat.kucaBr': '{n}. kuća', 'nat.uKuci': '{planet} u {n}. kući ({tema}): ovdje se tvoj put najjače osjeća.',
   'nat.rodenTekst': 'Rođenje: {datum} u {vrijeme}, {mjesto}',
   'nat.sunce.naslov': 'Sunce u znaku {znak} {glif}: tko jesi',
   'nat.mjesec.naslov': 'Mjesec u znaku {znak} {glif}: što ti duša treba',
@@ -61,7 +61,7 @@ I18n.dodaj('hr', {
   'nat.tema.sun': 'svijest i volja', 'nat.tema.moon': 'osjećaji i potrebe', 'nat.tema.mercury': 'misli i riječi', 'nat.tema.venus': 'ljubav i vrijednosti',
   'nat.tema.mars': 'želja i djelovanje', 'nat.tema.jupiter': 'rast i vjera', 'nat.tema.saturn': 'granice i zrelost', 'nat.tema.uranus': 'sloboda i buđenje',
   'nat.tema.neptune': 'snovi i suosjećanje', 'nat.tema.pluto': 'preobrazba i snaga', 'nat.tema.asc': 'tvoj nastup u svijetu', 'nat.tema.mc': 'tvoj poziv',
-  'nat.aspekt': '{a} i {b}: {zrcalo}',
+  'nat.aspekt': '<i>{a}</i> ↔ <i>{b}</i>: {zrcalo}',
   'nat.aspektZrcalo.konjunkcija': 'stopljeni u jednu snagu, ne možeš ih razdvojiti.', 'nat.aspektZrcalo.sekstil': 'prijateljski se potiču kad im daš priliku.',
   'nat.aspektZrcalo.kvadrat': 'trljaju se i stvaraju napetost iz koje raste tvoja najveća snaga.', 'nat.aspektZrcalo.trigon': 'teku skladno; to je dar koji smiješ koristiti bez truda.',
   'nat.aspektZrcalo.opozicija': 'stoje jedno nasuprot drugome; put je u ravnoteži, ne u izboru.',

@@ -57,6 +57,29 @@ h2 { font: 400 clamp(1.8rem, 3.5vw, 2.5rem)/1.15 var(--f-nas); margin: 0 0 8px; 
 .uskoro { text-align: center; }
 .uskoro p { color: var(--muted); max-width: 58ch; margin: 0 auto; }
 footer { border-top: 1px solid var(--crta); padding-block: 28px 40px; color: var(--muted); font-size: .9rem; display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+[hidden] { display: none !important; }
+.karta-forma { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px 16px; align-items: end; max-width: 900px; }
+.karta-forma label { display: flex; flex-direction: column; gap: 4px; color: var(--muted); font-size: .92rem; }
+.karta-forma input, .karta-forma select { background: rgba(0, 0, 0, .45); color: var(--ink); border: 1px solid var(--crta); border-radius: 10px; padding: 10px 12px; font: 1rem var(--f-tijelo); width: 100%; }
+.karta-forma .karta-check, .karta-check { flex-direction: row; align-items: center; gap: 8px; color: var(--ink); }
+.karta-check input { width: 18px; height: 18px; accent-color: var(--zlato); }
+.karta-koord { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px 16px; }
+.gumb-zlatni { grid-column: 1 / -1; justify-self: start; background: linear-gradient(#f6d27a, #d9a23e); color: #1a1206; border: 0; border-radius: 12px; padding: 12px 20px; font: 600 1.05rem var(--f-tijelo); cursor: pointer; }
+.gumb-zlatni:disabled { opacity: .6; cursor: wait; }
+.karta-izlaz { margin-top: 26px; max-width: 900px; }
+.karta-naslov { font: 400 1.8rem var(--f-nas); margin: 0; }
+.karta-sazetak { color: var(--zlato); margin: 4px 0 14px; }
+.karta-akcije { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.karta-akcije .gumb { display: inline-block; background: none; border: 1px solid var(--zlato); color: var(--zlato); border-radius: 10px; padding: 8px 14px; font: 500 .95rem var(--f-tijelo); cursor: pointer; text-decoration: none; }
+.karta-poruka { color: var(--muted); min-height: 1.2em; }
+.karta-dijeli { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 14px; }
+.karta-dijeli .cip, .cip { display: inline-block; border: 1px solid var(--crta); border-radius: 99px; padding: 4px 12px; color: var(--ink); text-decoration: none; }
+.karta-polozaji { margin: 14px 0 6px; } .karta-polozaji summary { cursor: pointer; color: var(--muted); }
+.karta-polozaji table { border-collapse: collapse; margin-top: 8px; } .karta-polozaji td { padding: 3px 12px 3px 0; color: var(--tekst, #cfc7b6); }
+.karta-polozaji td.g { color: var(--zlato); font-family: "Noto Sans Symbols", "DejaVu Sans", serif; }
+.karta-dio { border-top: 1px solid var(--crta); padding: 14px 0 4px; } .karta-dio h4 { font: 400 1.25rem var(--f-nas); margin: 0 0 6px; color: var(--ink); }
+.karta-dio p, .karta-dio li { color: #cfc7b6; } .karta-dio ul { padding-left: 1.1em; }
+.jezik { background: rgba(0,0,0,.4); color: var(--muted); border: 1px solid var(--crta); border-radius: 8px; padding: 3px 6px; font: .9rem var(--f-tijelo); }
 footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
 </style>
 </head>
@@ -64,7 +87,7 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
 <div class="sredina">
   <header class="vrh">
     <a class="ime" href="/">Feniks π</a>
-    <nav aria-label="Glavna navigacija"><a href="/#sto-radi">Što radi</a><a href="/#mudrost">Mudrost</a><a href="/#privatnost">Privatnost</a><a href="/preuzmi.html">Preuzmi</a><a href="/app/">Aplikacija</a></nav>
+    <nav aria-label="Glavna navigacija"><a href="/#sto-radi">Što radi</a><a href="/#mudrost">Mudrost</a><a href="/#privatnost">Privatnost</a><a href="/preuzmi.html">Preuzmi</a><a href="/app/">Aplikacija</a><select id="jezik" class="jezik" aria-label="Jezik"></select></nav>
   </header>
 
   <div class="junak">
@@ -79,6 +102,25 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
       <p class="uvod">Pronađi svoj životni put i hodaj njime. Feniks čita zvjezdanu svjetlost: tvoju natalnu kartu, brojeve i snove, povezane s nebom svakoga dana i s mudrošću starih knjiga.</p>
     </div>
   </div>
+
+  <section id="karta" class="karta">
+    <h2 data-i18n="nat.forma.naslov">Tvoja natalna karta: izračunaj odmah</h2>
+    <p class="uvod2" data-i18n="nat.forma.opis">Upiši datum, vrijeme i mjesto rođenja. Sve se računa u tvom pregledniku; podaci ne odlaze nikamo.</p>
+    <form id="karta-forma" class="karta-forma" autocomplete="off">
+      <label><span data-i18n="nat.forma.ime">Ime (neobavezno)</span><input name="ime" maxlength="60"></label>
+      <label><span data-i18n="nat.forma.datum">Datum rođenja</span><input name="datum" type="date" required min="1800-01-01" max="2100-12-31"></label>
+      <label><span data-i18n="nat.forma.vrijeme">Vrijeme rođenja</span><input name="vrijeme" type="time"></label>
+      <label class="karta-check"><input name="neznam" type="checkbox"> <span data-i18n="nat.forma.neznam">Ne znam vrijeme rođenja</span></label>
+      <label><span data-i18n="nat.forma.mjesto">Mjesto rođenja</span><select name="mjesto"></select></label>
+      <div id="karta-koord" class="karta-koord" hidden>
+        <label><span data-i18n="nat.forma.lat">Širina</span><input name="lat" inputmode="decimal"></label>
+        <label><span data-i18n="nat.forma.lon">Dužina</span><input name="lon" inputmode="decimal"></label>
+        <label><span data-i18n="nat.forma.zona">Vremenska zona</span><select name="zona"></select></label>
+      </div>
+      <button type="submit" class="gumb-zlatni" data-i18n="nat.forma.gumb">Izračunaj kartu i duboko čitanje</button>
+    </form>
+    <div id="karta-izlaz" class="karta-izlaz" aria-live="polite"></div>
+  </section>
 
   <section id="sto-radi">
     <h2>Što Feniks radi</h2>
@@ -133,6 +175,22 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
     <span><a href="/privatnost.html">Privatnost</a> · <a href="/uvjeti.html">Uvjeti korištenja</a></span>
   </footer>
 </div>
+<script src="/app/i18n.js"></script>
+<script src="/app/jezici/hr.js"></script>
+<script src="/app/jezici/en.js"></script>
+<script src="/app/jezici/de.js"></script>
+<script src="/app/jezici/it.js"></script>
+<script src="/app/jezici/es.js"></script>
+<script src="/app/jezici/fr.js"></script>
+<script src="/app/jezici/sl.js"></script>
+<script src="/app/jezici/sr.js"></script>
+<script src="/app/jezici/ru.js"></script>
+<script src="/app/jezici/uk.js"></script>
+<script src="/app/jezici/karta-hr.js"></script>
+<script src="/app/jezici/karta-en.js"></script>
+<script src="/app/mjesta.js"></script>
+<script>I18n.prevedi(document.getElementById('karta')); I18n.izbornik(document.getElementById('jezik'));</script>
+<script src="/karta-pocetna.js"></script>
 <script src="/glazba.js" defer></script>
 </body>
 </html>
