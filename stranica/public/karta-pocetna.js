@@ -89,7 +89,7 @@
   function odB64(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); return decodeURIComponent(escape(atob(s + '==='.slice((s.length + 3) % 4)))); }
   function link() {
     var r = zadnje.r;
-    return 'https://fenikspi.com/#k=' + b64(JSON.stringify([1, r.g, r.m, r.d, r.h, r.min, r.bezVremena ? 1 : 0, +r.lat.toFixed(4), +r.lon.toFixed(4), r.zona, r.mjesto, r.ime, r.spol]));
+    return 'https://fenikspi.com/#k=' + b64(JSON.stringify([1, r.g, r.m, r.d, r.h, r.min, r.bezVremena ? 1 : 0, +r.lat.toFixed(4), +r.lon.toFixed(4), r.zona, r.mjesto, r.ime, r.spol, I18n.jezik()]));
   }
   function izLinka() {
     var m = /^#k=([\w-]+)$/.exec(location.hash);
@@ -97,7 +97,7 @@
     try {
       var a = JSON.parse(odB64(m[1]));
       if (a[0] !== 1 || !(Math.abs(a[7]) <= 90 && Math.abs(a[8]) <= 180) || Mjesta.zone().indexOf(a[9]) < 0) return null;
-      return { g: a[1], m: a[2], d: a[3], h: a[4], min: a[5], bezVremena: !!a[6], lat: a[7], lon: a[8], zona: a[9], mjesto: String(a[10] || ''), ime: String(a[11] || ''), spol: a[12] === 'm' ? 'm' : 'z' };
+      return { g: a[1], m: a[2], d: a[3], h: a[4], min: a[5], bezVremena: !!a[6], lat: a[7], lon: a[8], zona: a[9], mjesto: String(a[10] || ''), ime: String(a[11] || ''), spol: a[12] === 'm' ? 'm' : 'z', jezik: I18n.JEZICI[a[13]] ? a[13] : null };
     } catch (e) { return null; }
   }
   // Nakon izračuna adresa u pregledniku postaje link na to čitanje (bez ponovnog učitavanja stranice).
@@ -177,6 +177,8 @@
   // Otvoren link s kartom (#k=…): popuni obrazac i odmah izračunaj.
   var izL = izLinka();
   if (izL) {
+    // čitanje se otvara na jeziku na kojem je napravljeno (Tor i neki preglednici svima javljaju engleski); izbor se ne pamti
+    if (izL.jezik && izL.jezik !== I18n.jezik()) I18n.postavi(izL.jezik, false);
     forma.datum.value = izL.g + '-' + String(izL.m).padStart(2, '0') + '-' + String(izL.d).padStart(2, '0');
     forma.vrijeme.value = String(izL.h).padStart(2, '0') + ':' + String(izL.min).padStart(2, '0');
     forma.neznam.checked = izL.bezVremena; forma.vrijeme.disabled = izL.bezVremena;

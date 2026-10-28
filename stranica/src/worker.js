@@ -39,7 +39,7 @@ async function simboli(env, req) {
 
 /* ---------- dublje čitanje (Claude) ---------- */
 const DNEVNO = 100;               // najviše dubljih čitanja na dan za cijelu stranicu (granica troška API-ja)
-const JEZICI = { hr: 'hrvatskom', en: 'engleskom', de: 'njemačkom', it: 'talijanskom', es: 'španjolskom', fr: 'francuskom', sl: 'slovenskom', sr: 'srpskom (latinica)', ru: 'ruskom', uk: 'ukrajinskom' };
+const JEZICI = { hr: 'hrvatskom', en: 'engleskom', de: 'njemačkom', it: 'talijanskom', es: 'španjolskom', fr: 'francuskom', sl: 'slovenskom', sr: 'srpskom (latinica)', 'sr-Cyrl': 'srpskom (ćirilica)', ru: 'ruskom', uk: 'ukrajinskom' };
 const SUSTAV = `Ti si pisac dubokih čitanja za Feniks π: natalna karta (tropski zodijak, Placidus), pet elemenata s eterom,
 kineski horoskop i numerologija, kako bi čovjek pronašao svoj životni put i hodao njime, kao odraz prepuštanja.
 Dobivaš apstraktnu kartu (znakovi, kuće, aspekti) i tekst čitanja koje su složila pravila. Napiši dublje, povezano čitanje
