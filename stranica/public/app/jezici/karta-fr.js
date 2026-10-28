@@ -102,6 +102,7 @@ I18n.dodaj('fr', {
   "nat.forma.zona": "Fuseau horaire", "nat.forma.gumb": "Calculer le thème et la lecture approfondie", "nat.forma.racunam": "Calcul en cours…", "nat.forma.greska": "Vérifie la date, l'heure et le lieu.",
   "nat.polozaji": "Positions", "nat.kopiraj": "Copier la lecture", "nat.kopirano": "Copié.", "nat.podijeli": "Partager", "nat.sPodacima": "Inclure la date, l'heure et le lieu de naissance lors de la copie et du partage",
   "nat.dijeliTekst": "Mon thème natal : {sazetak}. Calcule le tien gratuitement sur Feniks π :", "nat.uAplikaciju": "Enregistre-le dans l'app et suis les conseils du jour",
+  "nat.mailKratko": "La lecture complète s’ouvre via le lien. Pour l’avoir dans l’e-mail lui-même, clique sur « Copier la lecture » sur la page et colle-la ici, ou joins le fichier de « Enregistrer comme fichier ».",
   "nat.datoteka": "Enregistrer comme fichier", "nat.link": "Lien vers cette lecture (le thème est calculé dans le navigateur et n'est enregistré nulle part) :",
   "nat.ai": "Lecture plus approfondie (Claude)", "nat.ai.naslov": "Lecture plus approfondie", "nat.ai.pise": "Claude écrit…",
   "nat.ai.traje": "J'écris une lecture plus approfondie, cela prend jusqu'à une minute. Seul le thème est envoyé, sans nom, date ni lieu.", "nat.ai.greska": "La lecture approfondie n'a pas abouti pour le moment",

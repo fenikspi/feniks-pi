@@ -102,6 +102,7 @@ I18n.dodaj('es', {
   'nat.forma.zona': 'Zona horaria', 'nat.forma.gumb': 'Calcular la carta y la lectura profunda', 'nat.forma.racunam': 'Calculando…', 'nat.forma.greska': 'Revisa la fecha, la hora y el lugar.',
   'nat.polozaji': 'Posiciones', 'nat.kopiraj': 'Copiar la lectura', 'nat.kopirano': 'Copiado.', 'nat.podijeli': 'Compartir', 'nat.sPodacima': 'Incluir fecha, hora y lugar de nacimiento al copiar y compartir',
   'nat.dijeliTekst': 'Mi carta natal: {sazetak}. Calcula la tuya gratis en Feniks π:', 'nat.uAplikaciju': 'Guárdala en la app y sigue las recomendaciones diarias',
+  'nat.mailKratko': 'La lectura completa se abre en el enlace. Si la quieres dentro del correo, haz clic en «Copiar la lectura» en la página y pégala aquí, o adjunta el archivo de «Guardar como archivo».',
   'nat.datoteka': 'Guardar como archivo', 'nat.link': 'Enlace a esta lectura (la carta se calcula en el navegador y no se guarda en ningún sitio):',
   'nat.ai': 'Lectura más profunda (Claude)', 'nat.ai.naslov': 'Lectura más profunda', 'nat.ai.pise': 'Claude está escribiendo…',
   'nat.ai.traje': 'Escribiendo una lectura más profunda, tarda hasta un minuto. Solo se envía la carta, sin nombre, fecha ni lugar.', 'nat.ai.greska': 'La lectura más profunda no ha funcionado ahora mismo',

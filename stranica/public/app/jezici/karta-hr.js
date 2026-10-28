@@ -197,6 +197,7 @@ I18n.dodaj('hr', {
   'nat.forma.zona': 'Vremenska zona', 'nat.forma.gumb': 'Izračunaj kartu i duboko čitanje', 'nat.forma.racunam': 'Računam…', 'nat.forma.greska': 'Provjeri datum, vrijeme i mjesto.',
   'nat.polozaji': 'Položaji', 'nat.kopiraj': 'Kopiraj čitanje', 'nat.kopirano': 'Kopirano.', 'nat.podijeli': 'Podijeli', 'nat.sPodacima': 'Uključi datum, vrijeme i mjesto rođenja u kopiju i dijeljenje',
   'nat.dijeliTekst': 'Moja natalna karta: {sazetak}. Izračunaj svoju besplatno na Feniks π:', 'nat.uAplikaciju': 'Spremi u aplikaciju i prati dnevne preporuke',
+  'nat.mailKratko': 'Cijelo čitanje otvara se na linku. Ako ga želiš u samom mailu, na stranici klikni „Kopiraj čitanje” i zalijepi ga ovdje, ili priloži datoteku iz „Spremi kao datoteku”.',
   'nat.datoteka': 'Spremi kao datoteku', 'nat.link': 'Link na ovo čitanje (karta se izračuna u pregledniku, nigdje se ne sprema):',
   'nat.ai': 'Dublje čitanje (Claude)', 'nat.ai.naslov': 'Dublje čitanje', 'nat.ai.pise': 'Claude piše…',
   'nat.ai.traje': 'Pišem dublje čitanje, to traje do minute. Šalje se samo karta bez imena, datuma i mjesta.', 'nat.ai.greska': 'Dublje čitanje trenutno nije uspjelo'

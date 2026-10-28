@@ -116,13 +116,20 @@
     });
   }
   // Dijeljenje: izbornik sustava (mobitel), inače poveznice. Dijeli se kratki sažetak i poveznica, a puni tekst preko „Kopiraj”.
+  // Mnogi programi za poštu režu ili odbijaju mailto adrese duže od ~2000 znakova: tad u mail ide sažetak i link,
+  // a cijelo čitanje preko „Kopiraj” (zalijepi u mail) ili „Spremi kao datoteku” (privitak).
+  function tijeloMaila() {
+    var puno = tekstZaDijeljenje();
+    if (encodeURIComponent(puno).length <= 1800) return puno;
+    return zadnje.c.naslov.trim() + '\n' + zadnje.c.sazetak + '\n\n' + t('nat.link') + '\n' + link() + '\n\n' + t('nat.mailKratko') + '\n\n— Feniks π · https://fenikspi.com';
+  }
   function podijeli() {
     var url = link(), kratko = t('nat.dijeliTekst', { sazetak: zadnje.c.sazetak });
     if (navigator.share) { navigator.share({ title: 'Feniks π', text: kratko, url: url }).catch(function () {}); return; }
     var u = encodeURIComponent(url), tx = encodeURIComponent(kratko + ' ' + url), d = $('#k-dijeli');
     d.innerHTML = [['WhatsApp', 'https://wa.me/?text=' + tx], ['Telegram', 'https://t.me/share/url?url=' + u + '&text=' + encodeURIComponent(kratko)],
       ['Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + u], ['X', 'https://twitter.com/intent/tweet?text=' + tx],
-      ['E-mail', 'mailto:?subject=' + encodeURIComponent('Feniks π') + '&body=' + encodeURIComponent(tekstZaDijeljenje())]]
+      ['E-mail', 'mailto:?subject=' + encodeURIComponent('Feniks π') + '&body=' + encodeURIComponent(tijeloMaila())]]
       .map(function (x) { return '<a class="cip" href="' + x[1] + '" target="_blank" rel="noopener noreferrer">' + x[0] + '</a>'; }).join('');
     d.hidden = false;
   }

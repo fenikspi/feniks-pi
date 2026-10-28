@@ -102,6 +102,7 @@ I18n.dodaj('de', {
   'nat.forma.zona': 'Zeitzone', 'nat.forma.gumb': 'Horoskop und tiefe Deutung berechnen', 'nat.forma.racunam': 'Berechne…', 'nat.forma.greska': 'Prüfe Datum, Uhrzeit und Ort.',
   'nat.polozaji': 'Positionen', 'nat.kopiraj': 'Deutung kopieren', 'nat.kopirano': 'Kopiert.', 'nat.podijeli': 'Teilen', 'nat.sPodacima': 'Geburtsdatum, -zeit und -ort beim Kopieren und Teilen einschließen',
   'nat.dijeliTekst': 'Mein Geburtshoroskop: {sazetak}. Berechne deins kostenlos bei Feniks π:', 'nat.uAplikaciju': 'In der App speichern und tägliche Impulse erhalten',
+  'nat.mailKratko': 'Die vollständige Deutung öffnet sich über den Link. Wenn du sie in der E-Mail selbst haben möchtest, klicke auf der Seite auf „Deutung kopieren“ und füge sie hier ein, oder hänge die Datei aus „In Datei speichern“ an.',
   'nat.datoteka': 'In Datei speichern', 'nat.link': 'Link zu dieser Deutung (das Horoskop wird im Browser berechnet und nirgends gespeichert):',
   'nat.ai': 'Tiefere Deutung (Claude)', 'nat.ai.naslov': 'Tiefere Deutung', 'nat.ai.pise': 'Claude schreibt…',
   'nat.ai.traje': 'Ich schreibe eine tiefere Deutung, das dauert bis zu einer Minute. Gesendet wird nur das Horoskop, ohne Name, Datum und Ort.', 'nat.ai.greska': 'Die tiefere Deutung hat gerade nicht geklappt',
