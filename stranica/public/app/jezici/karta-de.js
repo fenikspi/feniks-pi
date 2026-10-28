@@ -61,7 +61,7 @@ I18n.dodaj('de', {
   'nat.tema.sun': 'Bewusstsein und Wille', 'nat.tema.moon': 'Gefühle und Bedürfnisse', 'nat.tema.mercury': 'Gedanken und Worte', 'nat.tema.venus': 'Liebe und Werte',
   'nat.tema.mars': 'Begehren und Handeln', 'nat.tema.jupiter': 'Wachstum und Glaube', 'nat.tema.saturn': 'Grenzen und Reife', 'nat.tema.uranus': 'Freiheit und Erwachen',
   'nat.tema.neptune': 'Träume und Mitgefühl', 'nat.tema.pluto': 'Verwandlung und Kraft', 'nat.tema.asc': 'dein Auftreten in der Welt', 'nat.tema.mc': 'deine Berufung',
-  'nat.aspekt': '{a} und {b}: {zrcalo}',
+  'nat.aspekt': '<i>{a}</i> ↔ <i>{b}</i>: {zrcalo}',
   'nat.aspektZrcalo.konjunkcija': 'zu einer Kraft verschmolzen, du kannst sie nicht trennen.', 'nat.aspektZrcalo.sekstil': 'sie ermutigen einander, wenn du ihnen eine Chance gibst.',
   'nat.aspektZrcalo.kvadrat': 'sie reiben sich und erzeugen eine Spannung, aus der deine größte Kraft wächst.', 'nat.aspektZrcalo.trigon': 'sie fließen harmonisch; ein Geschenk, das du mühelos nutzen darfst.',
   'nat.aspektZrcalo.opozicija': 'sie stehen einander gegenüber; der Weg liegt im Gleichgewicht, nicht in der Wahl.',
