@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pravila privatnosti · Feniks π</title>
+<meta name="description" content="Feniks π: bez reklama, bez praćenja, bez naplate. Podaci ostaju na tvom uređaju; usklađivanje je šifrirano i može ga pročitati samo vlasnik računa.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="/stil.css">
+</head>
+<body>
+<header class="vrh">
+  <a class="ime" href="/">Feniks π</a>
+  <nav aria-label="Glavna navigacija"><a href="/">Početna</a><a href="/preuzmi.html">Preuzmi</a><a href="/privatnost.html" aria-current="page">Privatnost</a><a href="/uvjeti.html">Uvjeti korištenja</a></nav>
+</header>
+<main>
+<h1>Pravila privatnosti</h1>
+<p class="datum">Vrijedi od 28. listopada 2026.</p>
+
+<ul class="sazetak">
+  <li><b>Bez naplate, bez reklama, bez praćenja.</b> Feniks π je besplatan i takav ostaje. Nema oglasa, analitike, kolačića za praćenje ni prodaje podataka.</li>
+  <li><b>Tvoji podaci ostaju kod tebe.</b> Profil, datumi i mjesta rođenja, dnevnik simbolizma i sinkroniciteta te čitanja zadano se čuvaju samo na tvom uređaju.</li>
+  <li><b>Usklađivanje samo ako ga uključiš, i to šifrirano.</b> Podaci se šifriraju na tvom uređaju prije slanja; poslužitelj čuva samo šifrirani zapis koji nitko osim tebe ne može pročitati, pa ni mi.</li>
+  <li><b>Doprinos simboličkoj knjižnici samo uz tvoj pristanak.</b> Zadano je isključen. Ako ga uključiš, šalju se samo anonimni simbolički obrasci, nikad tvoji osobni podaci ni tekst zapisa.</li>
+</ul>
+
+<h2>1. Tko obrađuje podatke</h2>
+<p>Voditelj obrade je projekt Feniks π (feniksPi.com). Za sva pitanja o privatnosti i ostvarivanje prava piši na <a href="mailto:info@fenikspi.com">info@fenikspi.com</a>.</p>
+
+<h2>2. Podaci na tvom uređaju</h2>
+<p>Aplikacija na računalu, mobitelu i u pregledniku sve što uneseš (imena profila, datume, vrijeme i mjesto rođenja, dnevnik simbolizma i sinkroniciteta, bilješke i čitanja) sprema lokalno na tvoj uređaj. Te podatke ne vidimo i ne primamo. Ti ih u svakom trenutku možeš izvesti ili izbrisati u postavkama aplikacije.</p>
+
+<h2>3. Račun i prijava (neobavezno)</h2>
+<p>Račun ti treba samo ako želiš koristiti iste podatke na više uređaja. Prijavu biraš sam:</p>
+<ul>
+  <li><b>korisničko ime i lozinka</b>: ne tražimo e-adresu ni broj mobitela;</li>
+  <li><b>ključ za prijavu (passkey)</b>: otisak prsta, lice ili PIN tvog uređaja; poslužitelj dobiva samo javni ključ;</li>
+  <li><b>e-adresa za oporavak</b>: samo ako je sam dodaš.</li>
+</ul>
+<p>Za račun čuvamo: korisničko ime, zaštićeni (hash) zapis lozinke ili javni ključ, datum stvaranja i zadnje prijave. Lozinku nikad ne čuvamo u čitljivom obliku.</p>
+
+<h2>4. Šifrirano usklađivanje</h2>
+<p>Kad uključiš usklađivanje, aplikacija iz tvoje lozinke ili ključa na tvom uređaju izvodi ključ za šifriranje i njime šifrira podatke (AES-256-GCM) prije slanja. Poslužitelj čuva samo šifrirane zapise, njihovu veličinu i vrijeme promjene. Ključ nikad ne napušta tvoj uređaj.</p>
+<p><b>Važno:</b> zato ti ne možemo vratiti podatke ako izgubiš lozinku i sve uređaje. Aplikacija ti pri uključivanju daje <b>ključ za oporavak</b>; spremi ga na sigurno mjesto.</p>
+
+<h2 id="5-doprinos">5. Doprinos simboličkoj knjižnici (pristanak, zadano isključen)</h2>
+<p>Feniks π uči tumačiti iz stare literature i gradi knjižnicu simboličkih obrazaca. Ako u postavkama uključiš <i>„Doprinesi anonimne obrasce”</i>, aplikacija nakon čitanja šalje samo apstraktni obrazac, na primjer: <i>„Saturn u 4. kući · Mjesec u Raku · san: voda, kuća”</i>.</p>
+<ul>
+  <li>Nikad se ne šalju: ime, korisničko ime, datum, vrijeme ili mjesto rođenja, tekst snova i bilješki, sam tekst čitanja, adresa uređaja.</li>
+  <li>Obrasci se spremaju bez ikakve veze s tvojim računom, pa ih kasnije ne možemo povezati s tobom.</li>
+  <li>Pristanak možeš povući u svakom trenutku jednim klikom; od tog trenutka se ništa više ne šalje.</li>
+</ul>
+<p>Pravna osnova je tvoj izričiti pristanak (čl. 6. st. 1. t. (a) i čl. 9. st. 2. t. (a) Opće uredbe o zaštiti podataka, GDPR).</p>
+
+<h2>6. Što bilježi poslužitelj</h2>
+<p>Stranicu i usklađivanje poslužuje Cloudflare, koji radi sigurnosti i rada mreže kratko bilježi tehničke podatke o zahtjevima (npr. IP adresu i vrstu preglednika). Mi te podatke ne koristimo za praćenje i ne povezujemo ih s računima. Fontovi i sve slike učitavaju se s naše domene, bez zahtjeva prema trećim stranama.</p>
+
+<h2>7. Koliko dugo čuvamo podatke</h2>
+<p>Račun i šifrirane zapise čuvamo dok ih ne izbrišeš. Račun bez prijave dulje od 3 godine brišemo nakon obavijesti u aplikaciji. Anonimni obrasci nisu osobni podaci i ostaju u knjižnici.</p>
+
+<h2>8. Tvoja prava</h2>
+<p>Imaš pravo na pristup, ispravak, brisanje, prenosivost podataka i povlačenje pristanka. Većinu toga radiš sam u aplikaciji (izvoz, brisanje računa jednim klikom). Ako smatraš da su ti prava povrijeđena, možeš podnijeti prigovor Agenciji za zaštitu osobnih podataka (AZOP).</p>
+
+<h2>9. Djeca</h2>
+<p>Račun za usklađivanje mogu otvoriti osobe starije od 16 godina. Mlađi mogu koristiti aplikaciju na uređaju uz roditelja.</p>
+
+<h2>10. Promjene</h2>
+<p>O bitnim promjenama ovih pravila obavijestit ćemo u aplikaciji prije nego što stupe na snagu. Nikad ih nećemo promijeniti tako da bez novog pristanka počnemo koristiti podatke koje si već povjerio.</p>
+</main>
+<footer><span>Feniks π · bez reklama, bez praćenja, bez naplate</span><a href="/uvjeti.html">Uvjeti korištenja</a></footer>
+<script src="/glazba.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feniks π</title>
+<meta name="description" content="Feniks π: Dnevnik simbolizma i sinkroniciteta, nebo trenutka i dnevne preporuke. Sve ostaje na tvom uređaju.">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/stil.css">
+<style>
+/* Aplikacija: kartice Danas / Dnevnik / Profil na noćnoj podlozi, kao stranica. */
+main.app { max-width: 820px; }
+.kartice { display: flex; gap: 6px; border-bottom: 1px solid var(--crta); margin: 6px 0 22px; overflow-x: auto; }
+.kartice button { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 500 1rem var(--f-tijelo); padding: 10px 14px; cursor: pointer; white-space: nowrap; }
+.kartice button[aria-selected="true"] { color: var(--zlato); border-bottom-color: var(--zlato); }
+.ploca { background: linear-gradient(160deg, rgba(28, 34, 66, .55), rgba(10, 13, 30, .5)); border: 1px solid var(--crta); border-radius: 16px; padding: 18px 20px; margin-bottom: 18px; }
+.ploca h2 { margin-top: 0; }
+.tiho { color: var(--muted); }
+#danas-nebo { list-style: none; padding: 0; margin: 0; columns: 2 180px; }
+#danas-nebo li { margin: 3px 0; }
+.g { display: inline-block; width: 1.4em; color: var(--zlato); font-family: "Noto Sans Symbols", "DejaVu Sans", serif; }
+label { display: block; margin: 10px 0 4px; color: var(--muted); font-size: .92rem; }
+input, select, textarea { width: 100%; background: rgba(0, 0, 0, .45); color: var(--ink); border: 1px solid var(--crta); border-radius: 10px; padding: 10px 12px; font: 1rem var(--f-tijelo); }
+textarea { min-height: 120px; resize: vertical; }
+.red { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0 14px; }
+button.gumb { background: none; cursor: pointer; font: 500 1rem var(--f-tijelo); margin-top: 14px; }
+.cip { display: inline-block; border: 1px solid var(--crta); border-radius: 99px; padding: 2px 10px; margin: 3px 4px 3px 0; font-size: .9rem; color: var(--ink); background: rgba(240, 192, 90, .06); }
+button.cip { cursor: pointer; font-family: var(--f-tijelo); }
+.cip b { color: var(--zlato); font-weight: 500; }
+.cip.sink { border-color: var(--zlato); box-shadow: 0 0 12px rgba(240, 160, 60, .35); }
+.zapis { border-top: 1px solid var(--crta); padding: 12px 0; }
+.zapis header { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.zapis time { color: var(--muted); font-size: .9rem; }
+.zapis p { margin: 8px 0; }
+.brisi { margin-left: auto; background: none; border: 0; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
+.nebo-zapisa { font-size: .88rem; }
+#prepoznato, #spremljeno, #profil-spremljeno, #izvoz-poruka { min-height: 1.4em; color: var(--muted); font-size: .92rem; margin-top: 8px; }
+.dogadaji { list-style: none; padding: 0; margin: 0; }
+.dogadaji li { border-top: 1px solid var(--crta); padding: 10px 0; display: grid; grid-template-columns: 7.5em 1fr; gap: 4px 14px; }
+.dogadaji li.proslo { opacity: .5; }
+.dogadaji li.ranije { display: block; }
+.dogadaji summary { cursor: pointer; color: var(--muted); padding: 4px 0; }
+.dogadaji li.danas { border-left: 3px solid var(--zlato); padding-left: 10px; }
+.dogadaji li.gospodar b { color: var(--zlato); }
+.dogadaji time { color: var(--muted); font-size: .9rem; }
+.dogadaji b { font-weight: 500; }
+.dogadaji p { margin: 2px 0 0; color: var(--tekst); font-size: .95rem; }
+@media (max-width: 520px) { .dogadaji li { grid-template-columns: 1fr; } }
+#izvoz-tekst { min-height: 160px; font-family: monospace; font-size: .8rem; margin-top: 10px; }
+</style>
+</head>
+<body>
+<header class="vrh">
+  <a class="ime" href="/">Feniks π</a>
+  <nav aria-label="Glavna navigacija"><a href="/">Početna</a><a href="/preuzmi.html">Preuzmi</a><a href="/privatnost.html">Privatnost</a></nav>
+</header>
+<main class="app siroko">
+  <h1 id="pozdrav">Dobro došli</h1>
+  <p class="tiho">Sve što ovdje upišeš ostaje samo na ovom uređaju.</p>
+  <div class="kartice" role="tablist">
+    <button role="tab" data-t="danas" aria-selected="true">Danas</button>
+    <button role="tab" data-t="mjesec" aria-selected="false">Mjesec</button>
+    <button role="tab" data-t="godina" aria-selected="false">Godina</button>
+    <button role="tab" data-t="dnevnik" aria-selected="false">Dnevnik simbolizma i sinkroniciteta</button>
+    <button role="tab" data-t="profil" aria-selected="false">Profil</button>
+  </div>
+
+  <section role="tabpanel" id="t-danas">
+    <div class="ploca"><h2>Preporuka dana</h2><div id="danas-preporuka"></div></div>
+    <div class="ploca"><h2>Nebo sada</h2><ul id="danas-nebo"></ul></div>
+  </section>
+
+  <section role="tabpanel" id="t-mjesec" hidden>
+    <div class="ploca"><h2 id="mjesec-naslov">Ovaj mjesec</h2><div id="mjesec-sazetak"><p class="tiho">Računam nebo mjeseca…</p></div>
+      <button class="gumb" type="button" id="mjesec-ics" hidden>Dodaj u kalendar (.ics)</button></div>
+    <div class="ploca"><h2>Što donosi</h2><ol class="dogadaji" id="mjesec-dogadaji"></ol></div>
+  </section>
+
+  <section role="tabpanel" id="t-godina" hidden>
+    <div class="ploca"><h2 id="godina-naslov">Tvoja godina</h2><div id="godina-sazetak"><p class="tiho">Računam tvoju godinu…</p></div>
+      <button class="gumb" type="button" id="godina-ics" hidden>Dodaj u kalendar (.ics)</button></div>
+    <div class="ploca"><h2>Veliki trenuci godine</h2><p class="tiho">Pomrčine, ulasci i postaje sporih planeta i njihovi točni tranziti na tvoju kartu. Istaknut je gospodar godine.</p><ol class="dogadaji" id="godina-dogadaji"></ol></div>
+  </section>
+
+  <section role="tabpanel" id="t-dnevnik" hidden>
+    <form class="ploca" id="unos">
+      <h2>Novi zapis</h2>
+      <div class="red">
+        <div><label for="vrsta">Što se dogodilo</label>
+          <select id="vrsta" name="vrsta"><option value="san">San</option><option value="znak">Znak</option><option value="susret">Susret</option><option value="sinkronicitet">Sinkronicitet (smislena slučajnost)</option><option value="misao">Misao</option></select></div>
+        <div><label for="dodatni">Dodatni simboli (zarezom)</label><input id="dodatni" name="dodatni" placeholder="npr. ključ, sova"></div>
+      </div>
+      <label for="tekst">Zapis</label>
+      <textarea id="tekst" name="tekst" placeholder="Opiši san, znak ili susret svojim riječima…" required></textarea>
+      <div id="prepoznato" aria-live="polite"></div>
+      <button class="gumb" type="submit">Zapiši s nebom ovog trenutka</button>
+      <div id="spremljeno" aria-live="polite"></div>
+    </form>
+    <div class="ploca">
+      <h2>Simboli koji se vraćaju</h2>
+      <p class="tiho">Zadnjih 30 dana. Istaknuti su sinkroniciteti: simbol koji se javio tri ili više puta u sedam dana.</p>
+      <div id="ponavljanja"></div>
+    </div>
+    <div class="ploca">
+      <h2>Zapisi</h2>
+      <p id="filtar" hidden>Samo zapisi sa simbolom <b id="filtar-ime"></b> · <button type="button" class="cip" id="filtar-makni">prikaži sve</button></p>
+      <div id="zapisi"></div>
+    </div>
+  </section>
+
+  <section role="tabpanel" id="t-profil" hidden>
+    <form class="ploca" id="profil">
+      <h2>Tvoj profil</h2>
+      <p class="tiho">Podaci o rođenju služe za tranzite na tvoju kartu i osobni dan. Ostaju samo na ovom uređaju.</p>
+      <label for="ime">Ime ili nadimak</label><input id="ime" name="ime" autocomplete="nickname">
+      <div class="red">
+        <div><label for="datum">Datum rođenja</label><input id="datum" name="datum" type="date"></div>
+        <div><label for="vrijeme">Vrijeme rođenja (ako znaš)</label><input id="vrijeme" name="vrijeme" type="time"></div>
+      </div>
+      <div class="red">
+        <div><label for="mjesto">Mjesto rođenja</label><select id="mjesto" name="mjesto"></select></div>
+        <div><label for="zivi">Gdje živiš (za nebo i planetarne sate)</label><select id="zivi" name="zivi"></select></div>
+      </div>
+      <button class="gumb" type="submit">Spremi</button>
+      <div id="profil-spremljeno" aria-live="polite"></div>
+    </form>
+    <div class="ploca">
+      <h2>Tvoji podaci</h2>
+      <p class="tiho">Izvezi sve kao tekst za sigurnosnu kopiju ili obriši sve s ovog uređaja.</p>
+      <button class="gumb" type="button" id="izvoz">Izvezi sve podatke</button>
+      <div id="izvoz-poruka" aria-live="polite"></div>
+      <textarea id="izvoz-tekst" readonly hidden aria-label="Izvezeni podaci"></textarea>
+      <button class="gumb" type="button" id="brisi-sve">Obriši sve podatke s ovog uređaja</button>
+    </div>
+  </section>
+</main>
+<script src="astronomy.js"></script>
+<script src="asteroids.js"></script>
+<script src="core.js"></script>
+<script src="simboli.js"></script>
+<script src="nebo.js"></script>
+<script src="prijedlozi.js"></script>
+<script src="app.js"></script>
+<script src="/glazba.js" defer></script>
+</body>
+</html>

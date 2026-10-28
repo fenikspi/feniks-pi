@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feniks π · Prirodna Inteligencija</title>
+<meta name="description" content="Feniks π: natalna karta, numerologija, dnevnik simbolizma i sinkroniciteta te dnevna čitanja utemeljena na starim knjigama. Živa pozadina radne površine sa stvarnim nebom dana.">
+<meta property="og:title" content="Feniks π · Prirodna Inteligencija">
+<meta property="og:description" content="Natalna karta, numerologija, dnevnik simbolizma i sinkroniciteta, dnevna i duboka čitanja.">
+<meta property="og:image" content="https://feniksPi.com/slike/og.jpg">
+<meta property="og:url" content="https://feniksPi.com/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/ikona-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fontovi/fontovi.css">
+<style>
+/* Feniks π: noć, žar i zlato. Znak kao srce stranice, zatim što Feniks radi, iz čega uči i kada stiže. */
+:root {
+  --crno: #000; --nebo: #070a18; --ink: #efe7d6; --muted: #a49e8e; --zlato: #f0c05a; --zar: #e8a23a; --crta: rgba(232, 162, 58, .22);
+  --f-kras: "Pinyon Script", cursive; --f-nas: "Marcellus", Georgia, serif; --f-tijelo: "Alegreya Sans", system-ui, sans-serif; --f-glag: "Noto Sans Glagolitic", serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--crno); }
+body { margin: 0; background: radial-gradient(ellipse 90% 60% at 50% 0%, #141a3a 0%, #070a18 45%, #000 100%); color: var(--ink); font: 18px/1.6 var(--f-tijelo);
+  padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
+a { color: var(--zlato); }
+:focus-visible { outline: 2px solid var(--zlato); outline-offset: 3px; }
+.sredina { max-width: 1100px; margin: 0 auto; }
+header.vrh { display: flex; justify-content: space-between; align-items: center; padding-block: 18px; }
+header.vrh .ime { font: 400 2rem/1 var(--f-kras); color: var(--zlato); text-decoration: none; }
+header.vrh nav { display: flex; gap: 18px; font-size: .95rem; }
+header.vrh nav a { color: var(--muted); text-decoration: none; }
+header.vrh nav a:hover { color: var(--zlato); }
+.junak { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 4vw; align-items: center; padding-block: 2vh 8vh; }
+@media (max-width: 820px) { .junak { grid-template-columns: 1fr; text-align: center; } }
+.junak img { width: 100%; height: auto; max-width: 560px; display: block; margin: 0 auto; filter: drop-shadow(0 0 40px rgba(255, 130, 30, .25)); }
+.junak h1 { font: 400 clamp(3rem, 7vw, 5.2rem)/1 var(--f-kras); margin: 0; background: linear-gradient(#fff0b8, #f0c05a 45%, #b9741e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.junak .pod { font: 400 1rem var(--f-nas); letter-spacing: .34em; text-transform: uppercase; color: var(--zar); margin: 6px 0 22px; }
+.junak .glag { font: 1.4rem var(--f-glag); color: var(--muted); letter-spacing: .3em; }
+.junak p.uvod { font-size: 1.15rem; max-width: 34ch; }
+@media (max-width: 820px) { .junak p.uvod { margin-inline: auto; } }
+.oznaka { display: inline-block; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; color: var(--zar); border: 1px solid var(--zar); border-radius: 99px; padding: 3px 12px; }
+section { padding-block: 7vh; border-top: 1px solid var(--crta); }
+h2 { font: 400 clamp(1.8rem, 3.5vw, 2.5rem)/1.15 var(--f-nas); margin: 0 0 8px; text-wrap: balance; }
+.uvod2 { color: var(--muted); max-width: 60ch; margin: 0 0 28px; }
+.mreza { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.kartica { background: linear-gradient(160deg, rgba(28, 34, 66, .6), rgba(10, 13, 30, .55)); border: 1px solid var(--crta); border-radius: 16px; padding: 20px; }
+.kartica img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 24px rgba(244, 197, 107, .25); }
+.kartica h3 { font: 400 1.3rem var(--f-nas); margin: 12px 0 6px; }
+.kartica p { margin: 0; color: var(--muted); font-size: .98rem; }
+.knjige { columns: 2 260px; column-gap: 32px; color: var(--muted); font-size: .98rem; }
+.knjige li { margin-bottom: 6px; break-inside: avoid; }
+.knjige b { color: var(--ink); font-weight: 500; }
+.uskoro { text-align: center; }
+.uskoro p { color: var(--muted); max-width: 58ch; margin: 0 auto; }
+footer { border-top: 1px solid var(--crta); padding-block: 28px 40px; color: var(--muted); font-size: .9rem; display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
+</style>
+</head>
+<body>
+<div class="sredina">
+  <header class="vrh">
+    <a class="ime" href="/">Feniks π</a>
+    <nav aria-label="Glavna navigacija"><a href="/#sto-radi">Što radi</a><a href="/#mudrost">Mudrost</a><a href="/#privatnost">Privatnost</a><a href="/preuzmi.html">Preuzmi</a><a href="/app/">Aplikacija</a></nav>
+  </header>
+
+  <div class="junak">
+    <img src="/slike/feniks-pi-znak.webp" srcset="/slike/feniks-pi-znak-600.webp 600w, /slike/feniks-pi-znak.webp 1200w" sizes="(max-width: 820px) 90vw, 50vw"
+         width="1200" height="1200" alt="Znak Feniks π: feniks se diže iz ognja na megalitnim blokovima vapnenca s glagoljicom, iza je zlatni lijevi kolovrat od pletera">
+    <div>
+      <span class="oznaka">Uskoro</span>
+      <h1>Feniks π</h1>
+      <div class="pod">Prirodna Inteligencija</div>
+      <div class="glag" lang="cu-Glag">ⰗⰅⰐⰋⰍⰔ π</div>
+      <p class="uvod">Tvoja natalna karta, tvoji brojevi i tvoji snovi, povezani s nebom svakoga dana i s mudrošću starih knjiga.</p>
+    </div>
+  </div>
+
+  <section id="sto-radi">
+    <h2>Što Feniks radi</h2>
+    <p class="uvod2">Feniks je osobni zvjezdani dnevnik za tebe i tvoje bližnje. Računa precizno, a tumači iz tradicije.</p>
+    <div class="mreza">
+      <div class="kartica"><img src="/slike/sun.webp" alt="" width="64" height="64"><h3>Natalna karta</h3><p>Geocentrično, tropski zodijak, kuće po Placidusu. Povijesno ljetno i zimsko vrijeme računa se samo, točno na minutu.</p></div>
+      <div class="kartica"><img src="/slike/moon.webp" alt="" width="64" height="64"><h3>Nebo danas</h3><p>Tranziti prema tvojoj karti, Mjesečeve mijene, izlazak i zalazak Sunca, zlatni i planetarni sati.</p></div>
+      <div class="kartica"><img src="/slike/venus.webp" alt="" width="64" height="64"><h3>Dnevnik simbolizma i sinkroniciteta</h3><p>Zapiši san, susret, znak ili smislenu slučajnost; svaki zapis pamti nebo tog trenutka. Iz njega rastu bolja čitanja i dnevne preporuke koje ti pomažu pronaći svoj životni put i hodati njime, kao odraz prepuštanja.</p></div>
+      <div class="kartica"><img src="/slike/jupiter.webp" alt="" width="64" height="64"><h3>Brojevi</h3><p>Pitagorejska numerologija: životni put, duša, izraz, osobna godina, mjesec i dan.</p></div>
+      <div class="kartica"><img src="/slike/saturn.webp" alt="" width="64" height="64"><h3>Duboka čitanja</h3><p>Dnevna i duboka čitanja koja povezuju kartu, brojeve i simbole iz tvog dnevnika, s citatima iz knjiga.</p></div>
+      <div class="kartica"><img src="/slike/mars.webp" alt="" width="64" height="64"><h3>Živa pozadina</h3><p>Radna površina postaje nebo dana: stvarne fotografije planeta, Mliječni put, poruka dana i brzi unos.</p></div>
+    </div>
+  </section>
+
+  <section id="mudrost">
+    <h2>Iz čega Feniks uči</h2>
+    <p class="uvod2">Biblioteka od gotovo dvije tisuće starih i slobodnih djela, iz kojih se grade obrasci simbolike za tumačenje.</p>
+    <ul class="knjige">
+      <li><b>Astrologija:</b> Ptolemejska i renesansna tradicija, Placidusove kuće, dostojanstva planeta</li>
+      <li><b>Pitagora i Platon:</b> brojevi, harmonija i neoplatonisti (Plotin, Proklo, Jamblih)</li>
+      <li><b>Vede i Upanišade:</b> Rigveda, Atharvaveda, Bhagavad-gita</li>
+      <li><b>Hermetika:</b> Hermes Trismegist, Smaragdna ploča, egipatska Knjiga mrtvih</li>
+      <li><b>Staroslavenska vjera:</b> Nodilo, Afanasjev, narodna vjerovanja i obredi</li>
+      <li><b>Šamanizam:</b> Sibir i Amerika, životinje-vodiči i putovanja duše</li>
+      <li><b>Mitologija svijeta:</b> grčka, nordijska, keltska, bliskoistočna, azijska</li>
+      <li><b>Sveta geometrija:</b> zlatni rez, Fibonacci, kanoni proporcija</li>
+      <li><b>Simbolika:</b> životinje, snovi, boje i znakovi kroz tradicije</li>
+    </ul>
+  </section>
+
+  <section id="privatnost">
+    <h2>Tvoje ostaje tvoje</h2>
+    <p class="uvod2">Feniks π je besplatan, bez reklama i bez praćenja. Nema naplate ni skrivenih dijelova.</p>
+    <ul class="knjige">
+      <li><b>Samo na uređaju:</b> karta, dnevnik snova i čitanja zadano ostaju na tvom računalu ili mobitelu.</li>
+      <li><b>Prijava kako želiš:</b> korisničko ime i lozinka ili ključ za prijavu (otisak prsta, lice), bez e-adrese i broja mobitela.</li>
+      <li><b>Šifrirano usklađivanje:</b> ako ga uključiš, podatke može pročitati samo vlasnik računa, pa ni mi.</li>
+      <li><b>Ti odlučuješ:</b> doprinos anonimnih simboličkih obrazaca zajedničkoj knjižnici uključuješ i isključuješ sam.</li>
+    </ul>
+    <p><a href="/privatnost.html">Pravila privatnosti</a> · <a href="/uvjeti.html">Uvjeti korištenja</a></p>
+  </section>
+
+  <section id="uskoro" class="uskoro">
+    <h2>Za svaki uređaj</h2>
+    <p>Feniks π nastaje i već radi na računalu kao aplikacija sa živom pozadinom. Uskoro za Linux, Windows, macOS, Android (F-Droid) i kao web-aplikacija za iPhone i sve ostale uređaje.</p>
+    <p style="margin-top:18px"><a class="oznaka" href="/app/" style="text-decoration:none">Otvori web-aplikaciju</a> &nbsp; <a class="oznaka" href="/preuzmi.html" style="text-decoration:none">Preuzmi</a></p>
+  </section>
+
+  <footer>
+    <span class="znak">Feniks π</span>
+    <span>Astrologija i numerologija su okvir za razmišljanje, ne sigurno predviđanje.</span>
+    <span><a href="/privatnost.html">Privatnost</a> · <a href="/uvjeti.html">Uvjeti korištenja</a></span>
+  </footer>
+</div>
+<script src="/glazba.js" defer></script>
+</body>
+</html>

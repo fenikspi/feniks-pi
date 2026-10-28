@@ -1,0 +1,14 @@
+{
+  "name": "feniks-pi",
+  "version": "0.1.0",
+  "description": "Natalna karta, numerologija, dnevnik simbola i živa pozadina",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "43.7.9"
+  },
+  "productName": "Feniks π",
+  "private": true
+}

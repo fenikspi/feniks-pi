@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/feniks/assets/ikone/favicon.ico" sizes="any">
+<title>Feniks π · znak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=IM+Fell+English+SC&family=Cormorant+Garamond:ital,wght@1,500&display=swap">
+<style>
+/* Znak Feniks π: zlatna gravura feniksa iznad ognja sa žarom i pepelom, starinski krasopis. Crna podloga, zlato. */
+html, body { margin: 0; background: #000; height: 100%; overflow: hidden; }
+.znak { position: relative; width: min(100vw, 100vh); aspect-ratio: 1; margin: 0 auto; }
+canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ptica { position: absolute; left: 50%; top: 5.5%; width: 84%; transform: translateX(-50%); filter: drop-shadow(0 0 1.2vmin rgba(255, 150, 40, .35)); }
+.natpis { position: absolute; left: 0; right: 0; top: 66%; text-align: center; }
+.ime { font: 400 15.5vmin/1 "Pinyon Script", cursive; background: linear-gradient(#fff3c4, #f0c05a 45%, #c97a1e 85%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 .9vmin rgba(255, 140, 30, .45)); padding: 0 3vmin; }
+.pi { font: italic 500 13vmin/1 "Cormorant Garamond", serif; margin-left: .25em; }
+.pod { margin-top: 1.6vmin; font: 400 3.3vmin "IM Fell English SC", serif; letter-spacing: .32em; color: #d6a24a; }
+</style>
+</head>
+<body>
+<div class="znak" id="znak">
+  <canvas id="vatra" aria-hidden="true"></canvas>
+  <img class="ptica" src="/feniks/assets/logo/feniks-zlato.png" alt="Feniks raširenih krila uzdiže se iz ognja">
+  <div class="natpis"><span class="ime">Feniks<span class="pi">π</span></span><div class="pod">Prirodna Inteligencija</div></div>
+</div>
+<script>
+// Žar i pepeo ispod feniksa te iskre koje se dižu. ?mirno=1 crta jednu sliku (za izvoz PNG-a).
+(function () {
+  var c = document.getElementById('vatra'), x = c.getContext('2d'), mirno = /mirno=1/.test(location.search) || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W, H, zar = [], pepeo = [], iskre = [], r = 7;
+  function rnd() { r = (r * 9301 + 49297) % 233280; return r / 233280; }
+  function postavi() {
+    var b = c.getBoundingClientRect(); W = c.width = b.width * devicePixelRatio; H = c.height = b.height * devicePixelRatio;
+    zar = []; pepeo = []; iskre = [];
+    for (var i = 0; i < 460; i++) {
+      // humak žara: u sredini viši i deblji, prema rubovima tanji i tamniji
+      var t = rnd(), ex = (rnd() + rnd() - 1), rub = 1 - ex * ex;
+      zar.push({ x: W * (0.5 + ex * 0.34), y: H * (0.6 - 0.028 * rub + 0.034 * rnd() * (0.35 + 0.65 * rub)), s: W * (0.002 + 0.008 * rnd()) * (0.45 + 0.55 * rub), f: rnd() * 6.28, b: t * rub });
+    }
+    for (var j = 0; j < 260; j++) { var ep = (rnd() + rnd() - 1); pepeo.push({ x: W * (0.5 + ep * 0.38), y: H * (0.6 + 0.03 * rnd() * (1 - ep * ep) + 0.01), s: W * (0.0012 + 0.003 * rnd()), a: 0.18 + 0.4 * rnd() }); }
+    for (var k = 0; k < 90; k++) iskre.push(nova(true));
+    crtaj(performance.now());
+  }
+  function nova(bilogdje) { return { x: W * (0.3 + 0.4 * rnd()), y: bilogdje ? H * (0.1 + 0.5 * rnd()) : H * 0.6, v: H * (0.0008 + 0.0018 * rnd()), s: W * (0.0012 + 0.002 * rnd()), z: rnd() * 6.28, z2: 0.6 + rnd() } }
+  function crtaj(t) { crtaj.jednom(t); if (!mirno && !crtaj.trci) { crtaj.trci = true; (function petlja(tt) { crtaj.jednom(tt); requestAnimationFrame(petlja); })(t); } }
+  crtaj.jednom = function (t) {
+    x.clearRect(0, 0, W, H);
+    var g = x.createRadialGradient(W * .5, H * .58, 0, W * .5, H * .55, W * .48);          // sjaj ognja
+    g.addColorStop(0, 'rgba(255,120,30,.38)'); g.addColorStop(.35, 'rgba(200,60,10,.16)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    var g2 = x.createRadialGradient(W * .5, H * .3, 0, W * .5, H * .3, W * .4);           // topla aura iza krila
+    g2.addColorStop(0, 'rgba(255,190,90,.12)'); g2.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g2; x.fillRect(0, 0, W, H);
+    pepeo.forEach(function (p) { x.fillStyle = 'rgba(150,140,130,' + p.a + ')'; x.beginPath(); x.arc(p.x, p.y, p.s, 0, 6.283); x.fill(); });
+    x.globalCompositeOperation = 'lighter';
+    zar.forEach(function (z) {
+      var tinja = 0.55 + 0.45 * Math.sin(t / (600 + z.b * 900) + z.f), rr = z.s * 3;
+      var gz = x.createRadialGradient(z.x, z.y, 0, z.x, z.y, rr);
+      gz.addColorStop(0, 'rgba(255,' + (150 + 80 * z.b | 0) + ',60,' + (0.8 * tinja) + ')'); gz.addColorStop(.4, 'rgba(220,70,10,' + (0.35 * tinja) + ')'); gz.addColorStop(1, 'rgba(120,20,0,0)');
+      x.fillStyle = gz; x.fillRect(z.x - rr, z.y - rr, rr * 2, rr * 2);
+    });
+    iskre.forEach(function (s, i) {
+      if (!mirno) { s.y -= s.v; s.x += Math.sin(t / 700 + s.z) * W * 0.0006; if (s.y < H * 0.05) iskre[i] = nova(false); }
+      var vis = Math.max(0, Math.min(1, (s.y - H * 0.05) / (H * 0.3))), rr = s.s * 3 * s.z2;
+      var gs = x.createRadialGradient(s.x, s.y, 0, s.x, s.y, rr); gs.addColorStop(0, 'rgba(255,220,140,' + (0.9 * vis) + ')'); gs.addColorStop(1, 'rgba(255,120,30,0)');
+      x.fillStyle = gs; x.fillRect(s.x - rr, s.y - rr, rr * 2, rr * 2);
+    });
+    x.globalCompositeOperation = 'source-over';
+  };
+  postavi(); addEventListener('resize', postavi);
+  document.fonts.ready.then(function () { crtaj(performance.now()); });
+})();
+</script>
+</body>
+</html>

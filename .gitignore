@@ -1,0 +1,17 @@
+# ovisnosti i zapisi
+node_modules/
+stranica/node_modules/
+stranica/.wrangler/
+electron.log
+*.log
+
+# slike koje ne smijemo dijeliti ili ne koristimo
+assets/logo/feniks-pi-ognjiste-vecteezy.png
+assets/logo/generirano/
+assets/logo/zivotinje/
+
+# lokalno
+.env
+.dev.vars
+*.db
+*.sqlite

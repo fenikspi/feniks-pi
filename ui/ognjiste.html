@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/feniks/assets/ikone/favicon.ico" sizes="any">
+<title>Feniks π · ognjište</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@1,600&display=swap">
+<style>
+/* Znak Feniks π: vatreni feniks se diže iz kamenog ognjišta; na kamenu je uklesano „Feniks π”. Crna podloga. */
+html, body { margin: 0; background: #000; height: 100%; overflow: hidden; display: grid; place-items: center; }
+canvas { width: min(100vw, 100vh); height: min(100vw, 100vh); display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="2000" height="2000" role="img" aria-label="Feniks π: vatreni feniks se diže iz kamenog ognjišta s uklesanim natpisom"></canvas>
+<script>
+(function () {
+  'use strict';
+  var c = document.getElementById('c'), x = c.getContext('2d'), W = 2000, H = 2000;
+  var mirno = /mirno=1/.test(location.search) || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ptica = new Image(); ptica.src = '/feniks/assets/logo/' + ((location.search.match(/ptica=([\w-]+)/) || [])[1] || 'feniks-moj') + '.png';
+  // ognjište: vrh (gornja ploha) i prednja strana
+  var VRH = 1290, DNO = 1830, GL = 330, GD = 1670, DL = 280, DD = 1720, STRAZ = 1238;
+  var r = 13; function rnd() { r = (r * 9301 + 49297) % 233280; return r / 233280; }
+  function hash(a, b) { var h = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return h - Math.floor(h); }
+  function sum(px, py) { var xi = Math.floor(px), yi = Math.floor(py), xf = px - xi, yf = py - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    var a = hash(xi, yi), b = hash(xi + 1, yi), cc = hash(xi, yi + 1), d = hash(xi + 1, yi + 1); return a + (b - a) * u + (cc - a) * v + (a - b - cc + d) * u * v; }
+  function fbm(px, py, n) { var s = 0, amp = .5, f = 1; for (var i = 0; i < n; i++) { s += amp * sum(px * f, py * f); f *= 2.1; amp *= .5; } return s; }
+
+  /* ---------- kamen (crta se jednom u zasebno platno) ---------- */
+  var kamen = document.createElement('canvas'); kamen.width = W; kamen.height = H;
+  (function () {
+    var k = kamen.getContext('2d');
+    function rub(pts, amp) { // neravan klesani rub: točke duž stranica s malim odstupanjima
+      var o = []; for (var s = 0; s < pts.length; s++) { var a = pts[s], b = pts[(s + 1) % pts.length], n = 26;
+        for (var q = 0; q < n; q++) { var u = q / n, jx = (hash(s * 31 + q, 7) - .5) * amp, jy = (hash(s * 17 + q, 3) - .5) * amp; o.push([a[0] + (b[0] - a[0]) * u + jx, a[1] + (b[1] - a[1]) * u + jy]); } }
+      return o; }
+    var TIJELO = rub([[GL + 40, STRAZ], [GD - 40, STRAZ], [GD, VRH], [DD, DNO], [DL, DNO], [GL, VRH]], 3.5);
+    var PODNOZJE = rub([[DL - 45, DNO - 4], [DD + 45, DNO - 4], [DD + 62, DNO + 26], [DD + 62, DNO + 104], [DL - 62, DNO + 104], [DL - 62, DNO + 26]], 3);
+    function oblik(pts) { k.beginPath(); pts.forEach(function (p, i) { if (i) k.lineTo(p[0], p[1]); else k.moveTo(p[0], p[1]); }); k.closePath(); }
+    var x0 = DL - 90, x1 = DD + 90, y0 = STRAZ - 14, y1 = DNO + 112, w = x1 - x0, h = y1 - y0;
+    var img = k.createImageData(w, h), d = img.data;
+    for (var j = 0; j < h; j++) for (var i = 0; i < w; i++) {
+      var X = x0 + i, Y = y0 + j, n = fbm(X * .006, Y * .006, 5), zrno = fbm(X * .05, Y * .05, 3), puk = Math.abs(fbm(X * .004 + 7, Y * .009 + 3, 4) - .5);
+      var zila = Math.abs(fbm(X * .0035 + 2, Y * .0055 + 9, 5) - .5);
+      var p = 196 + 34 * n + 14 * zrno - (zila < .012 ? 46 * (1 - zila / .012) : 0) - (puk < .006 ? 18 : 0) - (Math.abs(Math.sin(Y * .09 + n * 6)) < .03 ? 6 : 0);   // bijeli kamen, sive žile, tragovi dlijeta
+      var o = (j * w + i) * 4; d[o] = p * 1.0; d[o + 1] = p * .985; d[o + 2] = p * .95; d[o + 3] = 255;
+    }
+    var t = document.createElement('canvas'); t.width = w; t.height = h; t.getContext('2d').putImageData(img, 0, 0);
+    // podnožje (tamnije), pa tijelo ognjišta
+    k.save(); oblik(PODNOZJE); k.clip(); k.drawImage(t, x0, y0); k.fillStyle = 'rgba(0,0,0,.28)'; k.fillRect(0, 0, W, H);
+    var pg = k.createLinearGradient(0, DNO, 0, DNO + 104); pg.addColorStop(0, 'rgba(255,240,220,.18)'); pg.addColorStop(.26, 'rgba(255,240,220,.1)'); pg.addColorStop(.27, 'rgba(0,0,0,.12)'); pg.addColorStop(1, 'rgba(0,0,0,.4)'); k.fillStyle = pg; k.fillRect(0, 0, W, H); k.restore();
+    k.strokeStyle = 'rgba(80,60,40,.35)'; k.lineWidth = 2; k.beginPath(); k.moveTo(DL - 62, DNO + 26); k.lineTo(DD + 62, DNO + 26); k.stroke();
+    k.save(); oblik(TIJELO); k.clip(); k.drawImage(t, x0, y0);
+    // gornja ploha svjetlija; prednja strana zatamnjena prema dnu; vatra osvjetljava gornji rub
+    var g = k.createLinearGradient(0, STRAZ, 0, DNO);
+    g.addColorStop(0, 'rgba(255,150,60,.42)'); g.addColorStop(.14, 'rgba(255,140,60,.18)'); g.addColorStop(.45, 'rgba(255,190,120,.05)'); g.addColorStop(1, 'rgba(0,0,0,.42)');
+    k.fillStyle = g; k.fillRect(0, 0, W, H);
+    var bocno = k.createLinearGradient(DL, 0, DD, 0);
+    bocno.addColorStop(0, 'rgba(0,0,0,.38)'); bocno.addColorStop(.18, 'rgba(0,0,0,0)'); bocno.addColorStop(.82, 'rgba(0,0,0,0)'); bocno.addColorStop(1, 'rgba(0,0,0,.42)');
+    k.fillStyle = bocno; k.fillRect(0, 0, W, H);
+    k.restore();
+    // brid između gornje plohe i prednje strane
+    k.strokeStyle = 'rgba(255,190,120,.35)'; k.lineWidth = 3; k.beginPath(); k.moveTo(GL, VRH); k.lineTo(GD, VRH); k.stroke();
+    k.strokeStyle = 'rgba(0,0,0,.6)'; k.lineWidth = 4; k.beginPath(); k.moveTo(GL + 2, VRH + 4); k.lineTo(GD - 2, VRH + 4); k.stroke();
+    // šupljina ognjišta s žarom na vrhu
+    var ž = k.createRadialGradient(1000, VRH - 22, 10, 1000, VRH - 22, 560);
+    ž.addColorStop(0, 'rgba(255,230,140,.95)'); ž.addColorStop(.25, 'rgba(255,120,30,.85)'); ž.addColorStop(.6, 'rgba(160,30,0,.55)'); ž.addColorStop(1, 'rgba(40,0,0,0)');
+    k.save(); k.beginPath(); k.ellipse(1000, VRH - 24, 560, 34, 0, 0, 6.283); k.clip(); k.fillStyle = 'rgba(10,4,2,1)'; k.fillRect(0, 0, W, H); k.fillStyle = ž; k.fillRect(0, 0, W, H);
+    for (var z = 0; z < 220; z++) { var ex = 1000 + (rnd() - .5) * 1080, ey = VRH - 24 + (rnd() - .5) * 56, er = 4 + rnd() * 12;
+      var gz = k.createRadialGradient(ex, ey, 0, ex, ey, er); gz.addColorStop(0, 'rgba(255,' + (160 + 80 * rnd() | 0) + ',60,.95)'); gz.addColorStop(1, 'rgba(120,20,0,0)'); k.fillStyle = gz; k.fillRect(ex - er, ey - er, er * 2, er * 2); }
+    k.restore();
+  })();
+
+  /* ---------- uklesani natpis ---------- */
+  function natpis(k) {
+    var tekst = 'Feniks', pi = 'π', y = 1590;
+    k.textBaseline = 'alphabetic';
+    k.font = '400 300px "Pinyon Script"'; var sF = k.measureText(tekst).width;
+    k.font = 'italic 600 250px "Cormorant Garamond"'; var sP = k.measureText(pi).width;
+    var razmak = 90, ukupno = sF + razmak + sP, x0 = 1000 - ukupno / 2;
+    function pisi(dx, dy, boja) {
+      k.fillStyle = boja;
+      k.font = '400 300px "Pinyon Script"'; k.fillText(tekst, x0 + dx, y + dy);
+      k.font = 'italic 600 250px "Cormorant Garamond"'; k.fillText(pi, x0 + sF + razmak + dx, y + dy - 8);
+    }
+    pisi(4, 6, 'rgba(255,250,240,.85)');         // svijetli donji rub ureza u bijelom kamenu
+    pisi(-3, -4, 'rgba(70,52,36,.85)');          // sjena gornjeg ruba ureza
+    pisi(-1, -1, 'rgba(95,70,45,.75)');
+    var zl = k.createLinearGradient(0, y - 230, 0, y + 40);
+    zl.addColorStop(0, '#fbe08a'); zl.addColorStop(.45, '#d9a23e'); zl.addColorStop(1, '#9a6418');
+    k.save(); k.translate(1.5, 2); k.scale(.997, .997); pisi(0, 0, zl); k.restore();                             // pozlata u dnu ureza
+    k.globalCompositeOperation = 'multiply'; pisi(0, 0, 'rgba(200,170,130,.25)'); k.globalCompositeOperation = 'source-over';
+  }
+
+  /* ---------- plamen i iskre ---------- */
+  var cestice = [], iskre = [];
+  function nova(s) {
+    var t = rnd(), sir = 520 * (1 - .35 * rnd());
+    return { x: 1000 + (rnd() - .5) * 2 * sir * Math.pow(rnd(), .8), y: VRH - 30 - (s ? rnd() * 640 : 0), v: 2.6 + rnd() * 4, r: 34 + rnd() * 62, f: rnd() * 6.28, z: .55 + rnd() * .75 };
+  }
+  for (var i = 0; i < 1100; i++) cestice.push(nova(true));
+  for (var j = 0; j < 80; j++) iskre.push({ x: 1000 + (rnd() - .5) * 900, y: VRH - rnd() * 1100, v: 1.2 + rnd() * 2.6, s: 2 + rnd() * 3.5, f: rnd() * 6.28 });
+  function plamen(t, prednji) {
+    x.globalCompositeOperation = 'lighter';
+    cestice.forEach(function (p, i) {
+      if (!mirno && !prednji) { p.y -= p.v; p.x += Math.sin(t / 380 + p.f) * .9 + (1000 - p.x) * .0025; if (p.y < VRH - 760 * p.z) cestice[i] = nova(false); }
+      var vis = (VRH - 30 - p.y) / (760 * p.z); if (vis < 0) vis = 0; if (vis > 1) return;
+      if (prednji && vis > .22) return;
+      var rr = p.r * (1 - .65 * vis), a = (prednji ? .26 : .3) * Math.pow(1 - vis, 1.4);
+      var cR = 255, cG = Math.round(170 - 130 * vis), cB = Math.round(60 - 60 * Math.min(1, vis * 2));
+      var g = x.createRadialGradient(p.x, p.y, 0, p.x, p.y, rr);
+      g.addColorStop(0, 'rgba(' + cR + ',' + cG + ',' + cB + ',' + a + ')'); g.addColorStop(1, 'rgba(180,30,0,0)');
+      x.fillStyle = g; x.fillRect(p.x - rr, p.y - rr, rr * 2, rr * 2);
+    });
+    x.globalCompositeOperation = 'source-over';
+  }
+  function iskrice(t) {
+    x.globalCompositeOperation = 'lighter';
+    iskre.forEach(function (s) {
+      if (!mirno) { s.y -= s.v; s.x += Math.sin(t / 600 + s.f) * .7; if (s.y < 60) { s.y = VRH - 40; s.x = 1000 + (rnd() - .5) * 900; } }
+      var a = Math.max(0, Math.min(1, (s.y - 60) / 500)), g = x.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.s * 3);
+      g.addColorStop(0, 'rgba(255,225,150,' + a + ')'); g.addColorStop(1, 'rgba(255,120,30,0)'); x.fillStyle = g; x.fillRect(s.x - s.s * 3, s.y - s.s * 3, s.s * 6, s.s * 6);
+    });
+    x.globalCompositeOperation = 'source-over';
+  }
+
+  var prozirno = /prozirno=1/.test(location.search);
+  if (prozirno) { document.documentElement.style.background = 'transparent'; document.body.style.background = 'transparent'; }
+  function crtaj(t) {
+    x.clearRect(0, 0, W, H);
+    if (!prozirno) { x.fillStyle = '#000'; x.fillRect(0, 0, W, H); }
+    var sj = x.createRadialGradient(1000, 1050, 50, 1000, 950, 1100);                 // sjaj vatre u tami
+    sj.addColorStop(0, 'rgba(255,120,30,.30)'); sj.addColorStop(.45, 'rgba(140,40,5,.12)'); sj.addColorStop(1, 'rgba(0,0,0,0)');
+    if (!prozirno) { x.fillStyle = sj; x.fillRect(0, 0, W, H); }
+    plamen(t, false);
+    if (ptica.complete && ptica.naturalWidth) {
+      // feniks: plamen u dnu slike izlazi iz žara na vrhu kamena
+      var pw = 1700, ph = pw * ptica.naturalHeight / ptica.naturalWidth, py = VRH + 60 - ph + (mirno ? 0 : Math.sin(t / 1400) * 8);
+      x.save(); x.globalCompositeOperation = 'lighter'; x.drawImage(ptica, 1000 - pw / 2, py, pw, ph); x.restore();
+    }
+    plamen(t, true);
+    if (!/bez_kamena=1/.test(location.search)) x.drawImage(kamen, 0, 0);
+    if (!/bez_natpisa=1|bez_kamena=1/.test(location.search)) natpis(x);
+    iskrice(t);
+    if (!mirno) requestAnimationFrame(crtaj);
+  }
+  Promise.all([document.fonts.load('300px "Pinyon Script"'), document.fonts.load('italic 600 250px "Cormorant Garamond"'), new Promise(function (ok) { ptica.onload = ok; ptica.onerror = ok; if (ptica.complete) ok(); })])
+    .then(function () { if (mirno) { for (var k = 0; k < 1; k++) crtaj(0); document.title += ' ·'; } else requestAnimationFrame(crtaj); });
+})();
+</script>
+</body>
+</html>

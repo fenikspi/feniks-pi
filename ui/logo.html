@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/feniks/assets/ikone/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/feniks/assets/ikone/ikona-32.png">
+<link rel="apple-touch-icon" href="/feniks/assets/ikone/apple-touch-icon.png">
+<title>Feniks π · logo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@1,600&family=Marcellus&family=Alegreya+Sans:wght@400;500&family=Noto+Sans+Symbols&display=swap">
+<style>
+html, body { margin: 0; min-height: 100%; background: #000; color: #e9b44c; font: 18px "Alegreya Sans", sans-serif; }
+main { min-height: 100vh; display: grid; place-items: center; padding: 4vh 16px; box-sizing: border-box; }
+.varijante { display: flex; gap: 40px; align-items: end; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+.varijante figure { margin: 0; text-align: center; color: #a49e8e; font-size: .8rem; }
+</style>
+</head>
+<body>
+<main>
+  <div>
+    <div id="veliki" style="font-size:28px"></div>
+    <div class="varijante">
+      <figure><div id="srednji" style="font-size:14px"></div><figcaption>za zaglavlje</figcaption></figure>
+      <figure><div id="mali"></div><figcaption>ikona</figcaption></figure>
+    </div>
+  </div>
+</main>
+<script src="/static/astronomy.js"></script>
+<script src="/feniks/ui/logo.js"></script>
+<script>
+FeniksLogo.postavi(document.getElementById('veliki'), { velicina: 420 });
+FeniksLogo.postavi(document.getElementById('srednji'), { velicina: 140 });
+FeniksLogo.postavi(document.getElementById('mali'), { velicina: 64, tekst: false, interaktivno: false });
+</script>
+</body>
+</html>

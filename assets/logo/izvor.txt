@@ -1,0 +1,17 @@
+Feniks u logu Feniks π
+- Izvor: gravura feniksa s trgovačke kartice „Lewis Jacobs, Phoenix Glass Works, London” (19. st.), British Museum, Heal,66.38
+- Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Print,_trade-card_(BM_Heal,66.38).jpg
+- Licenca: javno dobro (public domain)
+- Obrada: izrez feniksa, uklanjanje ukrasa, linije pretvorene u zlato s prijelazom u žar, crna podloga; žar, pepeo i iskre iscrtani programski.
+Slova: Pinyon Script, IM Fell English SC, Cormorant Garamond (SIL Open Font License, Google Fonts).
+
+Logo s kamenim ognjištem (feniks-pi-ognjiste.png) — GLAVNI LOGO
+- Feniks: vlastiti, generiran lokalno (alati/generiraj_feniksa.py, model DreamShaper 8, licenca CreativeML OpenRAIL-M, sjeme 1000) → feniks-moj.png
+- Stara verzija s preuzetim feniksom: feniks-pi-ognjiste-vecteezy.png
+- Ognjište, plamen, iskre i uklesani natpis iscrtani programski (ui/ognjiste.html).
+
+Amblem (feniks-pi-amblem.png) — gore „Feniks π” latinicom, dolje kamene kocke s glagoljicom (Noto Sans Glagolitic, OFL),
+rub i krakovi kolovrata kao starohrvatski troprutasti pleter (ui/pleter.js), izvoz: npx electron alati/izvoz.js <adresa> <izlaz.png>
+
+KONAČNI ZNAK (feniks-pi-znak.png, ui/znak-konacni.html): zlatni kolovrat od starohrvatskog troprutastog pletera (8 krakova) kao pozadina,
+vlastiti feniks (feniks-moj.png) iz ognja na luku kamenih kocki s glagoljicom Ⱇ Ⰵ Ⱀ Ⰻ Ⰽ Ⱄ π, gore „Feniks π” (Pinyon Script).

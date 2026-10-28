@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/feniks/assets/ikone/favicon.ico" sizes="any">
+<title>Feniks π · znak čekanja</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@1,600&family=Alegreya+Sans:wght@400;500&family=Noto+Sans+Symbols&family=Noto+Sans+Glagolitic&display=swap">
+<style>
+/* Pregled znaka čekanja: živi znak gore, ispod svi likovi redom. */
+html, body { margin: 0; background: #000; color: #a49e8e; font: 16px "Alegreya Sans", sans-serif; }
+main { max-width: 1000px; margin: 0 auto; padding: 4vh 16px; text-align: center; }
+#zivi { font-size: 22px; margin-bottom: 36px; }
+.mreza { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px; }
+figure { margin: 0; } figcaption { margin-top: 4px; font-size: .85rem; }
+</style>
+</head>
+<body>
+<main>
+  <div id="zivi"></div>
+  <div class="mreza" id="mreza"></div>
+</main>
+<script src="/feniks/ui/logo.js?v=10"></script>
+<script>
+FeniksLogo.postavi(document.getElementById('zivi'), { velicina: 260 });
+// ispod: prva slova i simbol, pa svih dvanaest zviježđa, svaki lik zaustavljen
+var mreza = document.getElementById('mreza'), okviri = [0, 1, 2, 3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47];
+okviri.forEach(function (n) {
+  var fig = document.createElement('figure'), div = document.createElement('div');
+  fig.appendChild(div); mreza.appendChild(fig);
+  var z = FeniksLogo.postavi(div, { velicina: 150, tekst: false, interaktivno: false, korak: 1e9 });
+  z.idi(n); document.fonts.ready.then(function () { z.idi(n); });
+  var cap = document.createElement('figcaption'); fig.appendChild(cap);
+  document.fonts.ready.then(function () { cap.textContent = (n + 1) + '. ' + z.svg.getAttribute('aria-label').replace('Feniks π · ', ''); });
+});
+document.fonts.ready.then(function () { setTimeout(function () { document.title += ' ·'; }, 900); });
+</script>
+</body>
+</html>

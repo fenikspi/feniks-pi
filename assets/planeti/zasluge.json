@@ -1,0 +1,100 @@
+[
+ {
+  "id": "sun",
+  "datoteka": "sun.jpg",
+  "naslov": "File:The Sun by the Atmospheric Imaging Assembly of NASA's Solar Dynamics Observatory - 20100819.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "moon",
+  "datoteka": "moon.jpg",
+  "naslov": "File:Moon nearside LRO 5000.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Moon_nearside_LRO_5000.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "mercury",
+  "datoteka": "mercury.jpg",
+  "naslov": "File:Mercury in color - Prockter07 centered.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Mercury_in_color_-_Prockter07_centered.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "venus",
+  "datoteka": "venus.png",
+  "naslov": "File:Venus Mariner 10 true color.png",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Venus_Mariner_10_true_color.png",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "mars",
+  "datoteka": "mars.jpg",
+  "naslov": "File:Mars globe.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Mars_globe.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "jupiter",
+  "datoteka": "jupiter.jpg",
+  "naslov": "File:Jupiter in true color.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Jupiter_in_true_color.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "saturn",
+  "datoteka": "saturn.jpg",
+  "naslov": "File:Saturn during Equinox.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Saturn_during_Equinox.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "uranus",
+  "datoteka": "uranus.jpg",
+  "naslov": "File:Uranus2.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Uranus2.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "neptune",
+  "datoteka": "neptune.jpg",
+  "naslov": "File:Neptune Full.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Neptune_Full.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "pluto",
+  "datoteka": "pluto.jpg",
+  "naslov": "File:Pluto-01 Stern 03 Pluto Color TXT.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Pluto-01_Stern_03_Pluto_Color_TXT.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "ceres",
+  "datoteka": "ceres.jpg",
+  "naslov": "File:Ceres - RC3 - Haulani Crater (22381131691) (cropped).jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Ceres_-_RC3_-_Haulani_Crater_(22381131691)_(cropped).jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "vesta",
+  "datoteka": "vesta.jpg",
+  "naslov": "File:Vesta Full-Frame.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Vesta_Full-Frame.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "chiron",
+  "datoteka": "chiron.jpg",
+  "naslov": "File:Chiron instructs young Achilles - Ancient Roman fresco.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:Chiron_instructs_young_Achilles_-_Ancient_Roman_fresco.jpg",
+  "licenca": "Public domain"
+ },
+ {
+  "id": "earth",
+  "datoteka": "earth.jpg",
+  "naslov": "File:The Earth seen from Apollo 17.jpg",
+  "izvor": "https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg",
+  "licenca": "Public domain"
+ }
+]

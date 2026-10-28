@@ -1,0 +1,12 @@
+# Feniks π, javna stranica: statične datoteke iz ./public na feniksPi.com i www.feniksPi.com
+name = "feniks-pi"
+compatibility_date = "2026-10-01"
+workers_dev = false
+routes = [
+  { pattern = "feniksPi.com", custom_domain = true },
+  { pattern = "www.feniksPi.com", custom_domain = true },
+]
+
+[assets]
+directory = "./public"
+not_found_handling = "404-page"

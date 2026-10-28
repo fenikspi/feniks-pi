@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preuzmi · Feniks π</title>
+<meta name="description" content="Preuzmi Feniks π za Linux, Windows, macOS i Android ili ga instaliraj kao web-aplikaciju. Besplatno, bez reklama.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="/stil.css">
+</head>
+<body>
+<header class="vrh">
+  <a class="ime" href="/">Feniks π</a>
+  <nav aria-label="Glavna navigacija"><a href="/">Početna</a><a href="/preuzmi.html" aria-current="page">Preuzmi</a><a href="/privatnost.html">Privatnost</a><a href="/uvjeti.html">Uvjeti korištenja</a></nav>
+</header>
+<main class="siroko">
+<h1>Preuzmi Feniks π</h1>
+<p>Besplatno za svaki sustav, bez reklama i bez računa. Podaci ostaju na tvom uređaju; prijavu i šifrirano usklađivanje uključuješ samo ako želiš iste podatke na više uređaja.</p>
+<p id="preporuka" class="datum" aria-live="polite"></p>
+
+<div class="mreza">
+  <section class="kartica" id="linux">
+    <span class="oznaka">U pripremi</span>
+    <h2>Linux</h2>
+    <p>Za Ubuntu, Linux Mint, Debian, Fedoru i ostale. Živa pozadina radne površine radi na XFCE-u, GNOME-u i KDE-u.</p>
+    <ul><li>AppImage (sve distribucije)</li><li>.deb (Ubuntu, Mint, Debian)</li></ul>
+    <a class="gumb" aria-disabled="true">Uskoro</a>
+  </section>
+  <section class="kartica" id="windows">
+    <span class="oznaka">U pripremi</span>
+    <h2>Windows</h2>
+    <p>Windows 10 i 11, 64-bitni. Instalacijski program bez dodatnog softvera i bez reklama.</p>
+    <ul><li>Instalacija (.exe)</li><li>Prijenosna inačica (.zip)</li></ul>
+    <a class="gumb" aria-disabled="true">Uskoro</a>
+  </section>
+  <section class="kartica" id="macos">
+    <span class="oznaka">U pripremi</span>
+    <h2>macOS</h2>
+    <p>Za Mac računala s Apple Silicon i Intel procesorima.</p>
+    <ul><li>Disk slika (.dmg)</li></ul>
+    <a class="gumb" aria-disabled="true">Uskoro</a>
+  </section>
+  <section class="kartica" id="android">
+    <span class="oznaka">U pripremi</span>
+    <h2>Android</h2>
+    <p>Preko F-Droida, trgovine slobodnih aplikacija bez praćenja, ili izravno kao .apk s GitHuba.</p>
+    <ul><li>F-Droid</li><li>.apk s GitHuba</li></ul>
+    <a class="gumb" aria-disabled="true">Uskoro</a>
+  </section>
+  <section class="kartica" id="web">
+    <span class="oznaka">Dostupno · prva inačica</span>
+    <h2>Web-aplikacija</h2>
+    <p>Za iPhone, iPad i svaki drugi uređaj: otvori je u pregledniku i odaberi „Dodaj na početni zaslon”. Radi i bez interneta.</p>
+    <ul><li>iPhone i iPad (Safari)</li><li>Android (Chrome, Firefox)</li><li>Računalo (bilo koji preglednik)</li></ul>
+    <a class="gumb" href="/app/">Otvori web-aplikaciju</a>
+  </section>
+</div>
+
+<h2>Sigurnost preuzimanja</h2>
+<p>Uz svaku datoteku objavit ćemo njen SHA-256 otisak, a izvorni kod bit će javan na GitHubu, pa svatko može provjeriti da je aplikacija ono što tvrdi da jest.</p>
+</main>
+<footer><span>Feniks π · bez reklama, bez praćenja, bez naplate</span><span><a href="/privatnost.html">Privatnost</a> · <a href="/uvjeti.html">Uvjeti korištenja</a></span></footer>
+<script>
+// istakni karticu za sustav na kojem je posjetitelj (samo u pregledniku, ništa se ne šalje)
+(function () {
+  var ua = navigator.userAgent, id = /Android/i.test(ua) ? 'android' : /iPhone|iPad|iPod/i.test(ua) ? 'web' : /Windows/i.test(ua) ? 'windows' : /Mac OS X|Macintosh/i.test(ua) ? 'macos' : /Linux|X11/i.test(ua) ? 'linux' : null;
+  var imena = { android: 'Android', web: 'iPhone i iPad (web-aplikacija)', windows: 'Windows', macos: 'macOS', linux: 'Linux' };
+  if (!id) return;
+  var k = document.getElementById(id); k.style.borderColor = 'var(--zlato)'; k.parentNode.insertBefore(k, k.parentNode.firstChild);
+  document.getElementById('preporuka').textContent = 'Za tvoj uređaj preporučujemo: ' + imena[id] + '.';
+})();
+</script>
+<script src="/glazba.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/feniks/assets/ikone/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/feniks/assets/ikone/ikona-32.png">
+<link rel="apple-touch-icon" href="/feniks/assets/ikone/apple-touch-icon.png">
+<title>Feniks π</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Noto+Sans+Symbols&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap">
+<link rel="stylesheet" href="/feniks/ui/feniks.css">
+<style>
+/* Layout: a night-sky observatory — a slim glyph rail on the left, the family across the top, glass panels for each part of the day. */
+html, body { margin: 0; min-height: 100%; }
+body { background: radial-gradient(ellipse 80% 70% at 20% 0%, #172049 0%, #0a0e22 45%, #05060f 100%) fixed; color: var(--ink); font: 17px/1.5 var(--f-body); }
+canvas#nebo { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.okvir { position: relative; z-index: 1; display: grid; grid-template-columns: 96px minmax(0, 1fr); min-height: 100vh; }
+@media (max-width: 760px) { .okvir { grid-template-columns: 1fr; } }
+nav.tracnica { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 4px; padding: 18px 8px; border-right: 1px solid var(--line); background: rgba(5, 7, 18, .55); backdrop-filter: blur(8px); box-sizing: border-box; }
+@media (max-width: 760px) { nav.tracnica { position: sticky; height: auto; flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); z-index: 5; } }
+nav .logo { text-align: center; margin-bottom: 14px; }
+nav .logo-ptica { width: 76px; height: auto; filter: drop-shadow(0 0 8px rgba(255, 140, 30, .35)); }
+nav .krasopis { font: 400 1.35rem/1 "Pinyon Script", cursive; color: var(--gold); margin-top: 2px; }
+@media (max-width: 760px) { nav .logo { display: none; } }
+nav button { font: inherit; color: var(--muted); background: none; border: 0; border-radius: 12px; padding: 9px 4px; cursor: pointer; display: grid; justify-items: center; gap: 2px; min-width: 72px; }
+nav button .ng { font: 1.45rem/1 var(--f-glyph); color: var(--gold); opacity: .75; }
+nav button .nl { font-size: .74rem; letter-spacing: .04em; }
+nav button[aria-selected="true"] { background: var(--ember-soft); color: var(--ink); }
+nav button[aria-selected="true"] .ng { opacity: 1; }
+.sadrzaj { padding: 20px max(18px, 2.6vw) 60px; min-width: 0; }
+header.vrh { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+header.vrh h1 { font: 400 1.9rem var(--f-display); margin: 0; letter-spacing: .02em; }
+header.vrh .mjesto { color: var(--muted); font-size: .9rem; }
+.ljudi { display: flex; gap: 6px; flex-wrap: wrap; }
+.ljudi button { font: inherit; font-size: .92rem; color: var(--ink); background: rgba(255, 255, 255, .03); border: 1px solid var(--line); border-radius: 99px; padding: 3px 12px 3px 8px; display: flex; gap: 7px; align-items: center; cursor: pointer; }
+.ljudi button[aria-pressed="true"] { border-color: var(--ember); background: var(--ember-soft); font-weight: 700; }
+.ljudi .t { width: 10px; height: 10px; border-radius: 50%; }
+section.kartica[hidden] { display: none !important; }
+.mreza { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.s12 { grid-column: span 12; } .s8 { grid-column: span 8; } .s7 { grid-column: span 7; } .s6 { grid-column: span 6; } .s5 { grid-column: span 5; } .s4 { grid-column: span 4; }
+@media (max-width: 1100px) { .s8, .s7, .s6, .s5, .s4 { grid-column: span 12; } }
+.staklo { background: linear-gradient(160deg, rgba(28, 34, 66, .72), rgba(12, 15, 32, .62)); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; backdrop-filter: blur(10px); min-width: 0; }
+.oznaka { font-size: .7rem; text-transform: uppercase; letter-spacing: .16em; color: var(--muted); margin-bottom: 8px; }
+h2 { font: 400 1.45rem var(--f-display); margin: 0 0 10px; }
+.mali { color: var(--muted); font-size: .84rem; }
+.prazno { color: var(--muted); padding: 10px 0; }
+.greska { color: var(--tense); }
+.poruka { display: grid; grid-template-columns: 120px 1fr; gap: 18px; align-items: start; }
+.poruka .orb { width: 120px; height: 120px; box-shadow: 0 0 60px var(--glow); }
+@media (max-width: 560px) { .poruka { grid-template-columns: 1fr; } }
+.poruka h2 { font-size: 1.8rem; margin: 2px 0 6px; }
+.poruka p { margin: 0 0 8px; }
+.prijedlozi { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.prijedlozi li { padding-left: 20px; position: relative; }
+.prijedlozi li::before { content: "✦"; position: absolute; left: 0; color: var(--ember); font-size: .8rem; top: 3px; }
+.broj { display: flex; gap: 14px; align-items: center; }
+.broj .n { font: 400 3.2rem/1 var(--f-display); color: var(--gold); min-width: 1.3em; text-align: center; }
+.tr { display: grid; grid-template-columns: 38px 1fr; gap: 10px; align-items: start; padding: 7px 0; border-top: 1px solid rgba(232, 162, 58, .1); }
+.tr:first-child { border-top: 0; }
+.tr .orb { width: 38px; height: 38px; }
+.tr .tekst { font-size: .95rem; }
+.citanje { max-width: 74ch; }
+.citanje h3, .citanje h4, .citanje h5 { font: 400 1.25rem var(--f-display); color: var(--ink); margin: 18px 0 8px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.citanje h3 .orb, .citanje h4 .orb { width: 30px; height: 30px; }
+.citanje blockquote { margin: 8px 0 12px; padding-left: 14px; border-left: 2px solid var(--ember); color: var(--muted); }
+.citanje table { border-collapse: collapse; }
+.citanje td, .citanje th { border-bottom: 1px solid var(--line); padding: 4px 10px; }
+input, select, textarea { font: inherit; font-size: 1rem; color: var(--ink); background: rgba(5, 7, 18, .65); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-width: 0; }
+textarea { min-height: 120px; resize: vertical; }
+label { display: grid; gap: 4px; font-size: .9rem; color: var(--muted); }
+.forma { display: grid; gap: 10px; }
+.dva { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.gumb { font: inherit; font-size: .92rem; color: var(--ink); background: rgba(255, 255, 255, .04); border: 1px solid var(--line); border-radius: 99px; padding: 6px 14px; cursor: pointer; }
+.gumb:hover { border-color: var(--ember); color: var(--gold); }
+.gumb.glavni { background: linear-gradient(135deg, #c9781f, #e8a23a); color: #160d02; border: 0; font-weight: 700; }
+.gumb.glavni:hover { color: #000; filter: brightness(1.08); }
+.gumb[aria-pressed="true"] { background: var(--ember-soft); border-color: var(--ember); }
+.gumb:disabled { opacity: .5; cursor: wait; }
+.gumbi { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.zapis { padding: 10px 0; border-top: 1px solid rgba(232, 162, 58, .1); }
+.zapis:first-child { border-top: 0; }
+.vrsta { font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; color: var(--ember); font-weight: 700; }
+.simbol { display: inline-block; font-size: .82rem; padding: 1px 9px; border-radius: 99px; background: var(--ember-soft); color: var(--gold); margin: 3px 4px 0 0; text-decoration: none; }
+.stavka { display: block; width: 100%; text-align: left; font: inherit; color: var(--ink); background: transparent; border: 0; border-top: 1px solid rgba(232, 162, 58, .1); padding: 10px 6px; cursor: pointer; border-radius: 8px; }
+.stavka:hover, .stavka[aria-current="true"] { background: var(--ember-soft); }
+.stavka b { display: block; font-weight: 500; }
+.rez { padding: 10px 0; border-top: 1px solid rgba(232, 162, 58, .1); }
+.rez mark { background: rgba(232, 162, 58, .3); color: var(--ink); border-radius: 3px; }
+.rezultati-mjesta { display: grid; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.rezultati-mjesta button { font: inherit; font-size: .9rem; text-align: left; background: transparent; color: var(--ink); border: 0; border-top: 1px solid var(--line); padding: 7px 10px; cursor: pointer; }
+.rezultati-mjesta button:hover { background: var(--ember-soft); }
+iframe { width: 100%; height: 82vh; border: 1px solid var(--line); border-radius: 16px; background: #0d1120; }
+.atma a { display: block; color: var(--ink); text-decoration: none; padding: 7px 0; border-top: 1px solid rgba(232, 162, 58, .1); }
+.atma a:first-child { border-top: 0; }
+.atma a:hover b { color: var(--gold); }
+.atma b { font-weight: 500; display: block; }
+.napredak { height: 6px; border-radius: 99px; background: rgba(255, 255, 255, .08); overflow: hidden; margin: 8px 0; }
+.napredak span { display: block; height: 100%; background: linear-gradient(90deg, var(--ember), var(--gold)); }
+.mrezasim { display: flex; flex-wrap: wrap; gap: 8px; }
+.mrezasim .sim { font-size: 1.05rem; padding: 4px 8px; border: 1px solid var(--line); border-radius: 10px; }
+</style>
+</head>
+<body>
+<canvas id="nebo" aria-hidden="true"></canvas>
+<div class="okvir">
+  <nav class="tracnica" role="tablist" aria-label="Dijelovi aplikacije" id="kartice">
+    <div class="logo"><img src="/feniks/assets/logo/feniks-moj.png" alt="Feniks" class="logo-ptica"><div class="krasopis">Feniks π</div></div>
+    <button role="tab" data-t="danas" aria-selected="true"><span class="ng">☉&#xFE0E;</span><span class="nl">Danas</span></button>
+    <button role="tab" data-t="dnevnik"><span class="ng">☽&#xFE0E;</span><span class="nl">Dnevnik</span></button>
+    <button role="tab" data-t="citanja"><span class="ng">✶</span><span class="nl">Čitanja</span></button>
+    <button role="tab" data-t="karta"><span class="ng">♈&#xFE0E;</span><span class="nl">Karta</span></button>
+    <button role="tab" data-t="biblioteka"><span class="ng">☿&#xFE0E;</span><span class="nl">Biblioteka</span></button>
+    <button role="tab" data-t="simboli"><span class="ng">△</span><span class="nl">Simboli</span></button>
+    <button role="tab" data-t="profili"><span class="ng">⚭</span><span class="nl">Obitelj</span></button>
+    <button role="tab" data-t="postavke"><span class="ng">⚙&#xFE0E;</span><span class="nl">Postavke</span></button>
+  </nav>
+  <div class="sadrzaj">
+    <header class="vrh">
+      <div><h1 id="naslov">Danas</h1><div class="mjesto" id="mjesto"></div></div>
+      <div class="ljudi" id="ljudi" aria-label="Članovi obitelji"></div>
+    </header>
+
+    <section class="kartica" id="t-danas">
+      <div class="mreza">
+        <div class="staklo poruka s8" id="d-poruka"></div>
+        <div class="s4" style="display:grid;gap:16px">
+          <div class="staklo"><div class="broj"><div class="n" id="d-broj">–</div><div><div class="oznaka">Osobni dan</div><b id="d-broj-ime"></b><div class="mali" id="d-broj-opis"></div></div></div></div>
+          <div class="staklo"><div class="oznaka">Mjesečev dan</div><div id="d-mjesec"></div></div>
+        </div>
+        <div class="staklo s6"><div class="oznaka">Sunce i sati</div><div id="d-sunce"></div></div>
+        <div class="staklo s6"><div class="oznaka">Nebo prema tebi danas</div><div id="d-tranziti"></div></div>
+        <div class="staklo s8 citanje">
+          <div class="gumbi" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Čitanje dana</h2><div class="gumbi"><button class="gumb" id="b-dnevno">Napiši dnevno</button><button class="gumb" id="b-duboko">Duboko čitanje</button></div></div>
+          <div class="mali" id="d-pisac"></div><div id="d-citanje" class="prazno"></div>
+        </div>
+        <div class="staklo s4"><div class="oznaka">Iz Atme · atma.hr</div><div class="atma" id="d-atma"></div></div>
+      </div>
+    </section>
+
+    <section class="kartica" id="t-dnevnik" hidden>
+      <div class="mreza">
+        <form class="staklo forma s5" id="f-zapis">
+          <h2>Novi zapis</h2>
+          <div class="dva">
+            <label>Vrsta<select id="z-vrsta"><option value="san">San</option><option value="susret">Susret</option><option value="dogadaj">Događaj</option><option value="znak">Znak / sinkronicitet</option><option value="misao">Misao</option></select></label>
+            <label>Datum<input type="date" id="z-datum"></label>
+          </div>
+          <label>Naslov<input id="z-naslov" placeholder="npr. Vuk na raskrižju"></label>
+          <label>Opis<textarea id="z-tekst" placeholder="Što se dogodilo, što si sanjao/la, što si osjećao/la…"></textarea></label>
+          <label>Simboli (odvojeni zarezom)<input id="z-simboli" placeholder="vuk, raskrižje, mjesec"></label>
+          <span class="mali">Ako ih ne upišeš, simbole prepoznajem sam iz opisa.</span>
+          <div class="gumbi"><button class="gumb glavni" type="submit">Spremi zapis</button></div>
+          <div class="greska" id="z-greska" hidden></div>
+        </form>
+        <div class="staklo s7">
+          <div class="oznaka">Simboli koji se vraćaju</div><div id="z-ponavljanja" class="mali"></div>
+          <div class="oznaka" style="margin-top:16px">Zapisi</div><div id="z-lista"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="kartica" id="t-citanja" hidden>
+      <div class="mreza">
+        <div class="staklo s4"><div class="oznaka">Spremljena čitanja</div><div id="c-lista"></div></div>
+        <article class="staklo s8 citanje" id="c-prikaz"><p class="prazno">Odaberi čitanje s popisa.</p></article>
+      </div>
+    </section>
+
+    <section class="kartica" id="t-karta" hidden><iframe id="karta" title="Natalna karta"></iframe></section>
+
+    <section class="kartica" id="t-biblioteka" hidden>
+      <div class="staklo">
+        <form class="gumbi" id="f-trazi">
+          <input id="q" placeholder="npr. zmija, ouroboros, Saturn, golden section" style="flex:1;min-width:220px">
+          <select id="q-tema" style="width:auto"><option value="">sve teme</option></select>
+          <label style="display:flex;gap:6px;align-items:center;color:var(--ink)"><input type="checkbox" id="q-prevedi" checked style="width:auto"> prevedi simbol</label>
+          <button class="gumb glavni">Traži</button>
+        </form>
+        <div class="mali" id="b-stanje" style="margin-top:8px"></div>
+        <div id="b-rez"></div>
+      </div>
+    </section>
+
+    <section class="kartica" id="t-simboli" hidden>
+      <div class="mreza">
+        <div class="staklo s12"><div class="oznaka">Tvoje učenje simbola</div><div id="u-napredak"></div>
+          <div class="gumbi" role="group" aria-label="Prikaz oznaka" id="u-nacin"><button class="gumb" data-nacin="imena">Uvijek imena</button><button class="gumb" data-nacin="prilagodljivo">Prilagodljivo</button><button class="gumb" data-nacin="simboli">Samo simboli</button></div>
+          <p class="mali">Prijeđi mišem preko simbola da ga upoznaš. Nakon sedam susreta simbol je naučen i dalje se prikazuje samo glif.</p></div>
+        <div class="staklo s4"><div class="oznaka">Planeti i točke</div><div class="mrezasim" id="u-planeti"></div></div>
+        <div class="staklo s4"><div class="oznaka">Znakovi</div><div class="mrezasim" id="u-znakovi"></div></div>
+        <div class="staklo s4"><div class="oznaka">Aspekti</div><div class="mrezasim" id="u-aspekti"></div></div>
+      </div>
+    </section>
+
+    <section class="kartica" id="t-profili" hidden>
+      <div class="mreza">
+        <form class="staklo forma s7" id="f-profil">
+          <h2 id="p-naslov">Novi član</h2>
+          <input type="hidden" id="p-id">
+          <div class="dva"><label>Ime<input id="p-ime" required></label><label>Boja<input id="p-boja" type="color" value="#e8a23a" style="height:42px;padding:4px"></label></div>
+          <label>Puno ime pri rođenju (za numerologiju)<input id="p-puno"></label>
+          <div class="dva"><label>Datum rođenja<input type="date" id="p-datum" min="1800-01-01" max="2100-12-31"></label><label>Vrijeme rođenja<input type="time" id="p-vrijeme"></label></div>
+          <label>Mjesto rođenja<span class="gumbi"><input id="p-mjesto" placeholder="grad ili koordinate iz Google Mapsa" style="flex:1"><button type="button" class="gumb" id="p-trazi">Traži</button></span></label>
+          <div class="rezultati-mjesta" id="p-rez" hidden></div>
+          <div class="dva"><label>Geogr. širina<input type="number" step="any" id="p-lat"></label><label>Geogr. dužina<input type="number" step="any" id="p-lon"></label></div>
+          <div class="dva"><label>Vrijeme na satu<select id="p-nacin"><option value="auto">po povijesnim pravilima zone</option><option value="manual">ručni pomak</option><option value="lmt">lokalno srednje vrijeme</option></select></label><label>Vremenska zona<input id="p-tz" placeholder="Europe/Zagreb"></label></div>
+          <div class="dva" id="p-rucno" hidden><label>Pomak od UTC (min)<input type="number" id="p-pomak" value="60" step="15"></label><label style="align-content:end;color:var(--ink)"><span><input type="checkbox" id="p-ljetno" style="width:auto"> ljetno vrijeme (+1 h)</span></label></div>
+          <div class="gumbi"><button class="gumb glavni" type="submit">Spremi</button><button class="gumb" type="button" id="p-novi">Novi član</button><button class="gumb" type="button" id="p-brisi" hidden>Obriši</button></div>
+          <div class="greska" id="p-greska" hidden></div>
+        </form>
+        <div class="staklo s5"><div class="oznaka">Obitelj</div><div id="p-lista"></div></div>
+      </div>
+    </section>
+
+    <section class="kartica" id="t-postavke" hidden>
+      <div class="mreza">
+        <form class="staklo forma s6" id="f-dom">
+          <h2>Gdje živiš</h2>
+          <span class="mali">Za izlazak i zalazak Sunca, zlatne i planetarne sate.</span>
+          <label>Mjesto<span class="gumbi"><input id="s-mjesto" style="flex:1"><button type="button" class="gumb" id="s-trazi">Traži</button></span></label>
+          <div class="rezultati-mjesta" id="s-rez" hidden></div>
+          <div class="dva"><label>Geogr. širina<input type="number" step="any" id="s-lat"></label><label>Geogr. dužina<input type="number" step="any" id="s-lon"></label></div>
+          <div class="dva"><label>Nadmorska visina (m)<input type="number" id="s-visina"></label><label>Vremenska zona<input id="s-tz"></label></div>
+          <div class="gumbi"><button class="gumb glavni" type="submit">Spremi mjesto</button><span class="mali" id="s-dom-poruka"></span></div>
+        </form>
+        <form class="staklo forma s6" id="f-postavke">
+          <h2>Tko piše čitanja</h2>
+          <label style="display:flex;gap:8px;align-items:center;color:var(--ink)"><input type="radio" name="pisac" value="pravila" style="width:auto"> Pravila i citati iz knjiga (besplatno)</label>
+          <label style="display:flex;gap:8px;align-items:center;color:var(--ink)"><input type="radio" name="pisac" value="claude" style="width:auto"> Claude (Anthropic API)</label>
+          <label style="display:flex;gap:8px;align-items:center;color:var(--ink)"><input type="radio" name="pisac" value="lokalni" style="width:auto"> Lokalni model (Ollama)</label>
+          <label>Claude API ključ <span id="s-ima"></span><input id="s-kljuc" type="password" placeholder="sk-ant-… (prazno = zadrži postojeći)" autocomplete="off"></label>
+          <label>Claude model<input id="s-model"></label>
+          <div class="dva"><label>Lokalni model<input id="s-omodel" placeholder="postavit ćemo kasnije"></label><label>Adresa<input id="s-ourl"></label></div>
+          <div class="gumbi"><button class="gumb glavni" type="submit">Spremi</button><span class="mali" id="s-poruka"></span></div>
+        </form>
+        <div class="staklo s12"><div class="oznaka">Biblioteka</div><div id="s-bib" class="mali"></div></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="/static/astronomy.js"></script>
+<script src="/static/asteroids.js"></script>
+<script src="/static/core.js"></script>
+<script src="/static/zajednicko.js"></script>
+<script src="/feniks/ui/simboli.js"></script>
+<script src="/feniks/ui/dan.js"></script>
+<script src="/feniks/ui/logo.js"></script>
+<script src="/feniks/ui/cekanje.js"></script>
+<script>
+(function () {
+'use strict';
+var $ = function (s) { return document.querySelector(s); };
+var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+var S = Simboli, F = FeniksDan;
+var VRSTE = { san: 'San', susret: 'Susret', dogadaj: 'Događaj', znak: 'Znak / sinkronicitet', misao: 'Misao' };
+var NASLOVI = { danas: 'Danas', dnevnik: 'Dnevnik simbolizma i sinkroniciteta', citanja: 'Čitanja', karta: 'Natalna karta', biblioteka: 'Biblioteka', simboli: 'Simboli', profili: 'Obitelj', postavke: 'Postavke' };
+var PISAC = { pravila: 'pravila i citati', claude: 'Claude', lokalni: 'lokalni model' };
+var st = { profili: [], p: null, nat: null, num: null, dom: {} };
+
+/* tiho zvjezdano nebo */
+(function () {
+  var c = $('#nebo'); function crtaj() { var x = c.getContext('2d'), w = c.width = innerWidth, h = c.height = innerHeight, r = 5;
+    function rnd() { r = (r * 9301 + 49297) % 233280; return r / 233280; }
+    for (var i = 0; i < 260; i++) { x.fillStyle = 'rgba(240,232,214,' + (0.1 + rnd() * 0.45).toFixed(2) + ')'; x.beginPath(); x.arc(rnd() * w, rnd() * h, rnd() < .9 ? .7 : 1.4, 0, 6.283); x.fill(); } }
+  crtaj(); addEventListener('resize', crtaj);
+})();
+
+/* kartice */
+$('#kartice').addEventListener('click', function (e) { var b = e.target.closest('button[data-t]'); if (b) pokazi(b.dataset.t); });
+function pokazi(t) {
+  document.querySelectorAll('#kartice button[data-t]').forEach(function (x) { x.setAttribute('aria-selected', x.dataset.t === t); });
+  document.querySelectorAll('section.kartica').forEach(function (s) { s.hidden = s.id !== 't-' + t; });
+  $('#naslov').textContent = NASLOVI[t];
+  try { localStorage.setItem('feniks-kartica', t); } catch (e) {}
+  if (t === 'karta') ucitajKartu();
+  if (t === 'citanja') ucitajCitanja();
+  if (t === 'biblioteka' || t === 'postavke') ucitajBiblioteku();
+  if (t === 'simboli') ucitajSimbole();
+}
+
+/* obitelj */
+function ucitajProfile(odaberi) {
+  return K.api('/api/profili').then(function (ps) {
+    st.profili = ps;
+    st.p = ps.filter(function (p) { return odaberi ? p.id === odaberi : p.aktivan; })[0] || ps[0] || null;
+    $('#ljudi').innerHTML = ps.map(function (p) { return '<button data-id="' + p.id + '" aria-pressed="' + (st.p && p.id === st.p.id) + '"><span class="t" style="background:' + esc(p.boja || '#e8a23a') + '"></span>' + esc(p.ime) + '</button>'; }).join('') + '<button data-novi="1">+ član</button>';
+    $('#p-lista').innerHTML = ps.length ? ps.map(function (p) {
+      var nat = K.natal(p), sun = nat && nat.points[0], asc = nat && nat.points.filter(function (x) { return x.id === 'asc'; })[0];
+      return '<div class="zapis"><span class="t" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + esc(p.boja || '#e8a23a') + '"></span> <b>' + esc(p.ime) + '</b> <span class="mali">' + esc(p.datum || '') + ' ' + esc(p.vrijeme || '') + ' · ' + esc(p.mjesto || '') + '</span>' +
+        (sun ? '<div class="mali">' + S.oznaka('sun') + ' u ' + S.oznaka(S.ZNAKOVI[sun.sign]) + (asc ? ' · ' + S.oznaka('asc') + ' ' + S.oznaka(S.ZNAKOVI[asc.sign]) : '') + '</div>' : '') +
+        '<div class="gumbi" style="margin-top:6px"><button class="gumb" data-uredi="' + p.id + '">Uredi</button></div></div>';
+    }).join('') : '<p class="prazno">Još nema članova. Upiši prvog.</p>';
+    if (!ps.length) { pokazi('profili'); return; }
+    osvjeziDanas();
+  });
+}
+$('#ljudi').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.novi) { urediProfil(null); pokazi('profili'); return; }
+  K.api('/api/profil/aktiviraj', { method: 'POST', body: { id: +b.dataset.id } }).then(function () { ucitajProfile(+b.dataset.id); });
+});
+$('#p-lista').addEventListener('click', function (e) { var b = e.target.closest('[data-uredi]'); if (b) urediProfil(st.profili.filter(function (p) { return p.id === +b.dataset.uredi; })[0]); });
+function urediProfil(p) {
+  p = p || {};
+  $('#p-naslov').textContent = p.id ? 'Uredi: ' + p.ime : 'Novi član';
+  $('#p-id').value = p.id || ''; $('#p-ime').value = p.ime || ''; $('#p-puno').value = p.puno_ime || ''; $('#p-boja').value = p.boja || '#e8a23a';
+  $('#p-datum').value = p.datum || ''; $('#p-vrijeme').value = p.vrijeme || ''; $('#p-mjesto').value = p.mjesto || '';
+  $('#p-lat').value = p.lat != null ? p.lat : ''; $('#p-lon').value = p.lon != null ? p.lon : ''; $('#p-tz').value = p.tz || '';
+  $('#p-nacin').value = p.tz_nacin || 'auto'; $('#p-pomak').value = p.pomak != null ? p.pomak : 60; $('#p-ljetno').checked = !!p.ljetno;
+  $('#p-rucno').hidden = $('#p-nacin').value !== 'manual'; $('#p-brisi').hidden = !p.id; $('#p-greska').hidden = true;
+}
+$('#p-nacin').addEventListener('change', function () { $('#p-rucno').hidden = this.value !== 'manual'; });
+$('#p-novi').addEventListener('click', function () { urediProfil(null); });
+$('#p-brisi').addEventListener('click', function () {
+  var id = $('#p-id').value; if (!id) return;
+  if (this.dataset.potvrda !== '1') { this.dataset.potvrda = '1'; this.textContent = 'Stvarno obrisati? Klikni opet'; return; }
+  this.dataset.potvrda = ''; this.textContent = 'Obriši';
+  K.api('/api/profil?id=' + id, { method: 'DELETE' }).then(function () { urediProfil(null); ucitajProfile(); });
+});
+$('#f-profil').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var num = function (s) { var v = parseFloat($(s).value); return isFinite(v) ? v : null; };
+  var p = { id: +$('#p-id').value || null, ime: $('#p-ime').value.trim(), puno_ime: $('#p-puno').value.trim(), boja: $('#p-boja').value,
+    datum: $('#p-datum').value || null, vrijeme: $('#p-vrijeme').value || null, mjesto: $('#p-mjesto').value.trim(), lat: num('#p-lat'), lon: num('#p-lon'),
+    tz_nacin: $('#p-nacin').value, tz: $('#p-tz').value.trim() || null, pomak: parseInt($('#p-pomak').value, 10) || 0, ljetno: $('#p-ljetno').checked ? 1 : 0, aktivan: true };
+  K.api('/api/profil', { method: 'POST', body: p }).then(function (s) { urediProfil(s); ucitajProfile(s.id); pokazi('danas'); })
+    .catch(function (err) { $('#p-greska').textContent = err.message; $('#p-greska').hidden = false; });
+});
+
+/* pretraga mjesta (OpenStreetMap) i koordinate iz Google Mapsa */
+var TZ_DRZAVE = { hr: 'Europe/Zagreb', ba: 'Europe/Sarajevo', rs: 'Europe/Belgrade', si: 'Europe/Ljubljana', me: 'Europe/Podgorica', mk: 'Europe/Skopje', at: 'Europe/Vienna', de: 'Europe/Berlin', ch: 'Europe/Zurich', it: 'Europe/Rome', hu: 'Europe/Budapest', fr: 'Europe/Paris', gb: 'Europe/London', ie: 'Europe/Dublin', nl: 'Europe/Amsterdam', se: 'Europe/Stockholm', no: 'Europe/Oslo' };
+function traziMjesto(polje, rez, lat, lon, tz) {
+  var q = $(polje).value.trim(); if (!q) return;
+  var m = q.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || q.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || q.match(/^\s*(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)\s*$/);
+  if (m) { $(lat).value = (+m[1]).toFixed(5); $(lon).value = (+m[2]).toFixed(5); $(rez).hidden = true; return; }
+  $(rez).hidden = false; $(rez).innerHTML = '<span class="mali" style="padding:7px 10px">Tražim…</span>';
+  fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&accept-language=hr&q=' + encodeURIComponent(q))
+    .then(function (r) { return r.json(); }).then(function (d) {
+      $(rez).innerHTML = d.length ? d.map(function (x, i) { return '<button type="button" data-i="' + i + '">' + esc(x.display_name) + '</button>'; }).join('') : '<span class="mali" style="padding:7px 10px">Nema rezultata.</span>';
+      $(rez).onclick = function (e) {
+        var b = e.target.closest('button'); if (!b) return; var x = d[+b.dataset.i];
+        $(lat).value = (+x.lat).toFixed(5); $(lon).value = (+x.lon).toFixed(5);
+        $(polje).value = (x.name || x.display_name.split(',')[0]) + (x.address && x.address.country ? ', ' + x.address.country : '');
+        if (tz && !$(tz).value) $(tz).value = TZ_DRZAVE[(x.address || {}).country_code] || '';
+        $(rez).hidden = true;
+      };
+    }).catch(function () { $(rez).innerHTML = '<span class="mali" style="padding:7px 10px">Pretraga nije uspjela. Zalijepi koordinate iz Google Mapsa.</span>'; });
+}
+$('#p-trazi').addEventListener('click', function () { traziMjesto('#p-mjesto', '#p-rez', '#p-lat', '#p-lon', '#p-tz'); });
+$('#s-trazi').addEventListener('click', function () { traziMjesto('#s-mjesto', '#s-rez', '#s-lat', '#s-lon', '#s-tz'); });
+['#p-mjesto', '#s-mjesto'].forEach(function (id) { $(id).addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); (id === '#p-mjesto' ? $('#p-trazi') : $('#s-trazi')).click(); } }); });
+
+/* danas */
+function osvjeziDanas() {
+  var p = st.p; if (!p) return;
+  st.nat = K.natal(p);
+  K.api('/api/numerologija?profil=' + p.id).then(function (n) {
+    st.num = n;
+    if (n) { var z = n.znacenja.osobni_dan || ['', '']; $('#d-broj').textContent = n.osobni_dan; $('#d-broj-ime').textContent = z[0]; $('#d-broj-opis').textContent = z[1] + ' · životni put ' + n.zivotni_put + ' · osobna godina ' + n.osobna_godina; }
+    else { $('#d-broj').textContent = '–'; $('#d-broj-ime').textContent = 'Upiši datum rođenja.'; $('#d-broj-opis').textContent = ''; }
+    var tr = st.nat ? K.tranziti(st.nat, Date.now()).slice(0, 6) : [];
+    $('#d-poruka').innerHTML = F.poruka(tr, n);
+    $('#d-tranziti').innerHTML = F.tranziti(tr);
+  });
+  try { $('#d-sunce').innerHTML = F.sunce(st.dom); } catch (e) { $('#d-sunce').innerHTML = '<div class="mali">Izračun Sunca nije uspio.</div>'; }
+  $('#d-mjesec').innerHTML = F.mjesecevDan(st.nat);
+  K.api('/api/citanje?profil=' + p.id).then(prikaziCitanje);
+  ucitajDnevnik();
+  if (!$('#t-citanja').hidden) ucitajCitanja();
+}
+function bogatTekst(el, tekst) { el.innerHTML = F.obogati(K.md(tekst)); F.slikeUNaslove(el); }
+function prikaziCitanje(c) {
+  if (!c) { $('#d-citanje').className = 'prazno'; $('#d-citanje').textContent = 'Pritisni „Napiši dnevno” za današnje čitanje.'; $('#d-pisac').textContent = ''; return; }
+  $('#d-citanje').className = ''; bogatTekst($('#d-citanje'), c.tekst);
+  $('#d-pisac').textContent = 'Napisao: ' + (PISAC[c.pisac] || c.pisac);
+}
+function napisi(vrsta, gumb) {
+  if (!st.p) return; gumb.disabled = true; var stari = gumb.textContent; gumb.textContent = 'Pišem…';
+  K.api('/api/citanje', { method: 'POST', body: { profil_id: st.p.id, vrsta: vrsta, sazetak: K.sazetak(st.p, st.nat, st.num) } })
+    .then(function (c) { prikaziCitanje(c); if (vrsta === 'duboko') pokazi('citanja'); })
+    .catch(function (e) { $('#d-citanje').className = 'greska'; $('#d-citanje').textContent = e.message; })
+    .then(function () { gumb.disabled = false; gumb.textContent = stari; });
+}
+$('#b-dnevno').addEventListener('click', function () { napisi('dnevno', this); });
+$('#b-duboko').addEventListener('click', function () { napisi('duboko', this); });
+function atma() {
+  K.api('/api/atma').then(function (a) {
+    var izbor = a.filter(function (x) { return x.tema; }).slice(0, 5);
+    $('#d-atma').innerHTML = izbor.length ? izbor.map(function (x) { return '<a href="' + esc(x.link) + '" target="_blank" rel="noopener"><b>' + esc(x.naslov) + '</b><span class="mali">' + esc(x.sazetak) + '</span></a>'; }).join('') : '<span class="mali">Nema novih tekstova.</span>';
+  }).catch(function () { $('#d-atma').innerHTML = '<span class="mali">Atma trenutno nije dostupna.</span>'; });
+}
+
+/* dnevnik */
+$('#z-datum').value = new Date().toISOString().slice(0, 10);
+$('#f-zapis').addEventListener('submit', function (e) {
+  e.preventDefault(); if (!st.p) return;
+  var z = { profil_id: st.p.id, vrsta: $('#z-vrsta').value, datum: $('#z-datum').value, naslov: $('#z-naslov').value.trim(), tekst: $('#z-tekst').value.trim(),
+    simboli: $('#z-simboli').value.split(',').map(function (s) { return s.trim(); }).filter(Boolean) };
+  if (!z.tekst && !z.naslov) { $('#z-greska').textContent = 'Upiši naslov ili opis.'; $('#z-greska').hidden = false; return; }
+  K.api('/api/zapis', { method: 'POST', body: z }).then(function () { $('#z-naslov').value = ''; $('#z-tekst').value = ''; $('#z-simboli').value = ''; $('#z-greska').hidden = true; ucitajDnevnik(); })
+    .catch(function (err) { $('#z-greska').textContent = err.message; $('#z-greska').hidden = false; });
+});
+function ucitajDnevnik() {
+  if (!st.p) return;
+  K.api('/api/zapisi?profil=' + st.p.id).then(function (zs) {
+    $('#z-lista').innerHTML = zs.length ? zs.map(function (z) {
+      return '<div class="zapis"><span class="vrsta">' + VRSTE[z.vrsta] + '</span> <span class="mali">' + esc(z.datum.split('-').reverse().join('. ')) + '.</span><br><b>' + esc(z.naslov || '') + '</b> ' + F.obogati(esc(z.tekst || '')) +
+        '<div>' + z.simboli.map(function (s) { return '<a href="#" class="simbol" data-simbol="' + esc(s) + '">' + esc(s) + '</a>'; }).join('') + '</div></div>';
+    }).join('') : '<p class="prazno">Još nema zapisa.</p>';
+  });
+  K.api('/api/ponavljanja?profil=' + st.p.id).then(function (ps) {
+    $('#z-ponavljanja').innerHTML = ps.length ? ps.map(function (x) { return '<a href="#" class="simbol" data-simbol="' + esc(x[0]) + '">' + esc(x[0]) + ' ×' + x[1] + '</a>'; }).join('') : 'Simboli koji se ponove barem dvaput u 90 dana pojavit će se ovdje.';
+  });
+}
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('[data-simbol]'); if (a) { e.preventDefault(); $('#q').value = a.dataset.simbol; pokazi('biblioteka'); trazi(); return; }
+  var k = e.target.closest('[data-knjiga]'); if (k) { e.preventDefault(); K.api('/api/knjiga?putanja=' + encodeURIComponent(k.dataset.knjiga)); }
+});
+
+/* čitanja */
+function naslovCitanja(t) { var m = (t || '').match(/^#+\s*(.+)$/m); return (m ? m[1] : (t || '').split('\n').filter(function (l) { return l.trim(); })[0] || '').replace(/[*#>]/g, '').trim().slice(0, 90); }
+function ucitajCitanja() {
+  if (!st.p) return;
+  K.api('/api/citanja?profil=' + st.p.id).then(function (cs) {
+    $('#c-lista').innerHTML = cs.length ? cs.map(function (c) {
+      return '<button class="stavka" data-citanje="' + c.id + '"><span class="vrsta">' + (c.vrsta === 'duboko' ? 'Duboko' : 'Dnevno') + '</span> <span class="mali">' + c.datum.split('-').reverse().join('. ') + '. · ' + esc(PISAC[c.pisac] || c.pisac) + '</span><b>' + esc(naslovCitanja(c.pocetak)) + '</b></button>';
+    }).join('') : '<p class="prazno">Još nema spremljenih čitanja za ' + esc(st.p.ime) + '.</p>';
+    if (cs.length) otvoriCitanje(cs[0].id); else $('#c-prikaz').innerHTML = '<p class="prazno">Odaberi čitanje s popisa.</p>';
+  });
+}
+function otvoriCitanje(id) {
+  document.querySelectorAll('[data-citanje]').forEach(function (b) { b.setAttribute('aria-current', +b.dataset.citanje === id); });
+  K.api('/api/citanje?id=' + id).then(function (c) {
+    if (!c) return;
+    var el = $('#c-prikaz');
+    el.innerHTML = '<div class="mali">' + c.datum.split('-').reverse().join('. ') + '. · ' + (c.vrsta === 'duboko' ? 'duboko čitanje' : 'dnevno čitanje') + ' · napisao: ' + esc(PISAC[c.pisac] || c.pisac) + '</div><div id="c-tekst"></div>' +
+      (c.izvori && c.izvori.length ? '<h3>Izvori</h3><ul class="mali">' + c.izvori.map(function (r) { return '<li>' + esc(r.autor) + ', <i>' + esc(r.naslov) + '</i>' + (r.godina ? ' (' + esc(r.godina) + ')' : '') + ', str. ' + esc(r.stranica) + (r.razlog ? ' · ' + esc(r.razlog) : '') + '</li>'; }).join('') + '</ul>' : '');
+    bogatTekst($('#c-tekst'), c.tekst);
+  });
+}
+$('#c-lista').addEventListener('click', function (e) { var b = e.target.closest('[data-citanje]'); if (b) otvoriCitanje(+b.dataset.citanje); });
+
+/* karta */
+function ucitajKartu() {
+  var p = st.p; if (!p || !p.datum) { $('#karta').srcdoc = '<p style="font-family:sans-serif;color:#ccc;padding:20px">Član treba datum, vrijeme i mjesto rođenja.</p>'; return; }
+  var f = { name: p.ime, date: p.datum, time: p.vrijeme || '12:00', place: p.mjesto, lat: p.lat, lon: p.lon, tzMode: p.tz_nacin || 'auto', tz: p.tz, manOff: p.pomak, manDst: !!p.ljetno };
+  $('#karta').removeAttribute('srcdoc'); $('#karta').src = '/kosmogram#p=' + encodeURIComponent(JSON.stringify(f));
+}
+
+/* biblioteka */
+function ucitajBiblioteku() {
+  K.api('/api/biblioteka').then(function (b) {
+    var txt = b.knjiga.toLocaleString('hr-HR') + ' knjiga, ' + b.s_tekstom.toLocaleString('hr-HR') + ' s pretraživim tekstom, ' + b.odlomaka.toLocaleString('hr-HR') + ' odlomaka.';
+    $('#b-stanje').textContent = txt; $('#s-bib').innerHTML = txt;
+    var sel = $('#q-tema'), cur = sel.value;
+    sel.innerHTML = '<option value="">sve teme</option>' + b.teme.map(function (t) { return '<option>' + esc(t[0]) + '</option>'; }).join(''); sel.value = cur;
+  });
+}
+$('#f-trazi').addEventListener('submit', function (e) { e.preventDefault(); trazi(); });
+function trazi() {
+  var q = $('#q').value.trim(); if (!q) return;
+  $('#b-rez').innerHTML = '<p class="prazno">Tražim…</p>';
+  K.api('/api/trazi?n=30&prevedi=' + ($('#q-prevedi').checked ? 1 : 0) + '&tema=' + encodeURIComponent($('#q-tema').value) + '&q=' + encodeURIComponent(q)).then(function (rs) {
+    $('#b-rez').innerHTML = rs.length ? rs.map(function (r) {
+      return '<div class="rez"><b>' + esc(r.autor) + '</b>, <i>' + esc(r.naslov) + '</i> (' + esc(r.godina || '?') + '), str. ' + esc(r.stranica) + ' <span class="mali">· ' + esc(r.tema) + ' · ' + esc(r.jezik) + '</span> <a href="#" class="mali" data-knjiga="' + esc(r.putanja) + '" style="color:var(--gold)">otvori knjigu</a><div>' + esc(r.izvod).replace(/«/g, '<mark>').replace(/»/g, '</mark>') + '</div></div>';
+    }).join('') : '<p class="prazno">Nema rezultata. Probaj engleski naziv ili drugu riječ.</p>';
+  }).catch(function (e) { $('#b-rez').innerHTML = '<p class="greska">' + esc(e.message) + '</p>'; });
+}
+
+/* simboli */
+function ucitajSimbole() {
+  var n = S.napredak();
+  $('#u-napredak').innerHTML = '<b>' + n.nauceno + ' / ' + n.ukupno + '</b> simbola naučeno<div class="napredak"><span style="width:' + Math.round(n.nauceno / n.ukupno * 100) + '%"></span></div>';
+  var grupa = function (vrste) { return Object.keys(S.D).filter(function (k) { return vrste.indexOf(S.D[k].vrsta) >= 0 && k !== 'earth'; }).map(function (k) { return S.oznaka(k); }).join(''); };
+  $('#u-planeti').innerHTML = grupa(['planet', 'točka']); $('#u-znakovi').innerHTML = grupa(['znak']); $('#u-aspekti').innerHTML = grupa(['aspekt']);
+  document.querySelectorAll('#u-nacin [data-nacin]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.nacin === S.nacin()); });
+}
+$('#u-nacin').addEventListener('click', function (e) { var b = e.target.closest('[data-nacin]'); if (!b) return; S.postaviNacin(b.dataset.nacin); ucitajSimbole(); });
+
+/* postavke */
+function ucitajPostavke() {
+  return K.api('/api/postavke').then(function (s) {
+    st.dom = s;
+    $('#mjesto').textContent = s.lokacija_ime ? '⌂ ' + s.lokacija_ime : '';
+    document.querySelectorAll('input[name=pisac]').forEach(function (r) { r.checked = r.value === s.pisac; });
+    $('#s-model').value = s.claude_model; $('#s-omodel').value = s.ollama_model; $('#s-ourl').value = s.ollama_url;
+    $('#s-ima').textContent = s.ima_kljuc ? '(spremljen)' : '(nije postavljen)';
+    $('#s-mjesto').value = s.lokacija_ime || ''; $('#s-lat').value = s.lokacija_lat; $('#s-lon').value = s.lokacija_lon; $('#s-visina').value = s.lokacija_visina; $('#s-tz').value = s.lokacija_tz;
+  });
+}
+$('#f-postavke').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var s = { pisac: (document.querySelector('input[name=pisac]:checked') || {}).value || 'pravila', claude_model: $('#s-model').value.trim(), ollama_model: $('#s-omodel').value.trim(), ollama_url: $('#s-ourl').value.trim() };
+  if ($('#s-kljuc').value.trim()) s.claude_kljuc = $('#s-kljuc').value.trim();
+  K.api('/api/postavke', { method: 'POST', body: s }).then(function () { $('#s-kljuc').value = ''; $('#s-poruka').textContent = 'Spremljeno.'; ucitajPostavke(); });
+});
+$('#f-dom').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var s = { lokacija_ime: $('#s-mjesto').value.trim(), lokacija_lat: parseFloat($('#s-lat').value), lokacija_lon: parseFloat($('#s-lon').value), lokacija_visina: parseFloat($('#s-visina').value) || 0, lokacija_tz: $('#s-tz').value.trim() || 'Europe/Zagreb' };
+  if (!isFinite(s.lokacija_lat) || !isFinite(s.lokacija_lon)) { $('#s-dom-poruka').textContent = 'Upiši ili pronađi koordinate.'; return; }
+  K.api('/api/postavke', { method: 'POST', body: s }).then(function () { $('#s-dom-poruka').textContent = 'Spremljeno.'; ucitajPostavke().then(osvjeziDanas); });
+});
+
+var t0 = 'danas'; try { t0 = localStorage.getItem('feniks-kartica') || 'danas'; } catch (e) {}
+if (/^#[a-z]+$/.test(location.hash) && document.getElementById('t-' + location.hash.slice(1))) t0 = location.hash.slice(1);
+ucitajPostavke().catch(function () {}).then(function () { return ucitajProfile(); }).then(function () { if (st.profili.length) pokazi(t0); });
+atma();
+setInterval(function () { try { $('#d-sunce').innerHTML = F.sunce(st.dom); } catch (e) {} }, 60000);
+})();
+</script>
+</body>
+</html>

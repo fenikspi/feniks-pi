@@ -1,0 +1,37 @@
+/* Feniks π: zajednički stil. Noćno nebo, žar i zlato feniksa. */
+:root {
+  color-scheme: dark;
+  --ink: #efe7d6; --muted: #a49e8e; --line: rgba(232, 162, 58, .24);
+  --ember: #e8a23a; --ember-soft: rgba(232, 162, 58, .16); --gold: #f4c56b; --glow: rgba(244, 197, 107, .35);
+  --soft: #7fb6e6; --tense: #ee8a6a;
+  --f-display: "Marcellus", Georgia, serif;
+  --f-body: "Alegreya Sans", "Ubuntu", system-ui, sans-serif;
+  --f-glyph: "Noto Sans Symbols", "DejaVu Sans", "Segoe UI Symbol", sans-serif;
+}
+button:focus-visible, textarea:focus-visible, input:focus-visible, .sim:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* žive oznake simbola */
+.sim { display: inline-flex; align-items: baseline; gap: .22em; cursor: help; border-radius: 4px; white-space: nowrap; }
+.sim-g { font-family: var(--f-glyph); color: var(--gold); }
+.sim-slova { font: 700 .82em var(--f-body); letter-spacing: .04em; }
+.sim-ime { border-bottom: 1px dotted rgba(244, 197, 107, .45); }
+g.sim { cursor: help; }
+
+/* planeti kao kugle */
+.orb { border-radius: 50%; object-fit: cover; display: inline-block; vertical-align: middle; background: #05060f; box-shadow: 0 0 14px rgba(244, 197, 107, .15); }
+.orb-glif { display: inline-grid; place-items: center; font-family: var(--f-glyph); color: var(--gold); border: 1px solid var(--line); }
+
+/* kartica simbola */
+.sim-kartica { position: fixed; z-index: 50; width: 280px; box-sizing: border-box; padding: 12px 14px; border-radius: 12px; pointer-events: none;
+  background: linear-gradient(160deg, rgba(30, 36, 70, .97), rgba(12, 15, 32, .97)); border: 1px solid var(--ember); color: var(--ink);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .5); font: 15px/1.4 var(--f-body); }
+.sim-kartica[hidden] { display: none; }
+.sk-glava { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center; margin-bottom: 8px; }
+.sk-glif { font: 1.6rem/1 var(--f-glyph); color: var(--gold); }
+.sk-ime { font: 400 1.2rem var(--f-display); }
+.sk-vrsta { font-size: .72rem; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); }
+.sk-kw { color: var(--gold); font-size: .92rem; margin-bottom: 4px; }
+.sk-opis { font-size: .9rem; }
+.sk-ucenje { height: 4px; border-radius: 99px; background: rgba(255, 255, 255, .08); margin: 10px 0 4px; overflow: hidden; }
+.sk-ucenje span { display: block; height: 100%; background: linear-gradient(90deg, var(--ember), var(--gold)); }
+.sk-mali { font-size: .76rem; color: var(--muted); }

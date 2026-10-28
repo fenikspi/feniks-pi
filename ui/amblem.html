@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/feniks/assets/ikone/favicon.ico" sizes="any">
+<title>Feniks π · amblem</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@1,600&family=Noto+Sans+Glagolitic&display=swap">
+<style>
+/* Amblem Feniks π: feniks iz kamenog ognjišta u krugu, „Feniks π” polukružno ispod, kolovrat od starohrvatskog troprutastog pletera s 8 krakova koji se pružaju u prazan prostor. */
+html, body { margin: 0; height: 100%; background: #000; display: grid; place-items: center; overflow: hidden; }
+.okvir { position: relative; width: min(100vw, 100vh); height: min(100vw, 100vh); }
+svg, canvas#pleter { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+<div class="okvir"><svg id="a" viewBox="0 0 2000 2000" role="img" aria-label="Feniks π: feniks se diže iz kamenog ognjišta, okružen kolovratom">
+  <defs>
+    <radialGradient id="meko" cx="1000" cy="1000" r="880" gradientUnits="userSpaceOnUse">
+      <stop offset=".86" stop-color="#fff"/><stop offset="1" stop-color="#000"/>
+    </radialGradient>
+    <mask id="krug"><rect width="2000" height="2000" fill="url(#meko)"/></mask>
+    <linearGradient id="zlato" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff0b8"/><stop offset=".45" stop-color="#f0c05a"/><stop offset="1" stop-color="#b9741e"/>
+    </linearGradient>
+    <linearGradient id="zlatoK" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbe08a"/><stop offset=".5" stop-color="#d9a23e"/><stop offset="1" stop-color="#9a6418"/>
+    </linearGradient>
+    <filter id="sjaj" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="kamen" patternUnits="userSpaceOnUse" width="320" height="320"><image href="/feniks/assets/logo/kamen-tekstura.png" width="320" height="320"/></pattern>
+    <linearGradient id="kockaSvjetlo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff6e6" stop-opacity=".35"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#2a1a0a" stop-opacity=".45"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="1000" cy="930" r="640" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity=".94"/><stop offset=".62" stop-color="#000" stop-opacity=".88"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="mutno"><feGaussianBlur stdDeviation="7"/></filter>
+    <filter id="sjenaKocke" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity=".75"/></filter>
+    <path id="lukGore" d="M 280 1000 A 720 720 0 0 1 1720 1000"/>
+  </defs>
+  <rect id="crno" width="2000" height="2000" fill="#000"/>
+  <ellipse id="auraElipsa" cx="1000" cy="930" rx="600" ry="660" fill="url(#aura)" display="none"/>
+  <!-- prizor: feniks iz kamenog ognjišta -->
+  <image id="prizor" href="/feniks/assets/logo/feniks-scena-bez-natpisa.png" x="400" y="330" width="1200" height="1200" mask="url(#krug)"/>
+  <!-- gore polukružno latinicom (tamni obrub ispod, da se čita preko pletera) -->
+  <text id="natpisObrub" display="none" font-family="'Pinyon Script', cursive" font-size="215" fill="none" stroke="#000" stroke-width="26" stroke-linejoin="round" filter="url(#mutno)" letter-spacing="26">
+    <textPath href="#lukGore" startOffset="50%" text-anchor="middle">Feniks <tspan font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="190" dx="24">π</tspan></textPath>
+  </text>
+  <text id="natpisGore" font-family="'Pinyon Script', cursive" font-size="215" fill="url(#zlato)" filter="url(#sjaj)" letter-spacing="26">
+    <textPath href="#lukGore" startOffset="50%" text-anchor="middle">Feniks <tspan font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="190" dx="24">π</tspan></textPath>
+  </text>
+  <!-- dolje polukružno: kamene kocke s uklesanom glagoljicom Ⱇ Ⰵ Ⱀ Ⰻ Ⰽ Ⱄ π -->
+  <g id="kocke" filter="url(#sjenaKocke)"></g>
+</svg><canvas id="pleter" width="2000" height="2000" aria-hidden="true"></canvas></div>
+<script src="/static/astronomy.js"></script>
+<script src="/feniks/ui/pleter.js"></script>
+<script>
+(function () {
+  'use strict';
+  var P = Math.PI / 180, o = [];
+  // kamene kocke uz donji luk; slova čitljiva slijeva nadesno, okrenuta prema središtu
+  var SLOVA = ['\u2C17', '\u2C05', '\u2C10', '\u2C0B', '\u2C0D', '\u2C14', '\u03C0'], R = 772, KORAK = 13.2, V = 138, k = [];
+  SLOVA.forEach(function (s, i) {
+    var ugao = 90 + (3 - i) * KORAK, cx = 1000 + Math.cos(ugao * P) * R, cy = 1000 + Math.sin(ugao * P) * R, rot = ugao - 90, h = V / 2;
+    var pi = s === '\u03C0', font = pi ? "font-family=\"'Cormorant Garamond', serif\" font-style=\"italic\" font-weight=\"600\" font-size=\"112\"" : "font-family=\"'Noto Sans Glagolitic', serif\" font-size=\"92\"";
+    function slovo(dx, dy, boja) { return '<text x="' + dx + '" y="' + (dy + (pi ? 6 : 2)) + '" text-anchor="middle" dominant-baseline="central" ' + font + ' fill="' + boja + '">' + s + '</text>'; }
+    k.push('<g transform="translate(' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ') rotate(' + rot.toFixed(2) + ')">' +
+      '<rect x="' + -h + '" y="' + -h + '" width="' + V + '" height="' + V + '" rx="12" fill="url(#kamen)"/>' +
+      '<rect x="' + -h + '" y="' + -h + '" width="' + V + '" height="' + V + '" rx="12" fill="url(#kockaSvjetlo)"/>' +
+      '<rect x="' + (-h + 7) + '" y="' + (-h + 7) + '" width="' + (V - 14) + '" height="' + (V - 14) + '" rx="7" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"/>' +
+      '<rect x="' + -h + '" y="' + -h + '" width="' + V + '" height="' + V + '" rx="12" fill="none" stroke="rgba(70,50,30,.55)" stroke-width="3"/>' +
+      slovo(3, 4, 'rgba(255,250,240,.9)') + slovo(-2, -3, 'rgba(70,52,36,.85)') + slovo(0, 0, 'url(#zlato)') + '</g>');
+  });
+  document.getElementById('kocke').innerHTML = k.join('');
+  var mirno = /mirno=1/.test(location.search) || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pozadina = /pozadina=1/.test(location.search);
+  if (pozadina) {                                              // pleteni kolovrat ispod svega, prizor s prozirnom pozadinom preko
+    var okvir = document.querySelector('.okvir'); okvir.insertBefore(document.getElementById('pleter'), okvir.firstChild);
+    document.getElementById('crno').setAttribute('fill', 'none');
+    document.getElementById('auraElipsa').removeAttribute('display');
+    document.getElementById('natpisObrub').removeAttribute('display');
+    document.getElementById('prizor').setAttribute('href', '/feniks/assets/logo/feniks-scena-prozirna.png');
+    document.getElementById('prizor').removeAttribute('mask');
+  }
+  // danju posolon, noću obrnuto (Sunce nad Podsljemenom)
+  function dan() {
+    try { var obs = new Astronomy.Observer(45.857, 15.957, 300), eq = Astronomy.Equator(Astronomy.Body.Sun, new Date(), obs, true, true);
+      return Astronomy.Horizon(new Date(), obs, eq.ra, eq.dec, 'normal').altitude > -0.83; } catch (e) { var h = new Date().getHours(); return h >= 6 && h < 18; }
+  }
+  // slobodan prostor: od ruba prema središtu do prvog svijetlog piksela prizora, natpisa gore ili kocki dolje
+  var slika = new Image(); slika.src = document.getElementById('prizor').getAttribute('href');
+  Promise.all([document.fonts.ready, new Promise(function (ok) { slika.onload = ok; if (slika.complete) ok(); })]).then(function () {
+    var pl = document.createElement('canvas'); pl.width = pl.height = 2000; var px = pl.getContext('2d');
+    px.drawImage(slika, 400, 330, 1200, 1200);
+    var pod = px.getImageData(0, 0, 2000, 2000).data;
+    var gore = document.querySelector('#natpisGore'), polaGore = (gore ? gore.getComputedTextLength() / 720 / 2 : 0.6) + 0.07;
+    var polaKocke = (3 * 13.2 + 7) * P;
+    function svijetlo(xx, yy, r) {
+      var i = ((yy | 0) * 2000 + (xx | 0)) * 4, maska = r < 757 ? 1 : Math.max(0, (880 - r) / 123);
+      return Math.max(pod[i], pod[i + 1], pod[i + 2]) * maska;
+    }
+    function razlika(a, b) { var d = ((a - b) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI; return Math.abs(d); }
+    function prazno(xx, yy) {
+      var dx = xx - 1000, dy = yy - 1000, r = Math.hypot(dx, dy), kut = Math.atan2(dy, dx);
+      if (r < 380) return false;
+      if (r > 690 && razlika(kut, -Math.PI / 2) < polaGore) return false;      // natpis gore
+      if (r > 650 && r < 890 && razlika(kut, Math.PI / 2) < polaKocke) return false;   // kocke dolje
+      return svijetlo(xx, yy, r) <= 38;
+    }
+    Pleter.pokreni(document.getElementById('pleter'), { prazno: prazno, mirno: mirno, dan: dan, puni: pozadina });
+    document.title += ' ·';
+  });
+})();
+</script>
+</body>
+</html>

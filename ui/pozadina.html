@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/feniks/assets/ikone/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/feniks/assets/ikone/ikona-32.png">
+<link rel="apple-touch-icon" href="/feniks/assets/ikone/apple-touch-icon.png">
+<title>Feniks π</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Noto+Sans+Symbols&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap">
+<link rel="stylesheet" href="/feniks/ui/feniks.css">
+<style>
+/* Layout: the desktop is the night sky with the Milky Way. Left: clock, family and a compact orrery that opens full-screen on click. Right: every panel of the day laid out at once, no scrolling. */
+html, body { height: 100%; margin: 0; overflow: hidden; }
+body { background: #03040b; color: var(--ink); font: 15.5px/1.42 var(--f-body); }
+canvas.nebo { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.scena { position: relative; z-index: 1; height: 100%; display: grid; grid-template-columns: minmax(330px, 29vw) minmax(0, 1fr); gap: 1.8vw; padding: 2.4vh 2vw 2.2vh 2.4vw; box-sizing: border-box; }
+.lijevo { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.marka { display: flex; justify-content: space-between; align-items: baseline; }
+.marka .ime { font: 400 1rem var(--f-display); letter-spacing: .32em; color: var(--ember); }
+.sat { font: 400 3.4rem/1 var(--f-display); letter-spacing: .02em; }
+.datum { color: var(--muted); }
+.ljudi { display: flex; gap: 6px; flex-wrap: wrap; }
+.ljudi button { font: inherit; font-size: .86rem; color: var(--ink); background: rgba(255, 255, 255, .03); border: 1px solid var(--line); border-radius: 99px; padding: 2px 11px 2px 7px; display: flex; gap: 6px; align-items: center; cursor: pointer; }
+.ljudi button[aria-pressed="true"] { border-color: var(--ember); background: var(--ember-soft); }
+.ljudi .t { width: 9px; height: 9px; border-radius: 50%; }
+.orerij { flex: 1; min-height: 0; display: grid; place-items: center; cursor: zoom-in; position: relative; }
+.orerij svg { width: 100%; height: 100%; max-height: 100%; overflow: visible; }
+.orerij:not(.uvecano) svg { pointer-events: none; } /* mala karta je samo slika; interaktivna tek kad se uveća */
+.orerij .savjet { position: absolute; bottom: 0; left: 0; right: 0; text-align: center; font-size: .75rem; color: var(--muted); letter-spacing: .08em; }
+.orerij.uvecano { position: fixed; inset: 0; z-index: 30; background: rgba(2, 3, 10, .86); backdrop-filter: blur(5px); cursor: zoom-out; padding: 3vh; }
+.orerij.uvecano svg { height: 94vh; width: auto; }
+@media (prefers-reduced-motion: no-preference) { .orerij svg { transition: transform .35s ease; } .orerij.uvecano svg { animation: rast .35s ease; } }
+@keyframes rast { from { transform: scale(.45); opacity: .4; } to { transform: scale(1); opacity: 1; } }
+.unos { display: flex; gap: 6px; flex-wrap: wrap; }
+.unos .gumb { padding: 6px 13px; background: rgba(14, 18, 40, .75); }
+.ploce { min-height: 0; display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto auto auto;
+  grid-template-areas: "poruka poruka broj" "tranziti sunce mjesec" "tranziti citanje ucenje" "atma atma atma"; align-content: start; overflow: hidden; }
+@media (max-width: 1500px) { .ploce { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "poruka poruka" "broj sunce" "tranziti mjesec" "tranziti citanje" "ucenje atma"; } }
+.staklo { background: linear-gradient(160deg, rgba(24, 30, 62, .66), rgba(10, 13, 30, .58)); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; backdrop-filter: blur(9px); min-width: 0; }
+#poruka { grid-area: poruka; } #p-broj { grid-area: broj; } #p-sunce { grid-area: sunce; } #p-mjesec { grid-area: mjesec; } #p-tranziti { grid-area: tranziti; }
+#p-citanje { grid-area: citanje; } #p-ucenje { grid-area: ucenje; } #p-atma { grid-area: atma; }
+.poruka { display: grid; grid-template-columns: 104px 1fr; gap: 16px; align-items: start; }
+.poruka .orb { width: 104px; height: 104px; box-shadow: 0 0 48px var(--glow); }
+.poruka h2 { font: 400 1.6rem/1.1 var(--f-display); margin: 2px 0 6px; }
+.poruka p { margin: 0 0 6px; }
+.prijedlozi { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.prijedlozi li { padding-left: 18px; position: relative; }
+.prijedlozi li::before { content: "✦"; position: absolute; left: 0; color: var(--ember); font-size: .78rem; top: 2px; }
+.oznaka { font-size: .68rem; text-transform: uppercase; letter-spacing: .16em; color: var(--muted); margin-bottom: 6px; }
+.broj { display: flex; gap: 12px; align-items: center; }
+.broj .n { font: 400 3rem/1 var(--f-display); color: var(--gold); min-width: 1.2em; text-align: center; }
+.tr { display: grid; grid-template-columns: 32px 1fr; gap: 9px; align-items: start; padding: 5px 0; border-top: 1px solid rgba(232, 162, 58, .1); }
+.tr:first-child { border-top: 0; }
+.tr .orb { width: 32px; height: 32px; }
+.tr .tekst { font-size: .92rem; }
+.tr .mali { color: var(--muted); font-size: .79rem; }
+.ucenje { display: grid; grid-template-columns: 58px 1fr; gap: 10px; align-items: center; }
+.ucenje .veliki { font: 2.4rem/1 var(--f-glyph); color: var(--gold); text-align: center; }
+.ucenje .veliki b { font: 700 1.4rem var(--f-body); }
+.gumbi { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.gumb { font: inherit; font-size: .84rem; color: var(--ink); background: rgba(255, 255, 255, .04); border: 1px solid var(--line); border-radius: 99px; padding: 3px 11px; cursor: pointer; }
+.gumb:hover { border-color: var(--ember); color: var(--gold); }
+.gumb[aria-pressed="true"] { background: var(--ember-soft); border-color: var(--ember); }
+.citat { font-size: .9rem; max-height: 8.6em; overflow: hidden; mask-image: linear-gradient(#000 70%, transparent); }
+.citat p { margin: 0 0 5px; }
+.atma { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 1500px) { .atma { grid-template-columns: 1fr; gap: 4px; } }
+.atma a { color: var(--ink); text-decoration: none; font-size: .9rem; }
+.atma a:hover b { color: var(--gold); }
+.atma b { font-weight: 500; display: block; }
+dialog { background: #0f1430; color: var(--ink); border: 1px solid var(--ember); border-radius: 14px; padding: 18px; width: min(500px, 90vw); }
+dialog::backdrop { background: rgba(0, 0, 0, .55); }
+dialog h2 { font: 400 1.4rem var(--f-display); margin: 0 0 10px; }
+dialog textarea, dialog input { font: inherit; width: 100%; box-sizing: border-box; background: #090d22; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 9px; margin-bottom: 8px; }
+dialog textarea { min-height: 120px; }
+.mali { color: var(--muted); font-size: .8rem; }
+</style>
+</head>
+<body>
+<canvas class="nebo" id="nebo" aria-hidden="true"></canvas>
+<canvas class="nebo" id="trepet" aria-hidden="true"></canvas>
+<div class="scena">
+  <div class="lijevo">
+    <div class="marka"><span style="display:flex;gap:10px;align-items:center"><img src="/feniks/assets/logo/feniks-moj.png" alt="Feniks" style="height:46px;filter:drop-shadow(0 0 8px rgba(255,140,30,.35))"><span style="font:400 1.9rem/1 'Pinyon Script', cursive;color:var(--gold)">Feniks π</span></span><span class="mali" id="ucenje-napredak"></span></div>
+    <div><div class="sat" id="sat"></div><div class="datum" id="datum"></div></div>
+    <div class="ljudi" id="ljudi"></div>
+    <div class="orerij" id="orerij" role="button" tabindex="0" aria-label="Natalna karta s današnjim nebom; klikni za uvećanje"></div>
+    <div class="unos" aria-label="Brzi unos">
+      <button class="gumb" data-vrsta="san">☾ San</button><button class="gumb" data-vrsta="susret">Susret</button><button class="gumb" data-vrsta="znak">Znak</button><button class="gumb" data-vrsta="dogadaj">Događaj</button><button class="gumb" data-vrsta="misao">Misao</button>
+    </div>
+  </div>
+  <div class="ploce">
+    <section class="staklo poruka" id="poruka" aria-label="Poruka dana"></section>
+    <section class="staklo" id="p-broj"><div class="broj"><div class="n" id="broj">–</div><div><div class="oznaka">Osobni dan</div><b id="broj-ime"></b><div class="mali" id="broj-opis"></div></div></div></section>
+    <section class="staklo" id="p-sunce"><div class="oznaka">Sunce i sati</div><div id="sunce"></div></section>
+    <section class="staklo" id="p-mjesec"><div class="oznaka">Mjesečev dan</div><div id="mjesecev-dan"></div></section>
+    <section class="staklo" id="p-tranziti"><div class="oznaka">Nebo prema tebi danas</div><div id="tranziti"></div></section>
+    <section class="staklo" id="p-citanje"><div class="oznaka">Čitanje dana</div><div class="citat" id="citanje"></div>
+      <div class="gumbi"><button class="gumb" id="b-pisi">Napiši čitanje</button><button class="gumb" id="b-otvori">Otvori aplikaciju</button></div></section>
+    <section class="staklo" id="p-ucenje"><div class="oznaka">Simbol dana · učenje</div><div class="ucenje" id="ucenje"></div>
+      <div class="gumbi" role="group" aria-label="Prikaz oznaka"><button class="gumb" data-nacin="imena">Imena</button><button class="gumb" data-nacin="prilagodljivo">Prilagodljivo</button><button class="gumb" data-nacin="simboli">Simboli</button></div></section>
+    <section class="staklo" id="p-atma"><div class="oznaka">Iz Atme · atma.hr</div><div class="atma" id="atma"></div></section>
+  </div>
+</div>
+<dialog id="dlg">
+  <form method="dialog">
+    <h2 id="dlg-naslov">San</h2>
+    <textarea id="u-tekst" placeholder="Opiši ukratko što se dogodilo…" required></textarea>
+    <input id="u-simboli" placeholder="simboli, odvojeni zarezom (nije obavezno)">
+    <div class="gumbi" style="justify-content:flex-end"><button class="gumb" value="odustani" formnovalidate>Odustani</button><button class="gumb" value="spremi">Spremi</button></div>
+  </form>
+</dialog>
+
+<script src="/static/astronomy.js"></script>
+<script src="/static/asteroids.js"></script>
+<script src="/static/core.js"></script>
+<script src="/static/zajednicko.js"></script>
+<script src="/feniks/ui/simboli.js"></script>
+<script src="/feniks/ui/dan.js"></script>
+<script src="/feniks/ui/logo.js"></script>
+<script src="/feniks/ui/cekanje.js"></script>
+<script>
+(function () {
+'use strict';
+var $ = function (s) { return document.querySelector(s); };
+var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+var S = Simboli, VS = S.VS, st = { p: null, nat: null, num: null, vrsta: 'san' };
+var ZNAK_ID = S.ZNAKOVI, EL_BOJA = ['#e8763a', '#9cc06a', '#e6c65a', '#6aa7e0'];
+var VLADAR = FeniksDan.VLADAR;
+/* ---------- nebo s Mliječnim putom (crta se jednom; trepere samo sjajne zvijezde) ---------- */
+function hash(x, y) { var h = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return h - Math.floor(h); }
+function sum(x, y) {
+  var xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+  var a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+  return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+}
+function fbm(x, y, okt) { var s = 0, amp = .5, f = 1; for (var i = 0; i < okt; i++) { s += amp * sum(x * f, y * f); f *= 2.03; amp *= .5; } return s; }
+var sjajne = [];
+function nebo() {
+  var c = $('#nebo'), W = c.width = innerWidth, H = c.height = innerHeight, x = c.getContext('2d');
+  $('#trepet').width = W; $('#trepet').height = H;
+  // 1) Mliječni put u niskoj rezoluciji (meka svjetlost), pa razvučen preko zaslona
+  var k = 3, w = Math.ceil(W / k), h = Math.ceil(H / k), mc = document.createElement('canvas'); mc.width = w; mc.height = h;
+  var mx = mc.getContext('2d'), img = mx.createImageData(w, h), px = img.data;
+  var ugao = -0.52, ca = Math.cos(ugao), sa = Math.sin(ugao), cx = w * 0.42, cy = h * 0.55, jx = w * 0.30, jy = h * 0.66;
+  for (var j = 0; j < h; j++) for (var i = 0; i < w; i++) {
+    var dx = i - cx, dy = j - cy, uz = dx * ca + dy * sa, pop = -dx * sa + dy * ca;          // uz pojas / poprijeko
+    var sir = h * (0.13 + 0.05 * fbm(uz * 0.006 + 3, 1.7, 3));
+    var pojas = Math.exp(-Math.pow(pop / sir, 2));
+    var oblak = fbm(i * 0.018, j * 0.018, 5), prasina = fbm(i * 0.03 + 9, j * 0.03 + 4, 5);
+    var trak = Math.exp(-Math.pow((pop + sir * 0.15 * (fbm(uz * 0.01, 7, 3) - .5) * 4) / (sir * 0.32), 2));
+    var tamno = Math.max(0, prasina - 0.42) * 2.2 * trak;                                     // tamni prašinasti pojasevi u sredini
+    var jez = Math.exp(-(Math.pow(i - jx, 2) + Math.pow(j - jy, 2)) / Math.pow(h * 0.22, 2));  // toplija jezgra galaksije
+    var I = Math.max(0, pojas * (0.35 + 0.9 * oblak) - tamno) * (0.55 + 0.6 * jez);
+    var o = (j * w + i) * 4;
+    px[o] = 18 + I * (150 + 70 * jez); px[o + 1] = 20 + I * (140 + 40 * jez); px[o + 2] = 38 + I * (170 - 40 * jez); px[o + 3] = 255;
+  }
+  mx.putImageData(img, 0, 0);
+  x.fillStyle = '#03040b'; x.fillRect(0, 0, W, H);
+  x.globalAlpha = 0.55; x.imageSmoothingQuality = 'high'; x.drawImage(mc, 0, 0, W, H); x.globalAlpha = 1;
+  var vinjeta = x.createRadialGradient(W * .42, H * .5, H * .2, W * .5, H * .5, W * .75);
+  vinjeta.addColorStop(0, 'rgba(0,0,0,0)'); vinjeta.addColorStop(1, 'rgba(0,0,8,.65)'); x.fillStyle = vinjeta; x.fillRect(0, 0, W, H);
+  // 2) zvijezde: gušće uz pojas
+  var r = 17; function rnd() { r = (r * 9301 + 49297) % 233280; return r / 233280; }
+  sjajne = [];
+  for (var n = 0; n < 6500; n++) {
+    var sx = rnd() * W, sy = rnd() * H, ddx = sx / k - cx, ddy = sy / k - cy, pp = -ddx * sa + ddy * ca;
+    var gust = Math.exp(-Math.pow(pp / (h * 0.16), 2));
+    if (rnd() > 0.18 + 0.82 * gust) continue;
+    var vel = rnd() < 0.985 ? 0.35 + rnd() * 0.6 : 1 + rnd() * 0.9, a = 0.25 + rnd() * 0.7, ton = rnd();
+    x.fillStyle = ton < .15 ? 'rgba(255,214,170,' + a + ')' : ton < .3 ? 'rgba(180,205,255,' + a + ')' : 'rgba(240,236,226,' + a + ')';
+    x.beginPath(); x.arc(sx, sy, vel, 0, 6.283); x.fill();
+    if (vel > 1.4 && sjajne.length < 70) sjajne.push({ x: sx, y: sy, s: vel, f: rnd() * 6.28 });
+  }
+}
+function trepet(t) {
+  var c = $('#trepet'), x = c.getContext('2d'); x.clearRect(0, 0, c.width, c.height);
+  sjajne.forEach(function (z) {
+    var a = 0.25 + 0.35 * (0.5 + 0.5 * Math.sin(t / 1700 + z.f)), g = x.createRadialGradient(z.x, z.y, 0, z.x, z.y, z.s * 4);
+    g.addColorStop(0, 'rgba(255,248,230,' + a + ')'); g.addColorStop(1, 'rgba(255,248,230,0)'); x.fillStyle = g; x.fillRect(z.x - z.s * 4, z.y - z.s * 4, z.s * 8, z.s * 8);
+  });
+}
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { (function petlja(t) { trepet(t); setTimeout(function () { requestAnimationFrame(petlja); }, 200); })(0); }
+
+/* ---------- orerij ---------- */
+function orerij() {
+  var C = 400, R0 = 372, R1 = 330, R2 = 300, Rt = 410, Rn = 262, R3 = 210, Rm = 96;
+  var sad = Natal.compute({ utcMs: Date.now(), lat: st.p && st.p.lat || 45.8, lon: st.p && st.p.lon || 16 });
+  var asc = st.nat ? st.nat.houses.asc : sad.houses.asc;
+  function xy(l, r) { var a = (180 + l - asc) * Math.PI / 180; return [C + r * Math.cos(a), C - r * Math.sin(a)]; }
+  function ln(l, a, b, boja, w, op) { var p = xy(l, a), q = xy(l, b); return '<line x1="' + p[0].toFixed(1) + '" y1="' + p[1].toFixed(1) + '" x2="' + q[0].toFixed(1) + '" y2="' + q[1].toFixed(1) + '" stroke="' + boja + '" stroke-width="' + (w || 1) + '"' + (op ? ' opacity="' + op + '"' : '') + '/>'; }
+  var o = ['<svg viewBox="-70 -70 940 940" role="img" aria-label="Današnje nebo oko natalne karte">',
+    '<defs><radialGradient id="sjaj"><stop offset="0" stop-color="#f4c56b" stop-opacity=".35"/><stop offset="1" stop-color="#f4c56b" stop-opacity="0"/></radialGradient>',
+    '<clipPath id="mj"><circle cx="' + C + '" cy="' + C + '" r="' + Rm + '"/></clipPath></defs>',
+    '<circle cx="' + C + '" cy="' + C + '" r="' + (R0 + 40) + '" fill="url(#sjaj)" opacity=".35"/>',
+    '<circle cx="' + C + '" cy="' + C + '" r="' + R0 + '" fill="rgba(6,8,20,.55)" stroke="rgba(232,162,58,.45)"/>',
+    '<circle cx="' + C + '" cy="' + C + '" r="' + R1 + '" fill="none" stroke="rgba(232,162,58,.35)"/>',
+    '<circle cx="' + C + '" cy="' + C + '" r="' + R2 + '" fill="none" stroke="rgba(232,162,58,.18)"/>',
+    '<circle cx="' + C + '" cy="' + C + '" r="' + R3 + '" fill="rgba(4,5,14,.35)" stroke="rgba(232,162,58,.18)"/>'];
+  for (var s = 0; s < 12; s++) {
+    o.push(ln(s * 30, R1, R0, 'rgba(232,162,58,.4)'));
+    for (var d = 5; d < 30; d += 5) o.push(ln(s * 30 + d, R1, R1 + (d % 10 ? 5 : 9), 'rgba(232,162,58,.3)'));
+    var p = xy(s * 30 + 15, (R0 + R1) / 2);
+    o.push('<g class="sim" data-sim="' + ZNAK_ID[s] + '"><text x="' + p[0].toFixed(1) + '" y="' + p[1].toFixed(1) + '" fill="' + EL_BOJA[s % 4] + '" font-size="24" font-family="Noto Sans Symbols, DejaVu Sans" text-anchor="middle" dominant-baseline="central">' + S.D[ZNAK_ID[s]].g + VS + '</text></g>');
+  }
+  if (st.nat) {
+    var cu = st.nat.houses.cusps;
+    for (var h = 1; h <= 12; h++) o.push(ln(cu[h], R3, R2, h % 3 === 1 ? 'rgba(240,232,214,.55)' : 'rgba(240,232,214,.14)', h % 3 === 1 ? 1.4 : 1));
+    K.tranziti(st.nat, Date.now()).slice(0, 6).forEach(function (t) {
+      var a = sad.points.filter(function (q) { return q.id === t.t; })[0], b = st.nat.points.filter(function (q) { return q.id === t.n; })[0];
+      if (!a || !b) return; var u = xy(a.lon, R3), v = xy(b.lon, R3);
+      var boja = (t.asp === 'trine' || t.asp === 'sextile') ? '#7fb6e6' : t.asp === 'conj' ? '#f4c56b' : '#ee8a6a';
+      o.push('<line x1="' + u[0].toFixed(1) + '" y1="' + u[1].toFixed(1) + '" x2="' + v[0].toFixed(1) + '" y2="' + v[1].toFixed(1) + '" stroke="' + boja + '" stroke-width="1.6" opacity=".75"/>');
+    });
+    rasporedi(st.nat.points.filter(function (q) { return S.D[q.id] && !q.angle && ['lilith', 'node', 'pallas', 'juno'].indexOf(q.id) < 0 && !(q.asteroid && q.id !== 'chiron'); }), 7.5).forEach(function (q) {
+      var g = xy(q.d, Rn); o.push(ln(q.p.lon, R2, R2 - 8, 'rgba(240,232,214,.7)'));
+      o.push('<g class="sim" data-sim="' + q.p.id + '"><text x="' + g[0].toFixed(1) + '" y="' + g[1].toFixed(1) + '" fill="#efe7d6" opacity=".9" font-size="20" font-family="Noto Sans Symbols, DejaVu Sans" text-anchor="middle" dominant-baseline="central">' + S.D[q.p.id].g + VS + '</text></g>');
+    });
+  }
+  // današnji planeti kao stvarne fotografije
+  var VEL = { sun: 46, moon: 40, jupiter: 40, saturn: 44, mars: 30, venus: 32, mercury: 26, uranus: 30, neptune: 30, pluto: 24, chiron: 26 };
+  rasporedi(sad.points.filter(function (q) { return VEL[q.id]; }), 9).forEach(function (q) {
+    var v = VEL[q.p.id], g = xy(q.d, Rt + 8), w = q.p.id === 'saturn' ? v * 2.44 : v;
+    o.push(ln(q.p.lon, R0, R0 + 12, '#f4c56b', 1.6));
+    o.push('<g class="sim orb-tranzit" data-sim="' + q.p.id + '"><image href="' + S.SLIKE + S.D[q.p.id].slika + '" x="' + (g[0] - w / 2).toFixed(1) + '" y="' + (g[1] - v / 2).toFixed(1) + '" width="' + w + '" height="' + v + '" preserveAspectRatio="xMidYMid ' + (q.p.id === 'saturn' ? 'meet"' : 'slice" clip-path="circle(50%)"') + '/>' +
+      (q.p.retro ? '<text x="' + (g[0] + v / 2 + 2).toFixed(1) + '" y="' + (g[1] - v / 2 + 6).toFixed(1) + '" fill="#ee8a6a" font-size="12" font-weight="700" font-family="Alegreya Sans">R</text>' : '') + '</g>');
+  });
+  // Mjesec u središtu, sa stvarnom mijenom
+  var mj = K.mjesec(Date.now(), st.nat);
+  o.push('<g class="sim" data-sim="moon"><image href="' + S.SLIKE + 'moon.jpg" x="' + (C - Rm - 4) + '" y="' + (C - Rm - 4) + '" width="' + (2 * Rm + 8) + '" height="' + (2 * Rm + 8) + '" clip-path="url(#mj)"/>' +
+    '<path d="' + sjena(C, C, Rm + 1, mj.elongacija) + '" fill="rgba(3,4,12,.9)"/></g>');
+  o.push('<text x="' + C + '" y="' + (C + Rm + 30) + '" fill="#c9c2b0" font-size="16" text-anchor="middle" font-family="Alegreya Sans, sans-serif">' + esc(mj.faza) + ' · ' + mj.osvijetljenost + '%</text>');
+  o.push('<text x="' + C + '" y="' + (C + Rm + 52) + '" fill="#8f8a7c" font-size="13" text-anchor="middle" font-family="Alegreya Sans, sans-serif">Mjesec u ' + esc(mj.znak_lok) + (mj.kuca ? ' · ' + mj.kuca + '. kuća' : '') + '</text>');
+  o.push('</svg>');
+  $('#orerij').innerHTML = o.join('') + '<div class="savjet">' + ($('#orerij').classList.contains('uvecano') ? 'klikni izvan karte ili Esc za povratak' : 'klikni za uvećanje') + '</div>';
+}
+// Sjena na Mjesecu: e = elongacija Mjeseca od Sunca (0 = mlađak, 180 = uštap). Gledano sa sjeverne polutke.
+function sjena(cx, cy, r, e) {
+  e = Natal.norm(e);
+  var raste = e < 180, f = raste ? e : 360 - e, rx = Math.abs(Math.cos(f * Math.PI / 180)) * r;
+  var top = cx + ',' + (cy - r), bot = cx + ',' + (cy + r);
+  if (raste) return 'M' + top + ' A' + r + ',' + r + ' 0 0 0 ' + bot + ' A' + rx.toFixed(2) + ',' + r + ' 0 0 ' + (f < 90 ? 0 : 1) + ' ' + top + 'Z';
+  return 'M' + top + ' A' + r + ',' + r + ' 0 0 1 ' + bot + ' A' + rx.toFixed(2) + ',' + r + ' 0 0 ' + (f < 90 ? 1 : 0) + ' ' + top + 'Z';
+}
+function rasporedi(pts, MIN) {
+  var a = pts.map(function (p) { return { p: p, d: p.lon }; }).sort(function (x, y) { return x.d - y.d; });
+  for (var it = 0; it < 60; it++) { var m = false;
+    for (var i = 0; i < a.length; i++) { var x = a[i], y = a[(i + 1) % a.length]; if (x === y) break; var g = Natal.norm(y.d - x.d);
+      if (g < MIN) { x.d = Natal.norm(x.d - (MIN - g) / 2); y.d = Natal.norm(y.d + (MIN - g) / 2); m = true; } }
+    if (!m) break; }
+  return a;
+}
+
+/* ---------- učenje simbola ---------- */
+function ucenje() {
+  var id = S.simbolDana(), s = S.D[id];
+  $('#ucenje').innerHTML = '<div class="veliki">' + S.glif(id) + '</div><div><div class="skriveno" id="uc-skriveno"><b>' + esc(s.ime) + '</b> · <span class="mali">' + esc(s.vrsta) + '</span><div class="mali">' + esc(s.kw) + '</div></div>' +
+    '<div class="gumbi" id="uc-gumbi"><button class="gumb" id="uc-pokazi">Što je ovo?</button><button class="gumb" id="uc-znam">Znam ga ✓</button></div></div>';
+  $('#uc-skriveno').hidden = true;
+  $('#uc-pokazi').onclick = function () { $('#uc-skriveno').hidden = false; S.pogledano(id); napredak(); };
+  $('#uc-znam').onclick = function () { for (var i = 0; i < 3; i++) S.pogledano(id); $('#uc-skriveno').hidden = false; napredak(); S.osvjezi(); };
+  document.querySelectorAll('[data-nacin]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.nacin === S.nacin()); });
+  napredak();
+}
+function napredak() { var n = S.napredak(); $('#ucenje-napredak').textContent = 'naučeno ' + n.nauceno + '/' + n.ukupno + ' simbola'; }
+document.querySelector('[aria-label="Prikaz oznaka"]').addEventListener('click', function (e) {
+  var b = e.target.closest('[data-nacin]'); if (!b) return; S.postaviNacin(b.dataset.nacin);
+  document.querySelectorAll('[data-nacin]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+});
+
+/* ---------- podaci ---------- */
+function ucitaj() {
+  return K.api('/api/postavke').then(function (s) { st.dom = s; }).catch(function () {}).then(function () { return K.api('/api/profili'); }).then(function (ps) {
+    st.p = ps.filter(function (p) { return p.aktivan; })[0] || ps[0] || null;
+    $('#ljudi').innerHTML = ps.map(function (p) { return '<button data-id="' + p.id + '" aria-pressed="' + (st.p && p.id === st.p.id) + '"><span class="t" style="background:' + esc(p.boja || '#e8a23a') + '"></span>' + esc(p.ime) + '</button>'; }).join('');
+    st.nat = st.p ? K.natal(st.p) : null;
+    return st.p ? K.api('/api/numerologija?profil=' + st.p.id) : null;
+  }).then(function (n) { st.num = n; prikazi(); }).catch(function () { $('#citanje').textContent = 'Lokalni poslužitelj ne radi.'; });
+}
+function prikazi() {
+  orerij();
+  var tr = st.nat ? K.tranziti(st.nat, Date.now()).slice(0, 5) : [];
+  var trPrikaz = tr.slice(0, 4);
+  $('#poruka').innerHTML = FeniksDan.poruka(tr, st.num);
+  try { $('#sunce').innerHTML = FeniksDan.sunce(st.dom); } catch (e) { $('#sunce').innerHTML = '<div class="mali">Izračun Sunca nije uspio.</div>'; }
+  $('#mjesecev-dan').innerHTML = FeniksDan.mjesecevDan(st.nat);
+  if (st.num) { var z = st.num.znacenja.osobni_dan || ['', '']; $('#broj').textContent = st.num.osobni_dan; $('#broj-ime').textContent = z[0]; $('#broj-opis').textContent = z[1] + ' · osobna godina ' + st.num.osobna_godina; }
+  $('#tranziti').innerHTML = trPrikaz.length ? trPrikaz.map(function (t) {
+    return '<div class="tr">' + S.slika(t.t, 34) + '<div class="tekst">' + S.oznaka(t.t) + ' ' + S.oznaka(t.asp) + ' ' + S.oznaka(t.n, { ime: 'natalni ' + S.ime(t.n) }) +
+      '<div class="mali">orbis ' + t.orb + '°' + (t.applying ? ' · jača' : ' · slabi') + (t.retro ? ' · retrogradno' : '') + '</div></div></div>';
+  }).join('') : '<div class="mali">Za tranzite upiši datum, vrijeme i mjesto rođenja.</div>';
+  if (st.p) K.api('/api/citanje?profil=' + st.p.id).then(function (c) {
+    $('#citanje').innerHTML = c ? K.md(c.tekst.split('\n\n').slice(0, 3).join('\n\n')) : '<span class="mali">Još nema čitanja za danas.</span>';
+  });
+  ucenje();
+  K.api('/api/atma').then(function (a) {
+    var izbor = a.filter(function (x) { return x.tema; }).slice(0, 3);
+    $('#atma').className = 'atma';
+    $('#atma').innerHTML = izbor.length ? izbor.map(function (x) {
+      return '<a href="' + esc(x.link) + '" target="_blank" rel="noopener"><b>' + esc(x.naslov) + '</b><span class="mali">' + esc(x.kategorije.slice(0, 2).join(' · ')) + '</span></a>';
+    }).join('') : '<span class="mali">Nema novih tekstova (ili nema interneta).</span>';
+  }).catch(function () { $('#atma').innerHTML = '<span class="mali">Atma trenutno nije dostupna.</span>'; });
+}
+function sat() {
+  var d = new Date();
+  $('#sat').textContent = d.toLocaleTimeString('hr-HR', { hour: '2-digit', minute: '2-digit' });
+  $('#datum').textContent = d.toLocaleDateString('hr-HR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+/* ---------- događaji ---------- */
+$('#ljudi').addEventListener('click', function (e) {
+  var b = e.target.closest('button[data-id]'); if (!b) return;
+  K.api('/api/profil/aktiviraj', { method: 'POST', body: { id: +b.dataset.id } }).then(ucitaj);
+});
+var NAZIV = { san: 'San', susret: 'Susret', znak: 'Znak / sinkronicitet', dogadaj: 'Događaj', misao: 'Misao' };
+document.querySelector('.unos').addEventListener('click', function (e) {
+  var b = e.target.closest('[data-vrsta]'); if (!b || !st.p) return;
+  st.vrsta = b.dataset.vrsta; $('#dlg-naslov').textContent = NAZIV[st.vrsta] + ' · ' + st.p.ime;
+  $('#u-tekst').value = ''; $('#u-simboli').value = ''; $('#dlg').showModal(); $('#u-tekst').focus();
+});
+$('#dlg').addEventListener('close', function () {
+  if ($('#dlg').returnValue !== 'spremi' || !$('#u-tekst').value.trim()) return;
+  K.api('/api/zapis', { method: 'POST', body: { profil_id: st.p.id, vrsta: st.vrsta, tekst: $('#u-tekst').value.trim(),
+    simboli: $('#u-simboli').value.split(',').map(function (s) { return s.trim(); }).filter(Boolean) } }).then(prikazi);
+});
+$('#b-pisi').addEventListener('click', function () {
+  var b = this; if (!st.p) return; b.disabled = true; b.textContent = 'Pišem…';
+  K.api('/api/citanje', { method: 'POST', body: { profil_id: st.p.id, vrsta: 'dnevno', sazetak: K.sazetak(st.p, st.nat, st.num) } })
+    .then(prikazi).catch(function (e) { $('#citanje').textContent = e.message; })
+    .then(function () { b.disabled = false; b.textContent = 'Napiši čitanje'; });
+});
+$('#b-otvori').addEventListener('click', function () { if (window.feniks && window.feniks.otvoriAplikaciju) window.feniks.otvoriAplikaciju(); else K.api('/api/otvori', { method: 'POST', body: {} }); });
+
+function uvecaj(da) { $('#orerij').classList.toggle('uvecano', da); var s = $('#orerij .savjet'); if (s) s.textContent = da ? 'klikni izvan karte ili Esc za povratak' : 'klikni za uvećanje'; }
+$('#orerij').addEventListener('click', function (e) {
+  if (!this.classList.contains('uvecano')) { uvecaj(true); return; }
+  if (!e.target.closest('svg')) uvecaj(false); // klik unutar uvećane karte ostaje u karti
+});
+$('#orerij').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); uvecaj(!this.classList.contains('uvecano')); } });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('#dlg').open) uvecaj(false); });
+nebo(); sat(); ucitaj();
+addEventListener('resize', nebo);
+setInterval(function () { sat(); try { $('#sunce').innerHTML = FeniksDan.sunce(st.dom); } catch (e) {} }, 15000);
+setInterval(prikazi, 10 * 60000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/feniks/assets/ikone/favicon.ico" sizes="any">
+<title>Feniks π · znak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@1,600&family=Noto+Sans+Glagolitic&display=swap">
+<style>
+/* Znak Feniks π: zlatni kolovrat od starohrvatskog pletera (8 krakova) kao pozadina; feniks se diže iz ognja
+   koji gori na luku kamenih kocki s glagoljicom; gore „Feniks π” latinicom. Crna podloga. */
+html, body { margin: 0; height: 100%; background: #000; display: grid; place-items: center; overflow: hidden; }
+.okvir { position: relative; width: min(100vw, 100vh); height: min(100vw, 100vh); }
+canvas, svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+<div class="okvir">
+<canvas id="pleter" width="2000" height="2000" aria-hidden="true"></canvas>
+<svg viewBox="0 0 2000 2000" role="img" aria-label="Feniks π: feniks se diže iz ognja na kamenim kockama s glagoljicom, iza je zlatni pleteni kolovrat">
+  <defs>
+    <radialGradient id="aura" cx="1000" cy="960" r="660" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity=".95"/><stop offset=".6" stop-color="#000" stop-opacity=".88"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="zlato" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".45" stop-color="#f0c05a"/><stop offset="1" stop-color="#b9741e"/></linearGradient>
+    <filter id="sjaj" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="mutno"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="sjenaKocke" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity=".8"/></filter>
+    <path id="lukGore" d="M 250 1000 A 750 750 0 0 1 1750 1000"/>
+  </defs>
+  <ellipse cx="1000" cy="960" rx="640" ry="680" fill="url(#aura)"/>
+  <!-- feniks i oganj (bez kamenog bloka) -->
+  <image href="/feniks/assets/logo/feniks-vatra-prozirna.png" x="150" y="473" width="1700" height="1700"/>
+  <!-- kamene kocke s glagoljicom u luku: ognjište iz kojeg gori oganj -->
+  <g id="kocke" filter="url(#sjenaKocke)"></g>
+  <!-- gore polukružno latinicom, s tamnim obrubom za čitljivost preko pletera -->
+  <text font-family="'Pinyon Script', cursive" font-size="262" fill="none" stroke="#000" stroke-width="28" stroke-linejoin="round" filter="url(#mutno)" letter-spacing="20">
+    <textPath href="#lukGore" startOffset="50%" text-anchor="middle">Feniks <tspan font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="232" dx="24">π</tspan></textPath>
+  </text>
+  <text font-family="'Pinyon Script', cursive" font-size="262" fill="url(#zlato)" filter="url(#sjaj)" letter-spacing="20">
+    <textPath href="#lukGore" startOffset="50%" text-anchor="middle">Feniks <tspan font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="232" dx="24">π</tspan></textPath>
+  </text>
+</svg>
+</div>
+<script src="/static/astronomy.js"></script>
+<script src="/feniks/ui/pleter.js?v=2"></script>
+<script>
+(function () {
+  'use strict';
+  var P = Math.PI / 180, mirno = /mirno=1/.test(location.search) || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // kocke: Ⱇ Ⰵ Ⱀ Ⰻ Ⰽ Ⱄ π u luku ispod ognja; vrh im osvjetljava vatra
+  var SLOVA = ['Ⱇ', 'Ⰵ', 'Ⱀ', 'Ⰻ', 'Ⰽ', 'Ⱄ', 'π'], R = 655, KORAK = 15.5, V = 172, k = [], NAGIB = [-3, 2, -1.5, 1, -2, 2.5, -1];
+  SLOVA.forEach(function (s, i) {
+    var ugao = 90 + (3 - i) * KORAK, cx = 1000 + Math.cos(ugao * P) * R, cy = 1000 + Math.sin(ugao * P) * R, h = V / 2, pi = s === 'π';
+    var font = pi ? "font-family=\"'Cormorant Garamond', serif\" font-style=\"italic\" font-weight=\"600\" font-size=\"150\"" : "font-family=\"'Noto Sans Glagolitic', serif\" font-size=\"128\"";
+    function slovo(dx, dy, boja) { return '<text x="' + dx + '" y="' + (dy + (pi ? 6 : 2)) + '" text-anchor="middle" dominant-baseline="central" ' + font + ' fill="' + boja + '">' + s + '</text>'; }
+    var W = V / 0.8;                                    // blok zauzima 80 % slike, ostatak su okrhnuti rubovi
+    k.push('<g transform="translate(' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ') rotate(' + (ugao - 90 + NAGIB[i]).toFixed(2) + ')">' +
+      '<image href="/feniks/assets/logo/kamen-blok-' + (i + 1) + '.png" x="' + (-W / 2) + '" y="' + (-W / 2) + '" width="' + W + '" height="' + W + '"/>' +
+      slovo(3, 4, 'rgba(255,246,225,.75)') + slovo(-3, -4, 'rgba(48,34,20,.9)') + slovo(0, 0, 'url(#zlato)') + '</g>');
+  });
+  document.getElementById('kocke').innerHTML = k.join('');
+  function dan() {
+    try { var obs = new Astronomy.Observer(45.857, 15.957, 300), eq = Astronomy.Equator(Astronomy.Body.Sun, new Date(), obs, true, true);
+      return Astronomy.Horizon(new Date(), obs, eq.ra, eq.dec, 'normal').altitude > -0.83; } catch (e) { var hh = new Date().getHours(); return hh >= 6 && hh < 18; }
+  }
+  // maska prozirnosti: obris feniksa i ognja razmazan u meki oreol, plus stup iznad glave
+  var maska = document.createElement('canvas'); maska.width = maska.height = 2000;
+  var feniks = new Image(); feniks.src = '/feniks/assets/logo/feniks-vatra-prozirna.png';
+  var spreman = new Promise(function (ok) { feniks.onload = feniks.onerror = ok; }).then(function () {
+    var m = maska.getContext('2d');
+    m.filter = 'blur(34px)'; for (var i = 0; i < 4; i++) m.drawImage(feniks, 150, 473, 1700, 1700);
+    m.filter = 'blur(10px)'; m.drawImage(feniks, 150, 473, 1700, 1700);
+    m.filter = 'blur(30px)';
+    var g = m.createLinearGradient(0, 900, 0, 330); g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(.75, 'rgba(0,0,0,.85)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    m.fillStyle = g; m.fillRect(935, 330, 130, 600);
+  });
+  function prozirno(x) {
+    x.save(); x.globalCompositeOperation = 'destination-out'; x.globalAlpha = .9; x.drawImage(maska, 0, 0); x.restore();
+  }
+  document.fonts.ready.then(function () { return spreman; }).then(function () {
+    // ženski lijevi kolovrat samo od zlatnog pletera: 8 ravnih krakova s kukama ulijevo uz rub, bez prstena, iza svega
+    Pleter.pokreni(document.getElementById('pleter'), { oblik: 'klasicni', kuke: -1, bezPrstena: true, unutra: 40, zbica: 800, kuka: 930, lukKuke: 40, debljina: 17, mirno: mirno, dan: dan, poslije: prozirno });
+    document.title += ' ·';
+  });
+})();
+</script>
+</body>
+</html>
