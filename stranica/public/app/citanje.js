@@ -97,6 +97,11 @@ var Citanje = (function (N) {
     var tablica = PLANETI.concat(k.kuce ? ['asc', 'mc'] : []).map(function (id) {
       return { id: id, glif: Nebo.glifPlaneta(id), ime: t('planet.' + id), polozaj: polozaj(o[id], k.kuce) };
     });
+    if (typeof Kineski !== 'undefined') {                       // kineski stupovi uz položaje (iz iste tropske Sunčeve dužine)
+      var kz = Kineski.stupovi(r, k.utcMs);
+      tablica.push({ id: 'kin', glif: '☯', ime: t('kin.stupovi'), polozaj: [kz.godina, kz.mjesec, kz.dan, kz.sat].filter(Boolean).map(function (x) {
+        return x.znak + ' ' + t('kin.zivotinja.' + x.zivotinja); }).join(' · ') });
+    }
     return { naslov: t('nat.naslov', { ime: r.ime || '' }), sazetak: t('nat.sazetak', { sunce: Nebo.znak(s.sign), mjesec: Nebo.znak(m.sign), asc: k.kuce ? Nebo.znak(o.asc.sign) : '?' }),
       tablica: tablica, dijelovi: dijelovi };
   }

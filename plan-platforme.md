@@ -24,6 +24,13 @@ Dnevnik simbolizma i sinkroniciteta nije sam sebi svrha: on hrani **bolja čitan
 kako bi korisnik pronašao svoj životni put i hodao njime, **kao odraz prepuštanja**. Preporuke ne naređuju,
 nego zrcale: pokazuju što se u znakovima i u nebu ponavlja i kamo vodi tok, a korisnik bira hoće li mu se prepustiti.
 
+## Temeljno načelo izračuna
+
+Uvijek polazimo od **tropskog (platonskog) natalnog izračuna**: početak zodijaka je proljetna ravnodnevica, trenutak kad Sunce
+prelazi nebeski ekvator (0° Ovna). Datum se pomiče (19.–21. ožujka), ali je točka uvijek ista. Sve ostalo gradi se na tome:
+kuće po Placidusu, tranziti i ciklusi, a i kineski kalendar, čiji su solarni termini (jieqi) koraci od 15° iste tropske Sunčeve
+dužine (Lichun 315°, Chunfen 0°). Sideričke veličine (npr. 28 lunarnih kuća) samo se preračunavaju i prikazuju uz tropski temelj.
+
 ## Mreža simbola (obavezno)
 
 Sve tradicije povezuju se preko zajedničkih simbola. Agent čitač iz svake knjige izvlači obrasce; `~/Kosmogram/biblioteka/mreza_simbola.py`

@@ -66,6 +66,12 @@
     'god.sr': function (p, t) { return '<b>Solar return</b> ' + p.datum + ': Ascendant of the year in ' + t('znakovi')[p.asc] + ' ' + p.glif + ' (' + t('znakTema')[p.asc] + ')' + (p.kuca ? '; the Sun of the year shines in the ' + p.kuca + ordinal(p.kuca) + ' house: ' + t('kuce')[p.kuca - 1] : '') + '.'; },
     'god.prof': function (p, t) { return '<b>Profection:</b> in your ' + (p.dob + 1) + ordinal(p.dob + 1) + ' year of life (age ' + p.dob + ') your ' + p.kuca + ordinal(p.kuca) + ' house is active: ' + t('kuce')[p.kuca - 1] + ', in ' + t('znakovi')[p.znak] + '. <b>Lord of the year</b> is ' + t('planet.' + p.gospodar) + ' ' + p.glif + ': follow its transits, through them the year speaks to you.'; },
     'god.osobna': '<b>Personal year {n}:</b> a year for {tema}.',
+    "god.kineska": "<b>Chinese year</b> {znak} ({element}, {zivotinja}); your birth year is the {natal}: {odnos} Nine stars: a year of star {zvijezda}, your birth star {natalZvijezda}.",
+    "god.kinOdnos.isto": "the year of your own animal, a return to the start of the twelve-year circle.",
+    "god.kinOdnos.susjed": "a neighbouring sign, a year of small shifts.",
+    "god.kinOdnos.trigon": "a harmonious triangle (san he), a year of support.",
+    "god.kinOdnos.kvadrat": "a tense relationship, a year of friction from which strength grows.",
+    "god.kinOdnos.opozicija": "the opposite sign (chong), a year of change and reversal; do not force things.",
     'god.naslov': 'Your year: {od} – {do}',
 
     'ui.opis': 'Everything you enter here stays only on this device.',

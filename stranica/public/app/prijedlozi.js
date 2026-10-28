@@ -181,9 +181,21 @@ var Prijedlozi = (function (A, N) {
     var sazetak = [
       t('god.sr', { datum: datumDug(sr.ms), asc: sr.asc, glif: Nebo.glifZnaka(sr.asc), kuca: r.bezVremena ? null : sr.kucaSunca }),
       r.bezVremena ? '' : t('god.prof', { dob: dob, kuca: profKuca, znak: profZnak, gospodar: gospodar, glif: Nebo.glifPlaneta(gospodar) }),
-      t('god.osobna', { n: og, tema: t('broj.' + og) })
+      t('god.osobna', { n: og, tema: t('broj.' + og) }),
+      typeof Kineski === 'undefined' ? '' : kineskaGodina(r, natal)
     ].filter(Boolean);
     return { od: sr.ms, do_: sljedeci.ms, sazetak: sazetak, gospodar: gospodar, dogadaji: dog.map(function (d) { var o = opis(d); o.ms = d.ms; o.vrsta = d.vrsta; o.gospodar = d.planet === gospodar; return o; }) };
+  }
+
+  // kineski sloj godine: kineska godina u tijeku i njezin odnos prema natalnoj godini, devet zvijezda
+  function kineskaGodina(r, natal) {
+    var mog = N.resolveLocal(r.g, r.m, r.d, r.bezVremena ? 12 : r.h, r.bezVremena ? 0 : r.min, 0, r.zona || 'Europe/Zagreb');
+    var ks = Kineski.stupovi(r, mog[0].utcMs), sad = Kineski.godinaSada(new Date());
+    var odnos = ['isto', 'susjed', 'susjed', 'kvadrat', 'trigon', 'susjed', 'opozicija', 'susjed', 'trigon', 'kvadrat', 'susjed', 'susjed'];   // razmak grana: 4 i 8 = san he, 6 = chong, 3 i 9 = napetost
+    var razmak = ((sad.stup.grana - ks.godina.grana) % 12 + 12) % 12;
+    return t('god.kineska', { znak: sad.stup.znak, zivotinja: t('kin.zivotinja.' + sad.stup.zivotinja), element: t('kin.el.' + sad.stup.element),
+      natal: t('kin.zivotinja.' + ks.godina.zivotinja), odnos: t('god.kinOdnos.' + odnos[razmak]),
+      zvijezda: sad.zvijezda + ' (' + t('kin.el.' + Kineski.ZVIJEZDE[sad.zvijezda]) + ')', natalZvijezda: ks.zvijezda + ' (' + t('kin.el.' + Kineski.ZVIJEZDE[ks.zvijezda]) + ')' });
   }
 
   /* ---------- kalendar (.ics) ---------- */
