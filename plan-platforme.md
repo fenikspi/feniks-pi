@@ -35,6 +35,25 @@ dužine (Lichun 315°, Chunfen 0°). Sideričke veličine (npr. 28 lunarnih kuć
 nositelji (Parašara): vatra Sunce i Mars, zemlja Merkur, voda Mjesec i Venera, zrak Saturn, eter Jupiter; kineskih pet elemenata
 preko planeta (drvo Jupiter, vatra Mars, zemlja Saturn, metal Venera, voda Merkur).
 
+## Majstorski horoskop: sustavi po prioritetu
+
+Dodajemo svaki horoskopski sustav koji pronađemo, redom: **najbliži** (računa se iz istog neba i iste tropske točke ili se točno
+preračunava) i **najpouzdaniji** (stari, provjerljivi izvori). Svaki novi sloj spaja se s ostalima preko preklapanja (planeti,
+elementi, ciklusi), a Rade iz knjiga gradi obrasce za njega.
+
+| # | Sustav | Blizina | Pouzdanost | Stanje |
+|---|---|---|---|---|
+| 1 | Zapadni tropski (Placidus), tranziti, povratci, profekcije | temelj | antika do danas | **gotovo** |
+| 2 | Pitagorejska numerologija | isti datum | antička tradicija | **gotovo** |
+| 3 | Kineski: četiri stupa, pet elemenata, devet zvijezda | ista tropska Sunčeva dužina | klasični izvori | **gotovo** |
+| 4 | Pet elemenata s eterom (Platon, vedska akaša) | most sustava | Timej, Parašara | **gotovo** |
+| 5 | Helenistički slojevi: dekani (36 lica), Točka sreće i druge točke, sekta (dan/noć), firdarija, zodijakalno otpuštanje | isti tropski zodijak | Valens, Ptolemej, Abu Ma'šar | sljedeće |
+| 6 | Vedski (džjotiš): 27 nakšatri, vimšotari daše (120 g.), varge | siderički, točno preračunavanje (ajanamša) | Parašara, Varahamihira | zatim |
+| 7 | Kineski dodatno: Zi Wei Dou Shu (12 palača ↔ kuće), 28 lunarnih kuća (xiu) | lunarni / siderički | klasični izvori | zatim |
+| 8 | Arapske lunarne kuće (28 manazil) i arapske točke | tropski / siderički | Abu Ma'šar, Al-Biruni | zatim |
+| 9 | Majanski tzolk'in (260 dana) i dugo brojanje | kalendarski, korelacija GMT | natpisi, kodeksi | zatim |
+| — | Moderni „keltski”, „slavenski” i slični horoskopi bez starih izvora | — | novijeg postanka | samo kao simbolika, jasno označeno |
+
 ## Mreža simbola (obavezno)
 
 Sve tradicije povezuju se preko zajedničkih simbola. Agent čitač iz svake knjige izvlači obrasce; `~/Kosmogram/biblioteka/mreza_simbola.py`
