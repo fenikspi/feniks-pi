@@ -239,7 +239,7 @@
   $('#izvoz').addEventListener('click', function () {
     Pohrana.sve().then(function (r) {
       var json = JSON.stringify({ feniksPi: 1, izvezeno: new Date().toISOString(), profil: r[0] || null, zapisi: r[1] }, null, 2);
-      var t = $('#izvoz-tekst'); t.hidden = false; t.value = json; t.select();
+      var polje = $('#izvoz-tekst'); polje.hidden = false; polje.value = json; polje.select();   // ne "t": to je funkcija prijevoda
       $('#izvoz-poruka').textContent = t('pr.izvezeno');
     });
   });
