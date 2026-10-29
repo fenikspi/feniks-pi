@@ -9,7 +9,8 @@ const IME = /^[a-z0-9._-]{3,32}$/;
 const B64 = /^[A-Za-z0-9_-]+$/;                     // base64url bez znaka =
 const NAJVISE_PODATAKA = 2 * 1024 * 1024;           // šifrirani podaci jednog računa
 const SESIJA_DANA = 30;
-const PRAG_NEUSPJEHA = 10, ZAKLJUCAJ_MIN = 15;      // nakon 10 krivih lozinki račun se zaključa na 15 minuta
+const PRAG_NEUSPJEHA = 10, ZAKLJUCAJ_MIN = 15;      // nakon 10 krivih lozinki s iste adrese prijave s nje se zaključaju do kraja 15-minutnog prozora
+const PRAG_RACUNA = 100;                            // tek nakon 100 krivih lozinki ukupno (s bilo koje adrese) zaključa se i sam račun, na 15 minuta
 const NOVIH_RACUNA_DNEVNO = 500;
 
 const enc = new TextEncoder();
@@ -27,9 +28,31 @@ function sada() { return new Date().toISOString(); }
 // Za nepostojeće korisničko ime vraća se uvijek ista lažna sol, da se izvana ne može saznati koja imena postoje.
 async function lazna(env, ime) { return (await sha('feniks-sol:' + env.RACUN_TAJNA + ':' + ime)).slice(0, 22); }
 // korisničko ime u bazi: HMAC-SHA256(RACUN_TAJNA, ime); bez tajnog ključa iz baze se imena ne mogu pročitati ni pogađati
-async function imeKljuc(env, ime) {
+async function hmac(env, s) {
   const k = await crypto.subtle.importKey('raw', enc.encode(env.RACUN_TAJNA), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  return b64(new Uint8Array(await crypto.subtle.sign('HMAC', k, enc.encode('feniks-ime:' + ime))));
+  return b64(new Uint8Array(await crypto.subtle.sign('HMAC', k, enc.encode(s))));
+}
+async function imeKljuc(env, ime) { return hmac(env, 'feniks-ime:' + ime); }
+
+// Krive prijave broje se po izvoru, u tablici potrosnja: ključ je HMAC(RACUN_TAJNA, IP adresa + broj 15-minutnog prozora).
+// Sirova adresa se ne sprema, zapis nije vezan uz račun, a ključevi iz različitih prozora ne mogu se povezati.
+// Tko zna tuđe korisničko ime tako zaključava samo prijave sa svoje adrese, ne tuđi račun.
+function prozor() { return Math.floor(Date.now() / (ZAKLJUCAJ_MIN * 6e4)); }
+function oznakaProzora(p) { return 'prijava:' + String(p).padStart(10, '0') + ':'; }
+async function izvorKljuc(env, req) {
+  const p = prozor(), ip = req.headers.get('CF-Connecting-IP') || 'nepoznato';
+  return oznakaProzora(p) + (await hmac(env, 'feniks-izvor:' + ip + ':' + p)).slice(0, 22);
+}
+async function izvorZakljucan(db, kljuc) {
+  const r = await db.prepare('SELECT broj FROM potrosnja WHERE dan = ?').bind(kljuc).first();
+  return r && r.broj >= PRAG_NEUSPJEHA ? new Date((prozor() + 1) * ZAKLJUCAJ_MIN * 6e4).toISOString() : null;
+}
+async function krivaPrijava(db, kljuc, r) {
+  await db.prepare('INSERT INTO potrosnja (dan, broj) VALUES (?, 1) ON CONFLICT(dan) DO UPDATE SET broj = broj + 1 RETURNING broj').bind(kljuc).first();
+  if (!r) return;
+  const n = (r.neuspjeha || 0) + 1;
+  await db.prepare('UPDATE racuni SET neuspjeha = ?, zakljucan_do = ? WHERE id = ?')
+    .bind(n >= PRAG_RACUNA ? 0 : n, n >= PRAG_RACUNA ? new Date(Date.now() + ZAKLJUCAJ_MIN * 6e4).toISOString() : null, r.id).run();
 }
 
 async function sesija(req, env) {
@@ -106,15 +129,13 @@ export async function racun(req, env, put) {
   if ((put === 'prijava' || put === 'oporavak') && M === 'POST') {
     const u = await citaj(req);
     if (!u || !IME.test(u.korisnik || '') || !b64polje(u.provjera, 43, 43)) return odg({ greska: 'neispravno' }, 400);
+    const izvorPrijave = await izvorKljuc(env, req), doIzvora = await izvorZakljucan(db, izvorPrijave);
+    if (doIzvora) return odg({ greska: 'zaključano', do: doIzvora }, 429);
     const r = await db.prepare('SELECT * FROM racuni WHERE korisnik = ?').bind(await imeKljuc(env, u.korisnik)).first();
     if (r && r.zakljucan_do && r.zakljucan_do > sada()) return odg({ greska: 'zaključano', do: r.zakljucan_do }, 429);
     const ok = r && await jednako(await sha(u.provjera), put === 'prijava' ? r.provjera : r.provjera_oporavka);
     if (!ok) {
-      if (r) {
-        const n = (r.neuspjeha || 0) + 1;
-        await db.prepare('UPDATE racuni SET neuspjeha = ?, zakljucan_do = ? WHERE id = ?')
-          .bind(n >= PRAG_NEUSPJEHA ? 0 : n, n >= PRAG_NEUSPJEHA ? new Date(Date.now() + ZAKLJUCAJ_MIN * 6e4).toISOString() : null, r.id).run();
-      }
+      await krivaPrijava(db, izvorPrijave, r);
       return odg({ greska: 'pogrešno' }, 401);   // isti odgovor za krivo ime i krivu lozinku
     }
     if (put === 'oporavak') {
@@ -134,9 +155,11 @@ export async function racun(req, env, put) {
   if (put === 'omot-oporavka' && M === 'POST') {
     const u = await citaj(req);
     if (!u || !IME.test(u.korisnik || '') || !b64polje(u.provjera, 43, 43)) return odg({ greska: 'neispravno' }, 400);
+    const izvorPrijave = await izvorKljuc(env, req), doIzvora = await izvorZakljucan(db, izvorPrijave);
+    if (doIzvora) return odg({ greska: 'zaključano', do: doIzvora }, 429);
     const r = await db.prepare('SELECT * FROM racuni WHERE korisnik = ?').bind(await imeKljuc(env, u.korisnik)).first();
     if (r && r.zakljucan_do && r.zakljucan_do > sada()) return odg({ greska: 'zaključano', do: r.zakljucan_do }, 429);
-    if (!r || !(await jednako(await sha(u.provjera), r.provjera_oporavka))) return odg({ greska: 'pogrešno' }, 401);
+    if (!r || !(await jednako(await sha(u.provjera), r.provjera_oporavka))) { await krivaPrijava(db, izvorPrijave, r); return odg({ greska: 'pogrešno' }, 401); }
     return odg({ omotOporavka: JSON.parse(r.omot_oporavka) });
   }
 
@@ -177,12 +200,13 @@ export async function racun(req, env, put) {
   return odg({ greska: 'nepoznato' }, 404);
 }
 
-// Svakodnevno čišćenje (Cloudflare cron, vidi wrangler.toml): istekle prijave i računi bez prijave dulje od 3 godine,
-// zajedno s njihovim šifriranim podacima (Pravila privatnosti, odjeljak 8).
+// Svakodnevno čišćenje (Cloudflare cron, vidi wrangler.toml): istekle prijave, brojači krivih prijava iz prošlih
+// 15-minutnih prozora i računi bez prijave dulje od 3 godine, zajedno s njihovim šifriranim podacima (Pravila privatnosti, odjeljak 8).
 export async function ocisti(env) {
   const db = env.RACUNI, sad = sada(), granica = new Date(Date.now() - 3 * 365.25 * 864e5).toISOString();
   await db.batch([
     db.prepare('DELETE FROM sesije WHERE istjece < ?').bind(sad),
+    db.prepare("DELETE FROM potrosnja WHERE dan LIKE 'prijava:%' AND dan < ?").bind(oznakaProzora(prozor())),
     db.prepare('DELETE FROM podaci WHERE racun_id IN (SELECT id FROM racuni WHERE COALESCE(zadnja_prijava, stvoren) < ?)').bind(granica),
     db.prepare('DELETE FROM sesije WHERE racun_id IN (SELECT id FROM racuni WHERE COALESCE(zadnja_prijava, stvoren) < ?)').bind(granica),
     db.prepare('DELETE FROM racuni WHERE COALESCE(zadnja_prijava, stvoren) < ?').bind(granica),
