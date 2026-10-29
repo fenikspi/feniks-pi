@@ -5,7 +5,7 @@
      osim dnevnog brojača poziva (granica troška);
    - računi i šifrirano usklađivanje (/api/racun/*, vidi racuni.js). */
 import Anthropic from '@anthropic-ai/sdk';
-import { racun, ocisti, tijelo } from './racuni.js';
+import { racun, ocisti, tijelo, hmac } from './racuni.js';
 
 const PLANETI = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'asc', 'mc'];
 const ASPEKTI = ['konjunkcija', 'sekstil', 'kvadrat', 'trigon', 'opozicija'];
@@ -50,6 +50,7 @@ const OBRAZACA_DNEVNO = 2000;     // najviše anonimnih obrazaca na dan za cijel
 
 /* ---------- dublje čitanje (Claude) ---------- */
 const DNEVNO = 100;               // najviše dubljih čitanja na dan za cijelu stranicu (granica troška API-ja)
+const DNEVNO_PO_IZVORU = 5;       // i najviše 5 na dan s iste adrese, da jedan bot ne potroši dnevnu kvotu (B8)
 const JEZICI = { hr: 'hrvatskom', en: 'engleskom', de: 'njemačkom', it: 'talijanskom', es: 'španjolskom', fr: 'francuskom', sl: 'slovenskom', sr: 'srpskom (latinica)', 'sr-Cyrl': 'srpskom (ćirilica)', ru: 'ruskom', uk: 'ukrajinskom' };
 const SUSTAV = `Ti si pisac dubokih čitanja za Feniks π: natalna karta (tropski zodijak, Placidus), pet elemenata s eterom,
 kineski horoskop i numerologija, kako bi čovjek pronašao svoj životni put i hodao njime, kao odraz prepuštanja.
@@ -70,17 +71,27 @@ function apstrakt(u) {
 function json(d, status) { return new Response(JSON.stringify(d), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } }); }
 const NAS_IZVOR = /^https:\/\/(www\.)?fenikspi\.com$/i;
 
+export async function kljucIzvora(env, ip, dan) { return 'duboko:' + dan + ':' + (await hmac(env, 'feniks-duboko:' + ip + ':' + dan)).slice(0, 22); }
+// brojači dubljeg čitanja po izvoru iz prošlih dana (sažeci, ne adrese); današnji ostaje
+export async function ocistiDuboko(env) {
+  await env.OBRASCI.prepare("DELETE FROM potrosnja WHERE dan LIKE 'duboko:%' AND dan < ?").bind('duboko:' + new Date().toISOString().slice(0, 10)).run();
+}
+
 async function duboko(req, env) {
   if (req.method !== 'POST') return new Response('', { status: 405, headers: { Allow: 'POST' } });
   const izvor = req.headers.get('Origin');
   if (izvor && !NAS_IZVOR.test(izvor)) return json({ greska: 'izvor' }, 403);
-  if (!env.ANTHROPIC_API_KEY) return json({ greska: 'nije postavljeno' }, 503);
+  if (!env.ANTHROPIC_API_KEY || !env.RACUN_TAJNA) return json({ greska: 'nije postavljeno' }, 503);
   const t = await tijelo(req, 65536);
   if (t === null) return json({ greska: 'preveliko' }, 413);
   let u = null; try { u = JSON.parse(t); } catch (e) { return json({ greska: 'neispravno' }, 400); }
   const a = apstrakt(u);
   if (!a) return json({ greska: 'neispravno' }, 422);
   const dan = new Date().toISOString().slice(0, 10);
+  // po izvoru: ključ je HMAC(RACUN_TAJNA, IP + dan), bez same adrese; stari ključevi brišu se cronom (ocistiDuboko)
+  const { broj: poIzvoru } = await env.OBRASCI.prepare('INSERT INTO potrosnja (dan, broj) VALUES (?, 1) ON CONFLICT(dan) DO UPDATE SET broj = broj + 1 RETURNING broj')
+    .bind(await kljucIzvora(env, req.headers.get('CF-Connecting-IP') || 'nepoznato', dan)).first();
+  if (poIzvoru > DNEVNO_PO_IZVORU) return json({ greska: 'dnevna granica' }, 429);
   const { broj } = await env.OBRASCI.prepare('INSERT INTO potrosnja (dan, broj) VALUES (?, 1) ON CONFLICT(dan) DO UPDATE SET broj = broj + 1 RETURNING broj').bind(dan).first();
   if (broj > DNEVNO) return json({ greska: 'dnevna granica' }, 429);
 
@@ -114,7 +125,7 @@ ${a.dijelovi.map((x) => '## ' + x.naslov + '\n' + x.tekst).join('\n\n')}
 
 export default {
   // svaki dan u 03:17 UTC: istekle prijave i računi neaktivni dulje od 3 godine (racuni.js)
-  async scheduled(dogadaj, env, ctx) { ctx.waitUntil(ocisti(env)); },
+  async scheduled(dogadaj, env, ctx) { ctx.waitUntil(Promise.all([ocisti(env), ocistiDuboko(env)])); },
 
   async fetch(req, env) {
     const url = new URL(req.url);

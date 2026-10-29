@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import worker from '../src/worker.js';
+import worker, { kljucIzvora } from '../src/worker.js';
 import { tijelo } from '../src/racuni.js';
 
 const SIMBOLI = readFileSync(new URL('../public/app/simboli.js', import.meta.url), 'utf8');
@@ -49,6 +49,22 @@ test('duboko: bez ključa 503, tuđi Origin 403, neispravno tijelo 400/422', asy
   assert.equal((await worker.fetch(post('/api/duboko', DUBOKO, { Origin: 'https://zlo.example' }), env({ ANTHROPIC_API_KEY: 'x' }))).status, 403);
   assert.equal((await worker.fetch(post('/api/duboko', '{x'), env({ ANTHROPIC_API_KEY: 'x' }))).status, 400);
   assert.equal((await worker.fetch(post('/api/duboko', { jezik: 'xx' }), env({ ANTHROPIC_API_KEY: 'x' }))).status, 422);
+});
+test('duboko: 6. zahtjev s iste adrese u danu → 429, prije poziva Claudea; druga adresa prolazi dalje', async () => {
+  const DUBOKO = { jezik: 'hr', polozaji: [{ ime: 'Sunce', polozaj: 'Lav 12°' }], dijelovi: [{ naslov: 'a', tekst: 'b' }] };
+  const e = env({ ANTHROPIC_API_KEY: 'x' }), dan = new Date().toISOString().slice(0, 10);
+  e.OBRASCI.brojaci[await kljucIzvora(e, '203.0.113.7', dan)] = 5;
+  const r = await worker.fetch(post('/api/duboko', DUBOKO, { 'CF-Connecting-IP': '203.0.113.7' }), e);
+  assert.equal(r.status, 429);
+  assert.equal((await r.json()).greska, 'dnevna granica');
+  assert.equal(e.OBRASCI.brojaci[dan], undefined);                    // zajednička dnevna kvota nije potrošena
+  const k2 = await kljucIzvora(e, '203.0.113.8', dan);
+  assert.notEqual(k2, await kljucIzvora(e, '203.0.113.7', dan));
+  assert.ok(/^duboko:\d{4}-\d{2}-\d{2}:[A-Za-z0-9_-]{22}$/.test(k2) && !k2.includes('203.0.113'));   // sažetak, ne adresa
+});
+test('duboko: bez RACUN_TAJNA → 503 (granica po izvoru ne može raditi)', async () => {
+  const DUBOKO = { jezik: 'hr', polozaji: [{ ime: 'Sunce', polozaj: 'Lav 12°' }], dijelovi: [{ naslov: 'a', tekst: 'b' }] };
+  assert.equal((await worker.fetch(post('/api/duboko', DUBOKO), env({ ANTHROPIC_API_KEY: 'x', RACUN_TAJNA: '' }))).status, 503);
 });
 test('duboko: JSON odgovori nose nosniff', async () => {
   const r = await worker.fetch(post('/api/duboko', {}), env());

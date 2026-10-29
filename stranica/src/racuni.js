@@ -28,7 +28,7 @@ function sada() { return new Date().toISOString(); }
 // Za nepostojeće korisničko ime vraća se uvijek ista lažna sol, da se izvana ne može saznati koja imena postoje.
 async function lazna(env, ime) { return (await sha('feniks-sol:' + env.RACUN_TAJNA + ':' + ime)).slice(0, 22); }
 // korisničko ime u bazi: HMAC-SHA256(RACUN_TAJNA, ime); bez tajnog ključa iz baze se imena ne mogu pročitati ni pogađati
-async function hmac(env, s) {
+export async function hmac(env, s) {
   const k = await crypto.subtle.importKey('raw', enc.encode(env.RACUN_TAJNA), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   return b64(new Uint8Array(await crypto.subtle.sign('HMAC', k, enc.encode(s))));
 }
