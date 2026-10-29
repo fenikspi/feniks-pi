@@ -35,7 +35,7 @@ var Nebo = (function (A, N) {
 
   function natalna(profil) {
     if (!profil || !profil.rodenje) return null;
-    var r = profil.rodenje, mog = N.resolveLocal(r.g, r.m, r.d, r.h, r.min, 0, r.zona || 'Europe/Zagreb');
+    var r = profil.rodenje, mog = N.resolveLocal(r.g, r.m, r.d, r.h, r.min, 0, r.zona || 'Europe/Zagreb', r.lon);
     if (!mog.length) return null;
     return N.compute({ utcMs: mog[0].utcMs, lat: r.lat, lon: r.lon });
   }

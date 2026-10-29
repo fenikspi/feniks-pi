@@ -207,5 +207,9 @@ I18n.dodaj('de', {
   "kin.elOpis.vatra": "Feuer leuchtet und wärmt: Dein Weg ist Leidenschaft, Freude und Sichtbarkeit.",
   "kin.elOpis.zemlja": "Erde trägt und nährt: Dein Weg ist Beständigkeit, Fürsorge und die Mitte.",
   "kin.elOpis.metal": "Metall schneidet und formt: Dein Weg ist Klarheit, Gerechtigkeit und Vollendung.",
-  "kin.elOpis.voda": "Wasser fließt und dringt überall hin: Dein Weg ist Weisheit, Anpassungsfähigkeit und Tiefe."
+  "kin.elOpis.voda": "Wasser fließt und dringt überall hin: Dein Weg ist Weisheit, Anpassungsfähigkeit und Tiefe.",
+  'nat.mjesecPriblizno': 'Ohne Geburtszeit wird der Mond für 12 Uhr berechnet; an einem Tag legt er etwa 13° zurück: seine Position ist ungefähr, ebenso seine Aspekte (mit ≈ markiert).',
+  'nat.mjesecGranica': 'Er steht nahe der Zeichengrenze; mit einer anderen Geburtszeit könnte er in {znak} stehen.',
+  'nat.priblizno': '≈ ungefähr: ohne Geburtszeit wird der Mond für 12 Uhr berechnet.',
+  'kin.nedostaje2': '; es fehlen: <b>{lista}</b>, also bring sie bewusst in dein Leben (Farbe, Essen, Ort, Tätigkeit)'
 });

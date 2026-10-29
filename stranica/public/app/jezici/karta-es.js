@@ -207,5 +207,9 @@ I18n.dodaj('es', {
   "kin.elOpis.vatra": "El fuego brilla y calienta: tu camino es pasión, alegría y visibilidad.",
   "kin.elOpis.zemlja": "La tierra sostiene y nutre: tu camino es constancia, cuidado y centro.",
   "kin.elOpis.metal": "El metal corta y da forma: tu camino es claridad, justicia y culminación.",
-  "kin.elOpis.voda": "El agua fluye y penetra: tu camino es sabiduría, adaptabilidad y profundidad."
+  "kin.elOpis.voda": "El agua fluye y penetra: tu camino es sabiduría, adaptabilidad y profundidad.",
+  'nat.mjesecPriblizno': 'Sin hora de nacimiento la Luna se calcula para el mediodía, y en un día recorre unos 13°: su posición es aproximada, igual que sus aspectos (marcados con ≈).',
+  'nat.mjesecGranica': 'Está cerca del límite del signo, así que con otra hora de nacimiento podría estar en {znak}.',
+  'nat.priblizno': '≈ aproximado: sin hora de nacimiento la Luna se calcula para el mediodía.',
+  'kin.nedostaje2': '; faltan: <b>{lista}</b>, así que tráelos conscientemente a tu vida (color, comida, lugar, actividad)'
 });

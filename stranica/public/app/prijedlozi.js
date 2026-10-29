@@ -189,7 +189,7 @@ var Prijedlozi = (function (A, N) {
 
   // kineski sloj godine: kineska godina u tijeku i njezin odnos prema natalnoj godini, devet zvijezda
   function kineskaGodina(r, natal) {
-    var mog = N.resolveLocal(r.g, r.m, r.d, r.bezVremena ? 12 : r.h, r.bezVremena ? 0 : r.min, 0, r.zona || 'Europe/Zagreb');
+    var mog = N.resolveLocal(r.g, r.m, r.d, r.bezVremena ? 12 : r.h, r.bezVremena ? 0 : r.min, 0, r.zona || 'Europe/Zagreb', r.lon);
     var ks = Kineski.stupovi(r, mog[0].utcMs), sad = Kineski.godinaSada(new Date());
     var odnos = ['isto', 'susjed', 'susjed', 'kvadrat', 'trigon', 'susjed', 'opozicija', 'susjed', 'trigon', 'kvadrat', 'susjed', 'susjed'];   // razmak grana: 4 i 8 = san he, 6 = chong, 3 i 9 = napetost
     var razmak = ((sad.stup.grana - ks.godina.grana) % 12 + 12) % 12;

@@ -205,5 +205,9 @@ I18n.dodaj('en', {
   'nat.mailKratko': 'The full reading opens at the link. To have it in the email itself, click “Copy reading” on the page and paste it here, or attach the file from “Save as file”.',
   'nat.datoteka': 'Save as file', 'nat.link': 'Link to this reading (the chart is calculated in the browser and stored nowhere):',
   'nat.ai': 'Deeper reading (Claude)', 'nat.ai.naslov': 'Deeper reading', 'nat.ai.pise': 'Claude is writing…',
-  'nat.ai.traje': 'Writing a deeper reading, this takes up to a minute. Only the chart is sent, without name, date or place.', 'nat.ai.greska': 'The deeper reading did not work right now'
+  'nat.ai.traje': 'Writing a deeper reading, this takes up to a minute. Only the chart is sent, without name, date or place.', 'nat.ai.greska': 'The deeper reading did not work right now',
+  'nat.mjesecPriblizno': 'Without a birth time the Moon is calculated for noon, and it moves about 13° in a day: its position is approximate, and so are its aspects (marked ≈).',
+  'nat.mjesecGranica': 'It is close to the edge of the sign, so with a different birth time it could be in {znak}.',
+  'nat.priblizno': '≈ approximate: without a birth time the Moon is calculated for noon.',
+  'kin.nedostaje2': '; <b>{lista}</b> are missing, so bring them consciously into your life (colour, food, place, activity)'
 });

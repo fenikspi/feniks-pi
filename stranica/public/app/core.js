@@ -36,7 +36,7 @@ var Natal = (function (A) {
   }
   /* Resolve a local wall time in zone tz. Returns every UTC instant that shows that wall time:
      0 candidates = skipped hour (clocks moved forward), 2 = repeated hour (clocks moved back). */
-  function resolveLocal(y, mo, d, h, mi, s, tz) {
+  function resolveLocal(y, mo, d, h, mi, s, tz, lon) {
     var wall = wallAsUtcMs(y, mo, d, h, mi, s), seen = {}, out = [];
     [-36, -12, 0, 12, 36].forEach(function (hrs) {
       var off = tzOffsetMin(tz, wall + hrs * 3600000);
@@ -45,7 +45,28 @@ var Natal = (function (A) {
       if (tzOffsetMin(tz, utc) === off) out.push({ utcMs: utc, offsetMin: off });
     });
     out.sort(function (a, b) { return a.utcMs - b.utcMs; });
+    if (out.length) {                                   // before standard time: the birthplace's own mean time, not the zone city's
+      var l = lmtOfPlace(tz, out[0].utcMs, out[0].offsetMin, lon);
+      if (l != null) out = [{ utcMs: wall - l * 60000, offsetMin: l, lmt: true }];
+    }
     return out;
+  }
+  /* Before standard time IANA stores the local mean time (LMT) of the zone's reference city (Belgrade for Europe/Zagreb,
+     Berlin for Europe/Berlin). A birth elsewhere in the zone kept its own mean time: longitude × 4 minutes. That is applied
+     while the zone is still on its original LMT value (unchanged since 1800) and the birthplace longitude is known.
+     Exceptions: national mean times that IANA keeps under the same value as LMT, legally valid for the whole country
+     (years approximate, from tzdata); a named mean time with another value (Bern time 1853–1894 in Europe/Zurich) is
+     detected by the value itself and left to IANA. */
+  var NAMED_MEAN_TIME = { 'Europe/Paris': [1891, 1911], 'Europe/Amsterdam': [1835, 1937], 'Europe/Dublin': [1880, 1916], 'Europe/Warsaw': [1880, 1915],
+    'Europe/Moscow': [1880, 1916], 'Europe/Kiev': [1880, 1924], 'Europe/Kyiv': [1880, 1924], 'Europe/Riga': [1880, 1926], 'Europe/Tallinn': [1880, 1918],
+    'Europe/Helsinki': [1878, 1921], 'Europe/Brussels': [1880, 1892], 'Europe/Rome': [1866, 1893], 'Europe/Stockholm': [1879, 1900], 'Europe/Prague': [1850, 1891],
+    'Europe/Copenhagen': [1890, 1894], 'Europe/Athens': [1895, 1916], 'Europe/Bucharest': [1891, 1931], 'Europe/Vilnius': [1880, 1917], 'Europe/Minsk': [1880, 1924] };
+  function lmtOfPlace(tz, utcMs, off, lon) {
+    if (lon == null || !isFinite(lon) || !isLmtOffset(off)) return null;
+    var y = new Date(utcMs).getUTCFullYear(), nm = NAMED_MEAN_TIME[tz];
+    if (nm && y >= nm[0] && y <= nm[1]) return null;
+    if (tzOffsetMin(tz, wallAsUtcMs(1800, 1, 1, 12, 0)) !== off) return null;   // a later named mean time: IANA is right
+    return Math.round(lon * 4 * 60) / 60;                                         // minutes, to the second
   }
   // Standard (winter) offset of a zone around a date: the smaller of mid-January and mid-July offsets.
   function standardOffsetMin(tz, y) {
@@ -289,7 +310,7 @@ var Natal = (function (A) {
   }
 
   return {
-    norm: norm, angDiff: angDiff, resolveLocal: resolveLocal, tzOffsetMin: tzOffsetMin, standardOffsetMin: standardOffsetMin,
+    norm: norm, angDiff: angDiff, resolveLocal: resolveLocal, lmtOfPlace: lmtOfPlace, tzOffsetMin: tzOffsetMin, standardOffsetMin: standardOffsetMin,
     isLmtOffset: isLmtOffset, isDst: isDst, compute: compute, findAspects: findAspects, findConfigurations: findConfigurations,
     houseOf: houseOf, ASPECTS: ASPECTS, angles: angles, houses: houses, bodyState: bodyState, bodyLon: function (id, t) { return norm(bodyLon(id, t)); }
   };

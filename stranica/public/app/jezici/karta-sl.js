@@ -92,7 +92,7 @@ I18n.dodaj('sl', {
   'nat.broj.33': 'Mojstrska pot učenja ljubezni: učiš se služiti s srcem.',
   'nat.put.naslov': 'Tvoja pot in prepuščanje',
   'nat.put': function (p) {
-    return 'Tvoja življenjska pot teče skozi <b>' + p.sunce + '</b>, duša pa se hrani skozi <b>' + p.mjesec + '</b>' + (p.asc ? '; svetu se odpiraš skozi <b>' + p.asc + '</b>' : '') +
+    return 'Teme tvoje življenjske poti so <b>' + p.sunce + '</b>, dušo ti hranijo <b>' + p.mjesec + '</b>' + (p.asc ? ', svetu pa te odpirajo <b>' + p.asc + '</b>' : '') +
       '. Element, ki te nosi, je ' + p.el.toLowerCase() + ', število ' + p.broj + ' pa kaže, kako hodiš. Ničesar ni treba siliti: sledi znamenjem, ki se ponavljajo, zapisuj sanje in sinhronicitete, in pot se bo pokazala sama, korak za korakom.';
   },
   'nat.forma.naslov': 'Tvoja natalna karta: izračunaj jo zdaj', 'nat.forma.opis': 'Vpiši datum, uro in kraj rojstva. Vse se izračuna v tvojem brskalniku; podatki ne gredo nikamor.',
@@ -207,5 +207,9 @@ I18n.dodaj('sl', {
   "kin.elOpis.vatra": "Ogenj sveti in greje: tvoja pot je strast, veselje in vidnost.",
   "kin.elOpis.zemlja": "Zemlja nosi in hrani: tvoja pot je stanovitnost, skrb in središče.",
   "kin.elOpis.metal": "Kovina reže in oblikuje: tvoja pot je jasnost, pravičnost in dokončanje.",
-  "kin.elOpis.voda": "Voda teče in prodira: tvoja pot je modrost, prilagodljivost in globina."
+  "kin.elOpis.voda": "Voda teče in prodira: tvoja pot je modrost, prilagodljivost in globina.",
+  'nat.mjesecPriblizno': 'Brez ure rojstva je Luna izračunana za poldne, v enem dnevu pa prepotuje okoli 13°: njen položaj je približen, prav tako njeni aspekti (označeni z ≈).',
+  'nat.mjesecGranica': 'Blizu je meje znamenja, zato bi bila ob drugi uri rojstva lahko v znamenju {znak}.',
+  'nat.priblizno': '≈ približno: brez ure rojstva je Luna izračunana za poldne.',
+  'kin.nedostaje2': '; manjkajo: <b>{lista}</b>, zato jih zavestno vnašaj v življenje (barva, hrana, kraj, dejavnost)'
 });

@@ -15,7 +15,7 @@ var Citanje = (function (N) {
 
   // r: { g, m, d, h, min, lat, lon, zona, bezVremena, ime }
   function izracunaj(r) {
-    var mog = N.resolveLocal(r.g, r.m, r.d, r.bezVremena ? 12 : r.h, r.bezVremena ? 0 : r.min, 0, r.zona);
+    var mog = N.resolveLocal(r.g, r.m, r.d, r.bezVremena ? 12 : r.h, r.bezVremena ? 0 : r.min, 0, r.zona, r.lon);
     if (!mog.length) return null;
     var c = N.compute({ utcMs: mog[0].utcMs, lat: r.lat, lon: r.lon }), o = {};
     c.points.forEach(function (p) { o[p.id] = p; });
@@ -41,7 +41,9 @@ var Citanje = (function (N) {
     dio(t('nat.sunce.naslov', { znak: Nebo.znak(s.sign), glif: Nebo.glifZnaka(s.sign) }),
       '<p>' + niz('nat.sunceZnak', s.sign) + '</p>' + (k.kuce ? '<p>' + t('nat.uKuci', { planet: t('planet.sun'), n: s.house, tema: niz('kuce', s.house - 1) }) + '</p>' : ''));
     dio(t('nat.mjesec.naslov', { znak: Nebo.znak(m.sign), glif: Nebo.glifZnaka(m.sign) }),
-      '<p>' + niz('nat.mjesecZnak', m.sign) + '</p>' + (k.kuce ? '<p>' + t('nat.uKuci', { planet: t('planet.moon'), n: m.house, tema: niz('kuce', m.house - 1) }) + '</p>' : ''));
+      '<p>' + niz('nat.mjesecZnak', m.sign) + '</p>' + (k.kuce ? '<p>' + t('nat.uKuci', { planet: t('planet.moon'), n: m.house, tema: niz('kuce', m.house - 1) }) + '</p>'
+        // bez vremena: Mjesec je za podne, u danu prijeđe ~13°; blizu granice (7°) i znak može biti drugi
+        : '<p>' + t('nat.mjesecPriblizno') + (m.deg < 7 || m.deg > 23 ? ' ' + t('nat.mjesecGranica', { znak: Nebo.znak((m.sign + (m.deg < 7 ? 11 : 1)) % 12) }) : '') + '</p>'));
     if (k.kuce) dio(t('nat.asc.naslov', { znak: Nebo.znak(o.asc.sign), glif: Nebo.glifZnaka(o.asc.sign) }), '<p>' + niz('nat.ascZnak', o.asc.sign) + '</p>');
     else dio(t('nat.asc.naslovBez'), '<p>' + t('nat.asc.bez') + '</p>');
 
@@ -60,19 +62,19 @@ var Citanje = (function (N) {
       '<p>' + t('nat.eter', { znak: Nebo.znak(o.jupiter.sign), kuca: k.kuce && o.jupiter.house ? t('nat.eterKuca', { n: o.jupiter.house, tema: niz('kuce', o.jupiter.house - 1) }) : '' }) + '</p>');
 
     // 3. najjači aspekti
-    var glavni = k.aspekti.filter(function (a) { return ASPEKT[a.type]; }).slice(0, 6);
+    var glavni = k.aspekti.filter(function (a) { return ASPEKT[a.type]; }).slice(0, 6), pribl = function (ids) { return !k.kuce && ids.indexOf('moon') >= 0; };
     if (glavni.length) dio(t('nat.aspekti.naslov'), '<ul>' + glavni.map(function (a) {
       var ime = ASPEKT[a.type];
-      return '<li><b>' + esc(t('planet.' + a.a)) + ' ' + GLIF_ASP[ime] + ' ' + esc(t('planet.' + a.b)) + '</b> (' + t('aspekt.' + ime) + ', ' + a.orb.toFixed(1) + '°): ' +
+      return '<li>' + (pribl([a.a, a.b]) ? '≈ ' : '') + '<b>' + esc(t('planet.' + a.a)) + ' ' + GLIF_ASP[ime] + ' ' + esc(t('planet.' + a.b)) + '</b> (' + t('aspekt.' + ime) + ', ' + a.orb.toFixed(1) + '°): ' +
         t('nat.aspekt', { a: t('nat.tema.' + a.a), b: t('nat.tema.' + a.b), zrcalo: t('nat.aspektZrcalo.' + ime) }) + '</li>';
-    }).join('') + '</ul>');
+    }).join('') + '</ul>' + (glavni.some(function (a) { return pribl([a.a, a.b]); }) ? '<p>' + t('nat.priblizno') + '</p>' : ''));
 
     // 4. konfiguracije
     var kf = k.konfig.filter(function (x) { return ['stellium', 'grandTrine', 'tSquare', 'grandCross', 'yod', 'kite', 'rectangle'].indexOf(x.type) >= 0; });
     if (kf.length) dio(t('nat.konfig.naslov'), '<ul>' + kf.map(function (x) {
-      return '<li><b>' + t('nat.konfig.' + x.type) + '</b>' + (x.type === 'stellium' ? ' (' + Nebo.znak(x.sign) + ')' : '') + ': ' +
+      return '<li>' + (pribl(x.members) ? '≈ ' : '') + '<b>' + t('nat.konfig.' + x.type) + '</b>' + (x.type === 'stellium' ? ' (' + Nebo.znak(x.sign) + ')' : '') + ': ' +
         x.members.map(function (id) { return t('planet.' + id); }).join(', ') + '. ' + t('nat.konfigOpis.' + x.type) + '</li>';
-    }).join('') + '</ul>');
+    }).join('') + '</ul>' + (kf.some(function (x) { return pribl(x.members); }) ? '<p>' + t('nat.priblizno') + '</p>' : ''));
 
     // 5. životni put
     var zp = zivotniPut(r);
@@ -89,7 +91,7 @@ var Citanje = (function (N) {
         '<p><b>' + t('kin.stupovi') + ':</b> ' + red.map(function (x) { return t(x[0]) + ' <span lang="zh">' + x[1].znak + '</span> (' + E(x[1].element) + ', ' + Z(x[1]) + ')'; }).join(' · ') + '</p>' +
         '<p>' + t('kin.ja', { element: E(ks.ja), yy: t(ks.dan.yang ? 'kin.yang' : 'kin.yin'), opis: t('kin.elOpis.' + ks.ja) }) + '</p>' +
         '<p>' + t('kin.elementi', { lista: Object.keys(ks.elementi).map(function (e) { return E(e) + ' ' + ks.elementi[e]; }).join(', '), jaci: E(kp.najjaciElement),
-          nedostaje: nema ? t('kin.nedostaje', { lista: nema }) : '' }) + '</p>' +
+          nedostaje: nema ? t(kp.nedostaje.length > 1 && I18n.ima('kin.nedostaje2') ? 'kin.nedostaje2' : 'kin.nedostaje', { lista: nema }) : '' }) + '</p>' +
         '<p>' + t('kin.preklapanje', { element: E(ks.ja), planet: t('planet.' + kp.planetJa), znak: kp.planetJaZnak != null ? t('kin.planetZnak', { znak: Nebo.znak(kp.planetJaZnak) }) : '',
           zivotinja: Z(ks.mjesec), sunce: Nebo.znak(kp.sunceZnak) }) + '</p>' +
         '<p>' + t('kin.zvijezde', { natal: ks.zvijezda + ' (' + E(Kineski.ZVIJEZDE[ks.zvijezda]) + ')', godina: ksad.godina, sada: ksad.zvijezda + ' (' + E(Kineski.ZVIJEZDE[ksad.zvijezda]) + ')', osobna: osobna }) + '</p>');
@@ -98,7 +100,7 @@ var Citanje = (function (N) {
     // 6b. helenistički sloj: dekani, sekta, točke Sreće i Duha, firdarija, zodijakalno otpuštanje (ako je učitan helenisticki.js)
     if (typeof Helenisticki !== 'undefined') {
       var h = Helenisticki.izracunaj(k, Date.now()), P = function (id) { return t(/node/i.test(id) ? 'hel.cvor.' + id : 'planet.' + id); };
-      var dat = function (ms) { return new Date(ms).toLocaleDateString(I18n.locale(), { month: 'numeric', year: 'numeric' }); };
+      var dat = function (ms) { return new Date(ms).toLocaleDateString(I18n.locale(), { month: 'numeric', year: 'numeric' }).replace(/\.$/, ''); };   // bez završne točke (hr „3. 2027.”), predložak je dodaje
       var tema = function (id) { return t(/node/i.test(id) ? 'hel.tema.' + id : 'nat.tema.' + id); };
       var mjesto = function (x) { return Nebo.znak(x.znak) + (x.kuca ? ', ' + t('nat.kucaBr', { n: x.kuca }) + ' (' + niz('kuce', x.kuca - 1) + ')' : ''); };
       var html = '<p><b>' + t('hel.dekani') + ':</b> ' + Object.keys(h.dekani).map(function (id) {

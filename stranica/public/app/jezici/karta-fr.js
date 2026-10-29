@@ -209,5 +209,9 @@ I18n.dodaj('fr', {
   "kin.elOpis.vatra": "Le feu brille et réchauffe : ton chemin est passion, joie et visibilité.",
   "kin.elOpis.zemlja": "La terre porte et nourrit : ton chemin est stabilité, soin et centre.",
   "kin.elOpis.metal": "Le métal tranche et façonne : ton chemin est clarté, justice et accomplissement.",
-  "kin.elOpis.voda": "L'eau coule et pénètre : ton chemin est sagesse, adaptabilité et profondeur."
+  "kin.elOpis.voda": "L'eau coule et pénètre : ton chemin est sagesse, adaptabilité et profondeur.",
+  'nat.mjesecPriblizno': 'Sans heure de naissance, la Lune est calculée pour midi, et elle parcourt environ 13° en un jour : sa position est approximative, comme ses aspects (marqués ≈).',
+  'nat.mjesecGranica': 'Elle est proche de la limite du signe ; avec une autre heure de naissance, elle pourrait être en {znak}.',
+  'nat.priblizno': '≈ approximatif : sans heure de naissance, la Lune est calculée pour midi.',
+  'kin.nedostaje2': ' ; il manque : <b>{lista}</b>, alors fais-les entrer consciemment dans ta vie (couleur, nourriture, lieu, activité)'
 });

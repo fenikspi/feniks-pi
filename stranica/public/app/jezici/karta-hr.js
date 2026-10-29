@@ -132,7 +132,7 @@ I18n.dodaj('hr', {
   'nat.broj.33': 'Majstorski put učitelja ljubavi: učiš služiti srcem.',
   'nat.put.naslov': 'Tvoj put i prepuštanje',
   'nat.put': function (p) {
-    return 'Tvoj se životni put kreće kroz <b>' + p.sunce + '</b>, a duša se hrani kroz <b>' + p.mjesec + '</b>' + (p.asc ? '; svijetu se otvaraš kroz <b>' + p.asc + '</b>' : '') +
+    return 'Teme tvog životnog puta su <b>' + p.sunce + '</b>, dušu ti hrane <b>' + p.mjesec + '</b>' + (p.asc ? ', a svijetu te otvaraju <b>' + p.asc + '</b>' : '') +
       '. Element koji te nosi je ' + p.el.toLowerCase() + ', a broj ' + p.broj + ' pokazuje kako hodaš. Ne trebaš ništa forsirati: prati znakove koji se ponavljaju, zapisuj snove i sinkronicitete, i put će se sam pokazivati, korak po korak.';
   },
   "kin.naslov": "Kineski horoskop: {element} {zivotinja} ({znak})",
@@ -244,5 +244,9 @@ I18n.dodaj('hr', {
   'nat.mailKratko': 'Cijelo čitanje otvara se na linku. Ako ga želiš u samom mailu, na stranici klikni „Kopiraj čitanje” i zalijepi ga ovdje, ili priloži datoteku iz „Spremi kao datoteku”.',
   'nat.datoteka': 'Spremi kao datoteku', 'nat.link': 'Link na ovo čitanje (karta se izračuna u pregledniku, nigdje se ne sprema):',
   'nat.ai': 'Dublje čitanje (Claude)', 'nat.ai.naslov': 'Dublje čitanje', 'nat.ai.pise': 'Claude piše…',
-  'nat.ai.traje': 'Pišem dublje čitanje, to traje do minute. Šalje se samo karta bez imena, datuma i mjesta.', 'nat.ai.greska': 'Dublje čitanje trenutno nije uspjelo'
+  'nat.ai.traje': 'Pišem dublje čitanje, to traje do minute. Šalje se samo karta bez imena, datuma i mjesta.', 'nat.ai.greska': 'Dublje čitanje trenutno nije uspjelo',
+  'nat.mjesecPriblizno': 'Bez vremena rođenja Mjesec je izračunat za podne, a u jednom danu prijeđe oko 13°: položaj je približan, pa i aspekti s njim (označeni sa ≈).',
+  'nat.mjesecGranica': 'Blizu je granice znaka, pa bi uz drugo vrijeme rođenja mogao biti u znaku {znak}.',
+  'nat.priblizno': '≈ približno, jer je Mjesec bez vremena rođenja izračunat za podne.',
+  'kin.nedostaje2': '; nedostaju <b>{lista}</b>, pa te elemente svjesno unosi u život (boja, hrana, mjesto, djelatnost)'
 });
