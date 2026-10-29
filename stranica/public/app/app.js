@@ -1,5 +1,6 @@
 /* Feniks π web-aplikacija: profil, Dnevnik simbolizma i sinkroniciteta, dnevna preporuka.
-   Sve ostaje na uređaju (IndexedDB); ništa se ne šalje na poslužitelj. */
+   Sve ostaje na uređaju (IndexedDB). Iznimka su neobavezni račun (racun.js: samo šifrirano, ključ ostaje na uređaju)
+   i anonimni obrasci uz pristanak. */
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -37,6 +38,8 @@
   };
 
   var stanje = { profil: null, zapisi: [], doprinos: false };
+  // račun je neobavezan: ako racun.js nije dostupan (stari preglednik, stranica bez HTTPS-a), aplikacija radi bez njega
+  function racun(radnja, x) { try { return window.Racun && Racun.podrzano ? Racun[radnja](x) : null; } catch (e) { return null; } }
 
   /* ---------- doprinos anonimnih obrazaca (samo uz pristanak, zadano isključen) ---------- */
   // Šalje se samo apstraktni obrazac: simboli, vrsta zapisa, Mjesečev znak i mijena, glavni tranzit. Nikad tekst, ime, datumi ni mjesto.
@@ -209,12 +212,12 @@
     var sada = new Date();
     var z = { id: sada.getTime().toString(36) + Math.random().toString(36).slice(2, 6), vrijeme: sada.toISOString(), vrsta: unos.vrsta.value, tekst: tekst, simboli: simboli,
       nebo: Nebo.trenutak(sada, mjesto(), stanje.profil) };
-    Pohrana.spremi(z).then(function () { stanje.zapisi.unshift(z); posaljiObrazac(z); unos.reset(); $('#prepoznato').innerHTML = ''; osvjezi(); $('#spremljeno').textContent = t('dn.spremljeno'); setTimeout(function () { $('#spremljeno').textContent = ''; }, 4000); });
+    Pohrana.spremi(z).then(function () { stanje.zapisi.unshift(z); posaljiObrazac(z); racun('uskladiKasnije'); unos.reset(); $('#prepoznato').innerHTML = ''; osvjezi(); $('#spremljeno').textContent = t('dn.spremljeno'); setTimeout(function () { $('#spremljeno').textContent = ''; }, 4000); });
   });
   $('#zapisi').addEventListener('click', function (e) {
     var b = e.target.closest('.brisi'); if (!b) return;
     if (b.dataset.potvrda !== '1') { b.dataset.potvrda = '1'; b.textContent = t('dn.obrisiPitanje'); setTimeout(function () { b.dataset.potvrda = ''; b.textContent = '×'; }, 3000); return; }
-    Pohrana.obrisi(b.dataset.id).then(function () { stanje.zapisi = stanje.zapisi.filter(function (z) { return z.id !== b.dataset.id; }); osvjezi(); });
+    Promise.resolve(racun('zapamtiBrisanje', b.dataset.id)).then(function () { return Pohrana.obrisi(b.dataset.id); }).then(function () { racun('uskladiKasnije'); stanje.zapisi = stanje.zapisi.filter(function (z) { return z.id !== b.dataset.id; }); osvjezi(); });
   });
   $('#ponavljanja').addEventListener('click', function (e) { var b = e.target.closest('[data-simbol]'); if (!b) return; stanje.filtar = b.dataset.simbol; prikaziDnevnik(); });
   $('#filtar-makni').addEventListener('click', function () { stanje.filtar = null; prikaziDnevnik(); });
@@ -234,7 +237,7 @@
     var f = e.target, d = f.datum.value.split('-'), v = (f.vrijeme.value || '12:00').split(':'), m = izPolja('mjesto') || { ime: 'Zagreb', lat: 45.815, lon: 15.982, zona: 'Europe/Zagreb' };
     var p = { ime: f.ime.value.trim(), zivi: izPolja('zivi') || m,
       rodenje: d.length === 3 ? { g: +d[0], m: +d[1], d: +d[2], h: +v[0], min: +v[1], mjesto: m.ime, lat: m.lat, lon: m.lon, zona: m.zona, bezVremena: !f.vrijeme.value } : null };
-    Pohrana.spremiProfil(p).then(function () { stanje.profil = p; osvjezi(); setTimeout(function () { izracunaj('mjesec'); prikaziDanas(); }, 50); $('#profil-spremljeno').textContent = t('pr.spremljeno'); });
+    Pohrana.spremiProfil(p).then(function () { return Pohrana.spremiPostavku('profilVrijeme', new Date().toISOString()); }).then(function () { racun('uskladiKasnije'); stanje.profil = p; osvjezi(); setTimeout(function () { izracunaj('mjesec'); prikaziDanas(); }, 50); $('#profil-spremljeno').textContent = t('pr.spremljeno'); });
   });
   $('#izvoz').addEventListener('click', function () {
     Pohrana.sve().then(function (r) {
@@ -261,6 +264,10 @@
     tab(t || (stanje.profil ? 'danas' : 'profil'));
     setInterval(prikaziDanas, 5 * 60000);
     setTimeout(function () { izracunaj('mjesec'); prikaziDanas(); }, 400);   // današnji događaji mjeseca u preporuci
+  });
+  // nakon usklađivanja s računom (racun.js) ponovno učitaj profil i zapise
+  document.addEventListener('feniks:uskladeno', function () {
+    Pohrana.sve().then(function (r) { stanje.profil = r[0] || null; stanje.zapisi = r[1] || []; prikaziProfil(); osvjezi(); });
   });
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
 })();

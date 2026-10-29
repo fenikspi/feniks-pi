@@ -2,8 +2,10 @@
    - prijem anonimnih simboličkih obrazaca, koje aplikacija šalje isključivo ako je korisnik uključio „Doprinesi anonimne obrasce”
      (prima se samo strogo provjeren apstraktni obrazac; ne sprema se IP adresa, vrijeme ni ikakav tekst korisnika);
    - dublje čitanje preko Claudea (/api/duboko): prima apstraktnu kartu bez imena, datuma i mjesta, ništa ne sprema
-     osim dnevnog brojača poziva (granica troška). */
+     osim dnevnog brojača poziva (granica troška);
+   - računi i šifrirano usklađivanje (/api/racun/*, vidi racuni.js). */
 import Anthropic from '@anthropic-ai/sdk';
+import { racun } from './racuni.js';
 
 const PLANETI = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'asc', 'mc'];
 const ASPEKTI = ['konjunkcija', 'sekstil', 'kvadrat', 'trigon', 'opozicija'];
@@ -112,6 +114,7 @@ export default {
   async fetch(req, env) {
     const url = new URL(req.url);
     if (url.pathname === '/api/duboko') return duboko(req, env);
+    if (url.pathname === '/api/racun' || url.pathname.startsWith('/api/racun/')) return racun(req, env, url.pathname.slice('/api/racun/'.length));
     if (url.pathname === '/api/obrazac') {
       if (req.method !== 'POST') return new Response('', { status: 405, headers: { Allow: 'POST' } });
       if (Number(req.headers.get('content-length') || 0) > 4096) return new Response('', { status: 413 });

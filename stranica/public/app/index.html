@@ -131,6 +131,35 @@ button.cip { cursor: pointer; font-family: var(--f-tijelo); }
       <button class="gumb" type="submit" data-i18n="pr.spremi">Spremi</button>
       <div id="profil-spremljeno" aria-live="polite"></div>
     </form>
+    <div class="ploca" id="racun">
+      <h2 data-i18n="rc.naslov">Račun i usklađivanje (neobavezno)</h2>
+      <p class="tiho" data-i18n="rc.opis">Račun ti treba samo ako želiš iste podatke na više uređaja. Podaci se šifriraju na ovom uređaju; poslužitelj ne vidi ni lozinku ni sadržaj. Bez računa sve radi kao i do sada.</p>
+      <div id="racun-odjavljen">
+        <label for="rc-ime" data-i18n="rc.ime">Korisničko ime</label><input id="rc-ime" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="32">
+        <label for="rc-lozinka" data-i18n="rc.lozinka">Lozinka (najmanje 10 znakova)</label><input id="rc-lozinka" type="password" autocomplete="current-password">
+        <p><button class="gumb" type="button" id="rc-prijava" data-i18n="rc.prijava">Prijavi se</button> <button class="gumb" type="button" id="rc-novi" data-i18n="rc.novi">Napravi račun</button></p>
+        <details><summary data-i18n="rc.zaboravljeno">Zaboravljena lozinka</summary>
+          <label for="rc-kljuc" data-i18n="rc.kljuc">Ključ za oporavak</label><input id="rc-kljuc" autocomplete="off" autocapitalize="characters" spellcheck="false">
+          <label for="rc-nova" data-i18n="rc.nova">Nova lozinka (najmanje 10 znakova)</label><input id="rc-nova" type="password" autocomplete="new-password">
+          <p><button class="gumb" type="button" id="rc-oporavi" data-i18n="rc.oporavi">Postavi novu lozinku</button></p>
+        </details>
+      </div>
+      <div id="racun-prijavljen" hidden>
+        <p id="rc-status"></p>
+        <p><button class="gumb" type="button" id="rc-uskladi" data-i18n="rc.uskladi">Uskladi sada</button> <button class="gumb" type="button" id="rc-odjava" data-i18n="rc.odjava">Odjavi se</button></p>
+        <details><summary data-i18n="rc.brisiNaslov">Obriši račun</summary>
+          <p class="tiho" data-i18n="rc.brisiOpis">Briše račun i sve šifrirane podatke s poslužitelja, zauvijek. Podaci na ovom uređaju ostaju.</p>
+          <label for="rc-brisi-lozinka" data-i18n="rc.lozinkaPotvrda">Lozinka za potvrdu</label><input id="rc-brisi-lozinka" type="password" autocomplete="current-password">
+          <p><button class="gumb" type="button" id="rc-brisi" data-i18n="rc.brisi">Obriši račun zauvijek</button></p>
+        </details>
+      </div>
+      <div id="rc-kljuc-prikaz" hidden>
+        <p data-i18n-html="rc.kljucOpis"><b>Tvoj ključ za oporavak.</b> Zapiši ga ili spremi na sigurno mjesto. Prikazuje se samo sada; bez njega i lozinke tvoje podatke ne može vratiti nitko, ni mi.</p>
+        <p><code id="rc-kljuc-tekst" style="font-size:1.05em;letter-spacing:.04em;word-break:break-all"></code></p>
+        <p><button class="gumb" type="button" id="rc-kljuc-ok" data-i18n="rc.kljucOk">Zapisao sam ključ</button></p>
+      </div>
+      <p id="rc-poruka" aria-live="polite"></p>
+    </div>
     <div class="ploca">
       <h2 data-i18n="pr.doprinosNaslov">Doprinos simboličkoj knjižnici</h2>
       <label class="prekidac"><input type="checkbox" id="doprinos"> <span data-i18n="pr.doprinos">Doprinesi anonimne obrasce</span></label>
@@ -179,6 +208,7 @@ button.cip { cursor: pointer; font-family: var(--f-tijelo); }
 <script src="citanje.js"></script>
 <script src="prijedlozi.js"></script>
 <script>I18n.prevedi(); I18n.izbornik(document.getElementById('jezik'));</script>
+<script src="racun.js"></script>
 <script src="app.js"></script>
 <script src="/glazba.js" defer></script>
 </body>

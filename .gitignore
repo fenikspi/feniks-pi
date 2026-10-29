@@ -15,3 +15,7 @@ assets/logo/zivotinje/
 .dev.vars
 *.db
 *.sqlite
+
+# MSVM sadržaj (satira) je privatan: ne ide u javni repozitorij; na stranici je iza lozinke
+stranica/public/msvm/*
+!stranica/public/msvm/index.html
