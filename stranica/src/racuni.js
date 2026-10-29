@@ -38,9 +38,26 @@ async function novaSesija(env, id) {
   await env.OBRASCI.prepare('INSERT INTO sesije (token, racun_id, istjece) VALUES (?, ?, ?)').bind(await sha(token), id, istjece).run();
   return { token, istjece };
 }
-async function citaj(req, max = 8192) {
+// Tijelo zahtjeva čita se najviše do granice, i kad zaglavlje content-length nedostaje (chunked prijenos).
+export async function tijelo(req, max) {
   if (Number(req.headers.get('content-length') || 0) > max) return null;
-  try { return await req.json(); } catch (e) { return null; }
+  if (!req.body) return '';
+  const r = req.body.getReader(), dijelovi = []; let n = 0;
+  for (;;) {
+    const { done, value } = await r.read();
+    if (done) break;
+    n += value.length;
+    if (n > max) { await r.cancel(); return null; }
+    dijelovi.push(value);
+  }
+  const sve = new Uint8Array(n); let i = 0;
+  for (const d of dijelovi) { sve.set(d, i); i += d.length; }
+  return new TextDecoder().decode(sve);
+}
+async function citaj(req, max = 8192) {
+  const t = await tijelo(req, max);
+  if (t === null) return null;
+  try { return JSON.parse(t); } catch (e) { return null; }
 }
 function omotPolja(u) {   // omotani ključ: {iv, kljuc}, oboje base64url
   return u && b64polje(u.iv, 16, 16) && b64polje(u.kljuc, 40, 80);
@@ -151,4 +168,16 @@ export async function racun(req, env, put) {
     return odg(null, 204);
   }
   return odg({ greska: 'nepoznato' }, 404);
+}
+
+// Svakodnevno čišćenje (Cloudflare cron, vidi wrangler.toml): istekle prijave i računi bez prijave dulje od 3 godine,
+// zajedno s njihovim šifriranim podacima (Pravila privatnosti, odjeljak 8).
+export async function ocisti(env) {
+  const db = env.OBRASCI, sad = sada(), granica = new Date(Date.now() - 3 * 365.25 * 864e5).toISOString();
+  await db.batch([
+    db.prepare('DELETE FROM sesije WHERE istjece < ?').bind(sad),
+    db.prepare('DELETE FROM podaci WHERE racun_id IN (SELECT id FROM racuni WHERE COALESCE(zadnja_prijava, stvoren) < ?)').bind(granica),
+    db.prepare('DELETE FROM sesije WHERE racun_id IN (SELECT id FROM racuni WHERE COALESCE(zadnja_prijava, stvoren) < ?)').bind(granica),
+    db.prepare('DELETE FROM racuni WHERE COALESCE(zadnja_prijava, stvoren) < ?').bind(granica),
+  ]);
 }

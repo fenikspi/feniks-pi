@@ -125,14 +125,18 @@
     gumb.setAttribute('aria-pressed', svira ? 'true' : 'false');
     gumb.setAttribute('aria-label', svira ? rijec('glazba.zaustavi', 'Zaustavi glazbu') : rijec('glazba.pusti', 'Pusti drevnu glazbu'));
     gumb.title = gumb.getAttribute('aria-label');
-    gumb.textContent = svira ? rijec('glazba.svira', '♪ glazba svira') : rijec('glazba.gumb', '♪ glazba');
+    // na uskom zaslonu samo ♪ (puni naziv ostaje u aria-label), da gumb ne prekriva sadržaj
+    gumb.textContent = usko && usko.matches ? '♪' : svira ? rijec('glazba.svira', '♪ glazba svira') : rijec('glazba.gumb', '♪ glazba');
   }
+  var usko = window.matchMedia ? matchMedia('(max-width: 600px)') : null;
+  if (usko && usko.addEventListener) usko.addEventListener('change', function () { osvjezi(); });
   if (window.I18n) I18n.promjena(function () { osvjezi(); });
   gumb.addEventListener('click', function () { svira ? zaustavi() : pokreni(); });
   var css = document.createElement('style');
   css.textContent = '.feniks-glazba{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;' +
     'background:rgba(0,0,0,.6);color:#f0c05a;border:1px solid rgba(240,192,90,.55);border-radius:99px;padding:8px 14px;font:500 .9rem "Alegreya Sans",system-ui,sans-serif;cursor:pointer;backdrop-filter:blur(6px)}' +
-    '.feniks-glazba[aria-pressed="true"]{background:rgba(240,192,90,.15);box-shadow:0 0 16px rgba(240,160,60,.35)}';
+    '.feniks-glazba[aria-pressed="true"]{background:rgba(240,192,90,.15);box-shadow:0 0 16px rgba(240,160,60,.35)}' +
+    '@media (max-width:600px){.feniks-glazba{width:42px;height:42px;padding:0;font-size:1.15rem;line-height:1}}';
   document.head.appendChild(css);
   osvjezi(); document.body.appendChild(gumb);
 

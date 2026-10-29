@@ -5,7 +5,7 @@
      osim dnevnog brojača poziva (granica troška);
    - računi i šifrirano usklađivanje (/api/racun/*, vidi racuni.js). */
 import Anthropic from '@anthropic-ai/sdk';
-import { racun } from './racuni.js';
+import { racun, ocisti, tijelo } from './racuni.js';
 
 const PLANETI = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'asc', 'mc'];
 const ASPEKTI = ['konjunkcija', 'sekstil', 'kvadrat', 'trigon', 'opozicija'];
@@ -73,9 +73,10 @@ async function duboko(req, env) {
   if (req.method !== 'POST') return new Response('', { status: 405, headers: { Allow: 'POST' } });
   const izvor = req.headers.get('Origin');
   if (izvor && !/^https:\/\/(www\.)?fenikspi\.com$/i.test(izvor)) return json({ greska: 'izvor' }, 403);
-  if (Number(req.headers.get('content-length') || 0) > 65536) return json({ greska: 'preveliko' }, 413);
   if (!env.ANTHROPIC_API_KEY) return json({ greska: 'nije postavljeno' }, 503);
-  let u = null; try { u = await req.json(); } catch (e) { return json({ greska: 'neispravno' }, 400); }
+  const t = await tijelo(req, 65536);
+  if (t === null) return json({ greska: 'preveliko' }, 413);
+  let u = null; try { u = JSON.parse(t); } catch (e) { return json({ greska: 'neispravno' }, 400); }
   const a = apstrakt(u);
   if (!a) return json({ greska: 'neispravno' }, 422);
   const dan = new Date().toISOString().slice(0, 10);
@@ -111,14 +112,18 @@ ${a.dijelovi.map((x) => '## ' + x.naslov + '\n' + x.tekst).join('\n\n')}
 }
 
 export default {
+  // svaki dan u 03:17 UTC: istekle prijave i računi neaktivni dulje od 3 godine (racuni.js)
+  async scheduled(dogadaj, env, ctx) { ctx.waitUntil(ocisti(env)); },
+
   async fetch(req, env) {
     const url = new URL(req.url);
     if (url.pathname === '/api/duboko') return duboko(req, env);
     if (url.pathname === '/api/racun' || url.pathname.startsWith('/api/racun/')) return racun(req, env, url.pathname.slice('/api/racun/'.length));
     if (url.pathname === '/api/obrazac') {
       if (req.method !== 'POST') return new Response('', { status: 405, headers: { Allow: 'POST' } });
-      if (Number(req.headers.get('content-length') || 0) > 4096) return new Response('', { status: 413 });
-      let u = null; try { u = await req.json(); } catch (e) { return new Response('', { status: 400 }); }
+      const t = await tijelo(req, 4096);
+      if (t === null) return new Response('', { status: 413 });
+      let u = null; try { u = JSON.parse(t); } catch (e) { return new Response('', { status: 400 }); }
       const sim = await simboli(env, req);
       if (!sim.size) return new Response('', { status: 503 });
       const o = provjeri(u, sim);

@@ -1,6 +1,6 @@
 # ovisnosti i zapisi
 node_modules/
-stranica/node_modules/
+stranica/node_modules
 stranica/.wrangler/
 electron.log
 *.log

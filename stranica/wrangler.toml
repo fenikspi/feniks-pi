@@ -21,3 +21,7 @@ database_id = "7587bd83-2ce5-406b-86e0-2edb6487c8e9"
 
 [observability]
 enabled = false
+
+# svakodnevno čišćenje računa i prijava (Pravila privatnosti, odjeljak 8)
+[triggers]
+crons = ["17 3 * * *"]
