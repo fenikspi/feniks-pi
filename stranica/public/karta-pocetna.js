@@ -50,10 +50,10 @@
     zadnje.c = c;
     izlaz.innerHTML =
       '<h3 class="karta-naslov">' + esc(c.naslov.trim()) + '</h3><p class="karta-sazetak">' + esc(c.sazetak) + '</p>' +
-      '<div class="karta-akcije"><button type="button" class="gumb" id="k-kopiraj">' + t('nat.kopiraj') + '</button>' +
+      '<div class="karta-akcije"><button type="button" class="gumb glavni" id="k-ai">' + t('nat.ai') + '</button>' +
+      '<button type="button" class="gumb" id="k-kopiraj">' + t('nat.kopiraj') + '</button>' +
       '<button type="button" class="gumb" id="k-podijeli">' + t('nat.podijeli') + '</button>' +
       '<button type="button" class="gumb" id="k-datoteka">' + t('nat.datoteka') + '</button>' +
-      '<button type="button" class="gumb" id="k-ai">' + t('nat.ai') + '</button>' +
       '<a class="gumb" id="k-app" href="/app/">' + t('nat.uAplikaciju') + '</a></div>' +
       '<label class="karta-check"><input type="checkbox" id="k-podaci"> ' + t('nat.sPodacima') + '</label>' +
       '<p id="k-poruka" class="karta-poruka" aria-live="polite"></p><div id="k-dijeli" class="karta-dijeli" hidden></div>' +

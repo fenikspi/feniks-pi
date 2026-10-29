@@ -28,16 +28,18 @@ body { margin: 0; background: radial-gradient(ellipse 90% 60% at 50% 0%, #141a3a
 a { color: var(--zlato); }
 :focus-visible { outline: 2px solid var(--zlato); outline-offset: 3px; }
 .sredina { max-width: 1100px; margin: 0 auto; }
-header.vrh { display: flex; justify-content: space-between; align-items: center; padding-block: 18px; }
-header.vrh .ime { font: 400 2rem/1 var(--f-kras); color: var(--zlato); text-decoration: none; }
-header.vrh nav { display: flex; gap: 18px; font-size: .95rem; }
+header.vrh { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 24px; padding-block: 18px; }
+header.vrh .ime { font: 400 2rem/1 var(--f-kras); color: var(--zlato); text-decoration: none; white-space: nowrap; }
+header.vrh nav { display: flex; align-items: center; gap: 18px; font-size: .95rem; white-space: nowrap; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+header.vrh nav::-webkit-scrollbar { display: none; }
+@media (max-width: 720px) { header.vrh nav { order: 3; width: 100%; gap: 16px; padding-bottom: 4px; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); } }
 header.vrh nav a { color: var(--muted); text-decoration: none; }
 header.vrh nav a:hover { color: var(--zlato); }
 .junak { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 4vw; align-items: center; padding-block: 2vh 8vh; }
 @media (max-width: 820px) { .junak { grid-template-columns: 1fr; text-align: center; } }
 .junak img { width: 100%; height: auto; max-width: 560px; display: block; margin: 0 auto; filter: drop-shadow(0 0 40px rgba(255, 130, 30, .25)); }
 .junak h1 { font: 400 clamp(3rem, 7vw, 5.2rem)/1 var(--f-kras); margin: 0; background: linear-gradient(#fff0b8, #f0c05a 45%, #b9741e); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.junak .pod { font: 400 1rem var(--f-nas); letter-spacing: .34em; text-transform: uppercase; color: var(--zar); margin: 6px 0 22px; }
+.junak .pod { font: 400 1.25rem var(--f-nas); letter-spacing: .04em; color: var(--zar); margin: 10px 0 22px; }
 .junak .pod2 { font: italic 400 1.15rem var(--f-nas); color: var(--zlato); margin: -14px 0 18px; }
 .junak .glag { font: 1.4rem var(--f-glag); color: var(--muted); letter-spacing: .3em; }
 .junak p.uvod { font-size: 1.15rem; max-width: 34ch; }
@@ -56,12 +58,20 @@ h2 { font: 400 clamp(1.8rem, 3.5vw, 2.5rem)/1.15 var(--f-nas); margin: 0 0 8px; 
 .knjige b { color: var(--ink); font-weight: 500; }
 .uskoro { text-align: center; }
 .uskoro p { color: var(--muted); max-width: 58ch; margin: 0 auto; }
-footer { border-top: 1px solid var(--crta); padding-block: 28px 40px; color: var(--muted); font-size: .9rem; display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+.gumb-obrub { display: inline-block; border: 1px solid var(--zlato); color: var(--zlato); border-radius: 10px; padding: 9px 16px; margin: 4px 6px; text-decoration: none; font-weight: 500; }
+.gumb-obrub:hover { background: rgba(240, 192, 90, .1); }
+footer { border-top: 1px solid var(--crta); padding-block: 28px 84px; color: var(--muted); font-size: .9rem; display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
 [hidden] { display: none !important; }
-.karta-forma { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px 16px; align-items: end; max-width: 900px; }
+.karta-forma { display: grid; grid-template-columns: 1fr; gap: 14px 16px; align-items: start; max-width: 900px; }
+@media (min-width: 760px) {
+  .karta-forma { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: 'ime ime spol spol' 'datum datum vrijeme neznam' 'mjesto mjesto mjesto mjesto' 'info info info info' 'rucno rucno rucno rucno' 'koord koord koord koord' 'gumb gumb gumb gumb'; }
+  .f-ime { grid-area: ime; } .f-spol { grid-area: spol; } .f-datum { grid-area: datum; } .f-vrijeme { grid-area: vrijeme; } .f-mjesto { grid-area: mjesto; }
+  .f-neznam { grid-area: neznam; align-self: end; padding-bottom: 11px; } .f-rucno { grid-area: rucno; } .karta-koord-info { grid-area: info; } .karta-koord { grid-area: koord; } .gumb-zlatni { grid-area: gumb; }
+}
 .karta-forma label { display: flex; flex-direction: column; gap: 4px; color: var(--muted); font-size: .92rem; }
 .karta-forma input, .karta-forma select { background: rgba(0, 0, 0, .45); color: var(--ink); border: 1px solid var(--crta); border-radius: 10px; padding: 10px 12px; font: 1rem var(--f-tijelo); width: 100%; }
-.karta-forma .karta-check, .karta-check { flex-direction: row; align-items: center; gap: 8px; color: var(--ink); }
+.karta-forma .karta-check, .karta-check { display: flex; flex-direction: row; align-items: center; gap: 8px; color: var(--ink); }
+.karta-izlaz .karta-check { color: var(--muted); font-size: .92rem; margin: 2px 0 0; }
 .karta-check input { width: 18px; height: 18px; accent-color: var(--zlato); }
 .karta-koord-info { grid-column: 1 / -1; margin: -6px 0 0; color: var(--muted); font-size: .88rem; min-height: 1em; }
 .karta-koord { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px 16px; }
@@ -72,6 +82,7 @@ footer { border-top: 1px solid var(--crta); padding-block: 28px 40px; color: var
 .karta-sazetak { color: var(--zlato); margin: 4px 0 14px; }
 .karta-akcije { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
 .karta-akcije .gumb { display: inline-block; background: none; border: 1px solid var(--zlato); color: var(--zlato); border-radius: 10px; padding: 8px 14px; font: 500 .95rem var(--f-tijelo); cursor: pointer; text-decoration: none; }
+.karta-akcije .gumb.glavni { background: linear-gradient(#f6d27a, #d9a23e); color: #1a1206; border-color: transparent; font-weight: 600; }
 .karta-poruka { color: var(--muted); min-height: 1.2em; }
 .karta-dijeli { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 14px; }
 .karta-dijeli .cip, .cip { display: inline-block; border: 1px solid var(--crta); border-radius: 99px; padding: 4px 12px; color: var(--ink); text-decoration: none; }
@@ -88,19 +99,18 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
 <div class="sredina">
   <header class="vrh">
     <a class="ime" href="/">Feniks π</a>
-    <nav aria-label="Glavna navigacija"><a href="/#sto-radi">Što radi</a><a href="/#mudrost">Mudrost</a><a href="/#privatnost">Privatnost</a><a href="/preuzmi.html">Preuzmi</a><a href="/app/">Aplikacija</a><select id="jezik" class="jezik" aria-label="Jezik"></select></nav>
+    <nav aria-label="Glavna navigacija"><a href="/#sto-radi" data-i18n="poc.nav.sto">Što radi</a><a href="/#mudrost" data-i18n="poc.nav.mudrost">Mudrost</a><a href="/#privatnost" data-i18n="poc.nav.privatnost">Privatnost</a><a href="/preuzmi.html" data-i18n="poc.nav.preuzmi">Preuzmi</a><a href="/app/" data-i18n="poc.nav.app">Aplikacija</a><select id="jezik" class="jezik" aria-label="Jezik"></select></nav>
   </header>
 
   <div class="junak">
     <img src="/slike/feniks-pi-znak.webp" srcset="/slike/feniks-pi-znak-600.webp 600w, /slike/feniks-pi-znak.webp 1200w" sizes="(max-width: 820px) 90vw, 50vw"
          width="1200" height="1200" alt="Znak Feniks π: feniks se diže iz ognja na megalitnim blokovima vapnenca s glagoljicom, iza je zlatni lijevi kolovrat od pletera">
     <div>
-      <span class="oznaka">Uskoro</span>
       <h1>Feniks π</h1>
-      <div class="pod">Prirodna Inteligencija</div>
-      <div class="pod2">Čitanje zvjezdane svjetlosti</div>
+      <div class="pod" data-i18n="poc.pod">Prirodna inteligencija</div>
+      <div class="pod2" data-i18n="poc.pod2">Čitanje zvjezdane svjetlosti</div>
       <div class="glag" lang="cu-Glag">ⰗⰅⰐⰋⰍⰔ π</div>
-      <p class="uvod">Pronađi svoj životni put i hodaj njime. Feniks čita zvjezdanu svjetlost: tvoju natalnu kartu, brojeve i snove, povezane s nebom svakoga dana i s mudrošću starih knjiga.</p>
+      <p class="uvod" data-i18n="poc.uvod">Pronađi svoj životni put i hodaj njime. Feniks čita zvjezdanu svjetlost: tvoju natalnu kartu, brojeve i snove, povezane s nebom svakoga dana i s mudrošću starih knjiga.</p>
     </div>
   </div>
 
@@ -108,14 +118,14 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
     <h2 data-i18n="nat.forma.naslov">Tvoja natalna karta: izračunaj odmah</h2>
     <p class="uvod2" data-i18n="nat.forma.opis">Upiši datum, vrijeme i mjesto rođenja. Sve se računa u tvom pregledniku; podaci ne odlaze nikamo.</p>
     <form id="karta-forma" class="karta-forma" autocomplete="off">
-      <label><span data-i18n="nat.forma.ime">Ime (neobavezno)</span><input name="ime" maxlength="60"></label>
-      <label><span data-i18n="nat.forma.spol">Spol</span><select name="spol" required><option value="" data-i18n="nat.forma.odaberi">Odaberi…</option><option value="z" data-i18n="nat.forma.zensko">Žensko</option><option value="m" data-i18n="nat.forma.musko">Muško</option></select></label>
-      <label><span data-i18n="nat.forma.datum">Datum rođenja</span><input name="datum" type="date" required min="1800-01-01" max="2100-12-31"></label>
-      <label><span data-i18n="nat.forma.vrijeme">Vrijeme rođenja</span><input name="vrijeme" type="time"></label>
-      <label class="karta-check"><input name="neznam" type="checkbox"> <span data-i18n="nat.forma.neznam">Ne znam vrijeme rođenja</span></label>
-      <label><span data-i18n="nat.forma.mjesto">Mjesto rođenja</span><input name="mjesto" data-i18n-ph="nat.forma.mjestoPh" placeholder="Upiši grad, npr. Karlovac"></label>
+      <label class="f-ime"><span data-i18n="nat.forma.ime">Ime (neobavezno)</span><input name="ime" maxlength="60"></label>
+      <label class="f-spol"><span data-i18n="nat.forma.spol">Spol</span><select name="spol" required><option value="" data-i18n="nat.forma.odaberi">Odaberi…</option><option value="z" data-i18n="nat.forma.zensko">Žensko</option><option value="m" data-i18n="nat.forma.musko">Muško</option></select></label>
+      <label class="f-datum"><span data-i18n="nat.forma.datum">Datum rođenja</span><input name="datum" type="date" required min="1800-01-01" max="2100-12-31"></label>
+      <label class="f-vrijeme"><span data-i18n="nat.forma.vrijeme">Vrijeme rođenja</span><input name="vrijeme" type="time"></label>
+      <label class="karta-check f-neznam"><input name="neznam" type="checkbox"> <span data-i18n="nat.forma.neznam">Ne znam vrijeme rođenja</span></label>
+      <label class="f-mjesto"><span data-i18n="nat.forma.mjesto">Mjesto rođenja</span><input name="mjesto" data-i18n-ph="nat.forma.mjestoPh" placeholder="Upiši grad, npr. Karlovac"></label>
       <p class="karta-koord-info" id="karta-odabrano" aria-live="polite"></p>
-      <label class="karta-check"><input name="rucno" type="checkbox"> <span data-i18n="nat.forma.drugo">Drugo mjesto (koordinate)…</span></label>
+      <label class="karta-check f-rucno"><input name="rucno" type="checkbox"> <span data-i18n="nat.forma.drugo">Drugo mjesto (koordinate)…</span></label>
       <div id="karta-koord" class="karta-koord" hidden>
         <label><span data-i18n="nat.forma.lat">Širina</span><input name="lat" inputmode="decimal"></label>
         <label><span data-i18n="nat.forma.lon">Dužina</span><input name="lon" inputmode="decimal"></label>
@@ -127,55 +137,55 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
   </section>
 
   <section id="sto-radi">
-    <h2>Što Feniks radi</h2>
-    <p class="uvod2">Feniks je osobni zvjezdani dnevnik za tebe i tvoje bližnje. Računa precizno, a tumači iz tradicije.</p>
+    <h2 data-i18n="poc.sto.naslov">Što Feniks radi</h2>
+    <p class="uvod2" data-i18n="poc.sto.uvod">Feniks je osobni zvjezdani dnevnik za tebe i tvoje bližnje. Računa precizno, a tumači iz tradicije.</p>
     <div class="mreza">
-      <div class="kartica"><img src="/slike/sun.webp" alt="" width="64" height="64"><h3>Natalna karta</h3><p>Geocentrično, tropski zodijak, kuće po Placidusu. Povijesno ljetno i zimsko vrijeme računa se samo, točno na minutu.</p></div>
-      <div class="kartica"><img src="/slike/moon.webp" alt="" width="64" height="64"><h3>Nebo danas</h3><p>Tranziti prema tvojoj karti, Mjesečeve mijene, izlazak i zalazak Sunca, zlatni i planetarni sati.</p></div>
-      <div class="kartica"><img src="/slike/venus.webp" alt="" width="64" height="64"><h3>Dnevnik simbolizma i sinkroniciteta</h3><p>Zapiši san, susret, znak ili smislenu slučajnost; svaki zapis pamti nebo tog trenutka. Iz njega rastu bolja čitanja i dnevne preporuke koje ti pomažu pronaći svoj životni put i hodati njime, kao odraz prepuštanja.</p></div>
-      <div class="kartica"><img src="/slike/jupiter.webp" alt="" width="64" height="64"><h3>Brojevi</h3><p>Pitagorejska numerologija: životni put, duša, izraz, osobna godina, mjesec i dan.</p></div>
-      <div class="kartica"><img src="/slike/saturn.webp" alt="" width="64" height="64"><h3>Duboka čitanja</h3><p>Dnevna i duboka čitanja koja povezuju kartu, brojeve i simbole iz tvog dnevnika, s citatima iz knjiga.</p></div>
-      <div class="kartica"><img src="/slike/mars.webp" alt="" width="64" height="64"><h3>Živa pozadina</h3><p>Radna površina postaje nebo dana: stvarne fotografije planeta, Mliječni put, poruka dana i brzi unos.</p></div>
+      <div class="kartica"><img src="/slike/sun.webp" alt="" width="64" height="64"><h3 data-i18n="poc.k1.h">Natalna karta</h3><p data-i18n="poc.k1.p">Geocentrično, tropski zodijak, kuće po Placidusu. Povijesno ljetno i zimsko vrijeme računa se samo, točno na minutu.</p></div>
+      <div class="kartica"><img src="/slike/moon.webp" alt="" width="64" height="64"><h3 data-i18n="poc.k2.h">Nebo danas</h3><p data-i18n="poc.k2.p">Tranziti prema tvojoj karti, Mjesečeve mijene, izlazak i zalazak Sunca, zlatni i planetarni sati.</p></div>
+      <div class="kartica"><img src="/slike/venus.webp" alt="" width="64" height="64"><h3 data-i18n="poc.k3.h">Dnevnik simbolizma i sinkroniciteta</h3><p data-i18n="poc.k3.p">Zapiši san, susret, znak ili smislenu slučajnost; svaki zapis pamti nebo tog trenutka. Iz njega rastu bolja čitanja i dnevne preporuke koje ti pomažu pronaći svoj životni put i hodati njime, kao odraz prepuštanja.</p></div>
+      <div class="kartica"><img src="/slike/jupiter.webp" alt="" width="64" height="64"><h3 data-i18n="poc.k4.h">Brojevi</h3><p data-i18n="poc.k4.p">Pitagorejska numerologija: životni put, duša, izraz, osobna godina, mjesec i dan.</p></div>
+      <div class="kartica"><img src="/slike/saturn.webp" alt="" width="64" height="64"><h3 data-i18n="poc.k5.h">Duboka čitanja</h3><p data-i18n="poc.k5.p">Dnevna i duboka čitanja koja povezuju kartu, brojeve i simbole iz tvog dnevnika, s citatima iz knjiga.</p></div>
+      <div class="kartica"><img src="/slike/mars.webp" alt="" width="64" height="64"><h3 data-i18n="poc.k6.h">Živa pozadina</h3><p data-i18n="poc.k6.p">Radna površina postaje nebo dana: stvarne fotografije planeta, Mliječni put, poruka dana i brzi unos.</p></div>
     </div>
   </section>
 
   <section id="mudrost">
-    <h2>Iz čega Feniks uči</h2>
-    <p class="uvod2">Biblioteka od gotovo dvije tisuće starih i slobodnih djela, iz kojih se grade obrasci simbolike za tumačenje.</p>
+    <h2 data-i18n="poc.mud.naslov">Iz čega Feniks uči</h2>
+    <p class="uvod2" data-i18n="poc.mud.uvod">Biblioteka od gotovo dvije tisuće starih i slobodnih djela, iz kojih se grade obrasci simbolike za tumačenje.</p>
     <ul class="knjige">
-      <li><b>Astrologija:</b> Ptolemejska i renesansna tradicija, Placidusove kuće, dostojanstva planeta</li>
-      <li><b>Pitagora i Platon:</b> brojevi, harmonija i neoplatonisti (Plotin, Proklo, Jamblih)</li>
-      <li><b>Vede i Upanišade:</b> Rigveda, Atharvaveda, Bhagavad-gita</li>
-      <li><b>Hermetika:</b> Hermes Trismegist, Smaragdna ploča, egipatska Knjiga mrtvih</li>
-      <li><b>Staroslavenska vjera:</b> Nodilo, Afanasjev, narodna vjerovanja i obredi</li>
-      <li><b>Šamanizam:</b> Sibir i Amerika, životinje-vodiči i putovanja duše</li>
-      <li><b>Mitologija svijeta:</b> grčka, nordijska, keltska, bliskoistočna, azijska</li>
-      <li><b>Sveta geometrija:</b> zlatni rez, Fibonacci, kanoni proporcija</li>
-      <li><b>Simbolika:</b> životinje, snovi, boje i znakovi kroz tradicije</li>
+      <li data-i18n-html="poc.mud.1"><b>Astrologija:</b> Ptolemejska i renesansna tradicija, Placidusove kuće, dostojanstva planeta</li>
+      <li data-i18n-html="poc.mud.2"><b>Pitagora i Platon:</b> brojevi, harmonija i neoplatonisti (Plotin, Proklo, Jamblih)</li>
+      <li data-i18n-html="poc.mud.3"><b>Vede i Upanišade:</b> Rigveda, Atharvaveda, Bhagavad-gita</li>
+      <li data-i18n-html="poc.mud.4"><b>Hermetika:</b> Hermes Trismegist, Smaragdna ploča, egipatska Knjiga mrtvih</li>
+      <li data-i18n-html="poc.mud.5"><b>Staroslavenska vjera:</b> Nodilo, Afanasjev, narodna vjerovanja i obredi</li>
+      <li data-i18n-html="poc.mud.6"><b>Šamanizam:</b> Sibir i Amerika, životinje-vodiči i putovanja duše</li>
+      <li data-i18n-html="poc.mud.7"><b>Mitologija svijeta:</b> grčka, nordijska, keltska, bliskoistočna, azijska</li>
+      <li data-i18n-html="poc.mud.8"><b>Sveta geometrija:</b> zlatni rez, Fibonacci, kanoni proporcija</li>
+      <li data-i18n-html="poc.mud.9"><b>Simbolika:</b> životinje, snovi, boje i znakovi kroz tradicije</li>
     </ul>
   </section>
 
   <section id="privatnost">
-    <h2>Tvoje ostaje tvoje</h2>
-    <p class="uvod2">Feniks π je besplatan, bez reklama i bez praćenja. Nema naplate ni skrivenih dijelova.</p>
+    <h2 data-i18n="poc.priv.naslov">Tvoje ostaje tvoje</h2>
+    <p class="uvod2" data-i18n="poc.priv.uvod">Feniks π je besplatan, bez reklama i bez praćenja. Nema naplate ni skrivenih dijelova.</p>
     <ul class="knjige">
-      <li><b>Samo na uređaju:</b> karta, dnevnik snova i čitanja zadano ostaju na tvom računalu ili mobitelu.</li>
-      <li><b>Prijava kako želiš:</b> korisničko ime i lozinka ili ključ za prijavu (otisak prsta, lice), bez e-adrese i broja mobitela.</li>
-      <li><b>Šifrirano usklađivanje:</b> ako ga uključiš, podatke može pročitati samo vlasnik računa, pa ni mi.</li>
-      <li><b>Ti odlučuješ:</b> doprinos anonimnih simboličkih obrazaca uključuješ i isključuješ sam. Ti obrasci služe rastu i razvoju boljih, točnijih i preciznijih čitanja za sve.</li>
+      <li data-i18n-html="poc.priv.1"><b>Samo na uređaju:</b> karta, dnevnik snova i čitanja zadano ostaju na tvom računalu ili mobitelu.</li>
+      <li data-i18n-html="poc.priv.2"><b>Bez računa:</b> sve radi bez prijave, bez e-adrese i bez broja mobitela.</li>
+      <li data-i18n-html="poc.priv.3"><b>Dijeliš kako želiš:</b> link na čitanje nosi podatke samo u adresi; poslužitelj ih ne prima i nigdje se ne spremaju.</li>
+      <li data-i18n-html="poc.priv.4"><b>Ti odlučuješ:</b> doprinos anonimnih simboličkih obrazaca uključuješ i isključuješ sam. Ti obrasci služe rastu i razvoju boljih, točnijih i preciznijih čitanja za sve.</li>
     </ul>
     <p><a href="/privatnost.html">Pravila privatnosti</a> · <a href="/uvjeti.html">Uvjeti korištenja</a></p>
   </section>
 
   <section id="uskoro" class="uskoro">
-    <h2>Za svaki uređaj</h2>
-    <p>Feniks π nastaje i već radi na računalu kao aplikacija sa živom pozadinom. Uskoro za Linux, Windows, macOS, Android (F-Droid) i kao web-aplikacija za iPhone i sve ostale uređaje.</p>
-    <p style="margin-top:18px"><a class="oznaka" href="/app/" style="text-decoration:none">Otvori web-aplikaciju</a> &nbsp; <a class="oznaka" href="/preuzmi.html" style="text-decoration:none">Preuzmi</a></p>
+    <h2 data-i18n="poc.ured.naslov">Za svaki uređaj</h2>
+    <p data-i18n="poc.ured.tekst">Feniks π radi kao web-aplikacija na svakom uređaju, i na iPhoneu, te kao aplikacija za Linux sa živom pozadinom. Windows, macOS i Android (F-Droid) su u pripremi.</p>
+    <p style="margin-top:18px"><a class="gumb-obrub" href="/app/" data-i18n="poc.ured.app">Otvori web-aplikaciju</a> <a class="gumb-obrub" href="/preuzmi.html" data-i18n="poc.ured.preuzmi">Preuzmi</a></p>
   </section>
 
   <footer>
     <span class="znak">Feniks π</span>
-    <span>Astrologija i numerologija su okvir za razmišljanje, ne sigurno predviđanje.</span>
+    <span data-i18n="poc.napomena">Astrologija i numerologija su okvir za razmišljanje, ne sigurno predviđanje.</span>
     <span><a href="/privatnost.html">Privatnost</a> · <a href="/uvjeti.html">Uvjeti korištenja</a></span>
   </footer>
 </div>
@@ -202,7 +212,7 @@ footer .znak { font: 1.4rem var(--f-kras); color: var(--zlato); }
 <script src="/app/jezici/karta-uk.js"></script>
 <script src="/app/mjesta.js"></script>
 <script src="/app/mjesto-trazi.js"></script>
-<script>I18n.prevedi(document.getElementById('karta')); I18n.izbornik(document.getElementById('jezik'));</script>
+<script>I18n.prevedi(); I18n.izbornik(document.getElementById('jezik'));</script>
 <script src="/karta-pocetna.js"></script>
 <script src="/glazba.js" defer></script>
 </body>

@@ -187,7 +187,10 @@
 
   /* ---------- događaji ---------- */
   function tab(ime) {
-    document.querySelectorAll('[role=tab]').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.t === ime ? 'true' : 'false'); });
+    document.querySelectorAll('[role=tab]').forEach(function (b) {
+      b.setAttribute('aria-selected', b.dataset.t === ime ? 'true' : 'false');
+      if (b.dataset.t === ime && b.scrollIntoView) b.scrollIntoView({ block: 'nearest', inline: 'nearest' });   // na mobitelu odabrana kartica uvijek vidljiva
+    });
     document.querySelectorAll('[role=tabpanel]').forEach(function (s) { s.hidden = s.id !== 't-' + ime; });
     try { localStorage.setItem('feniks-tab', ime); } catch (e) {}
     if (ime === 'danas') prikaziDanas();

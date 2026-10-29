@@ -30,18 +30,17 @@
 <h2>2. Podaci na tvom uređaju</h2>
 <p>Aplikacija na računalu, mobitelu i u pregledniku sve što uneseš (imena profila, datume, vrijeme i mjesto rođenja, dnevnik simbolizma i sinkroniciteta, bilješke i čitanja) sprema lokalno na tvoj uređaj. Te podatke ne vidimo i ne primamo. Ti ih u svakom trenutku možeš izvesti ili izbrisati u postavkama aplikacije.</p>
 
-<h2>3. Račun i prijava (neobavezno)</h2>
-<p>Račun ti treba samo ako želiš koristiti iste podatke na više uređaja. Prijavu biraš sam:</p>
+<h2>3. Račun i prijava (neobavezno, u pripremi)</h2>
+<p><b>Računa još nema:</b> Feniks π zasad radi bez prijave i ne vodi korisničke račune. Kad račun bude dostupan, služit će samo za iste podatke na više uređaja i vrijedit će ovo:</p>
 <ul>
-  <li><b>korisničko ime i lozinka</b>: ne tražimo e-adresu ni broj mobitela;</li>
-  <li><b>ključ za prijavu (passkey)</b>: otisak prsta, lice ili PIN tvog uređaja; poslužitelj dobiva samo javni ključ;</li>
-  <li><b>e-adresa za oporavak</b>: samo ako je sam dodaš.</li>
+  <li>korisničko ime i lozinka, bez e-adrese i broja mobitela;</li>
+  <li>lozinka ne napušta tvoj uređaj: poslužitelj dobiva samo vrijednost izvedenu iz nje i čuva njezin zaštićeni zapis;</li>
+  <li>račun brišeš sam, jednim potezom, i tada se s poslužitelja brišu i račun i svi njegovi podaci.</li>
 </ul>
-<p>Za račun čuvamo: korisničko ime, zaštićeni (hash) zapis lozinke ili javni ključ, datum stvaranja i zadnje prijave. Lozinku nikad ne čuvamo u čitljivom obliku.</p>
+<p>Prije uvođenja ovaj odjeljak dopunit ćemo točnim popisom podataka koje račun čuva.</p>
 
-<h2>4. Šifrirano usklađivanje</h2>
-<p>Kad uključiš usklađivanje, aplikacija iz tvoje lozinke ili ključa na tvom uređaju izvodi ključ za šifriranje i njime šifrira podatke (AES-256-GCM) prije slanja. Poslužitelj čuva samo šifrirane zapise, njihovu veličinu i vrijeme promjene. Ključ nikad ne napušta tvoj uređaj.</p>
-<p><b>Važno:</b> zato ti ne možemo vratiti podatke ako izgubiš lozinku i sve uređaje. Aplikacija ti pri uključivanju daje <b>ključ za oporavak</b>; spremi ga na sigurno mjesto.</p>
+<h2>4. Šifrirano usklađivanje (u pripremi)</h2>
+<p>Usklađivanje među uređajima uvest ćemo zajedno s računom. Podaci će se šifrirati na tvom uređaju (AES-256-GCM) prije slanja, a poslužitelj će čuvati samo šifrirane zapise, njihovu veličinu i vrijeme promjene. Ključ neće napuštati tvoj uređaj.</p>
 
 <h2 id="5-doprinos">5. Doprinos simboličkoj knjižnici (pristanak, zadano isključen)</h2>
 <p>Svrha Feniksa π je pomoći ti da pronađeš svoj životni put i hodaš njime, kroz čitanje zvjezdane svjetlosti. Feniks uči tumačiti iz stare literature i gradi knjižnicu simboličkih obrazaca. Anonimni obrasci korisnika služe isključivo rastu i razvoju boljih, točnijih i preciznijih čitanja za sve korisnike. Ako u postavkama uključiš <i>„Doprinesi anonimne obrasce”</i>, aplikacija nakon čitanja šalje samo apstraktni obrazac, na primjer: <i>„Saturn u 4. kući · Mjesec u Raku · san: voda, kuća”</i>.</p>
@@ -60,10 +59,10 @@
 <p>Stranicu i usklađivanje poslužuje Cloudflare, koji radi sigurnosti i rada mreže kratko bilježi tehničke podatke o zahtjevima (npr. IP adresu i vrstu preglednika). Mi te podatke ne koristimo za praćenje i ne povezujemo ih s računima. Fontovi i sve slike učitavaju se s naše domene, bez zahtjeva prema trećim stranama. Popis gradova za odabir mjesta rođenja (GeoNames, CC BY 4.0) također je na našoj domeni i pretražuje se u tvom pregledniku, pa upisano mjesto ne odlazi nikamo.</p>
 
 <h2>8. Koliko dugo čuvamo podatke</h2>
-<p>Račun i šifrirane zapise čuvamo dok ih ne izbrišeš. Račun bez prijave dulje od 3 godine brišemo nakon obavijesti u aplikaciji. Anonimni obrasci nisu osobni podaci i ostaju u knjižnici.</p>
+<p>Osobne podatke na poslužitelju zasad ne čuvamo, jer računa još nema. Kad račun bude dostupan, račun i šifrirane zapise čuvat ćemo dok ih ne izbrišeš, a račun bez prijave dulje od 3 godine izbrisat ćemo nakon obavijesti u aplikaciji. Anonimni obrasci nisu osobni podaci i ostaju u knjižnici.</p>
 
 <h2>9. Tvoja prava</h2>
-<p>Imaš pravo na pristup, ispravak, brisanje, prenosivost podataka i povlačenje pristanka. Većinu toga radiš sam u aplikaciji (izvoz, brisanje računa jednim klikom). Ako smatraš da su ti prava povrijeđena, možeš podnijeti prigovor Agenciji za zaštitu osobnih podataka (AZOP).</p>
+<p>Imaš pravo na pristup, ispravak, brisanje, prenosivost podataka i povlačenje pristanka. Većinu toga radiš sam u aplikaciji: izvoz podataka i brisanje svih podataka s uređaja (Profil → Tvoji podaci). Ako smatraš da su ti prava povrijeđena, možeš podnijeti prigovor Agenciji za zaštitu osobnih podataka (AZOP).</p>
 
 <h2>10. Djeca</h2>
 <p>Račun za usklađivanje mogu otvoriti osobe starije od 16 godina. Mlađi mogu koristiti aplikaciju na uređaju uz roditelja.</p>
