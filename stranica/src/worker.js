@@ -29,13 +29,22 @@ function provjeri(u, simboli) {
 }
 
 let SIMBOLI = null;
+// Popis dopuštenih simbola čita se iz /app/simboli.js. Čitanje podnosi drukčije oblikovanje (var/let/const, prijelome
+// redaka, jednostruke navodnike); ako popis ipak ne nađe, ne pamti prazan popis nego javi grešku (503), da se kvar vidi.
 async function simboli(env, req) {
   if (SIMBOLI) return SIMBOLI;
   const r = await env.ASSETS.fetch(new URL('/app/simboli.js', req.url));
-  const m = (await r.text()).match(/var RIJECI = (\[[^\]]*\]);/);
-  SIMBOLI = new Set(m ? JSON.parse(m[1]) : []);
+  const m = (await r.text()).match(/\bRIJECI\s*=\s*(\[[\s\S]*?\])\s*;?/);
+  let lista = [];
+  if (m) {
+    try { lista = JSON.parse(m[1]); } catch (e) { lista = [...m[1].matchAll(/"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'/g)].map((x) => x[1] ?? x[2]); }
+  }
+  const skup = new Set(lista.filter((x) => typeof x === 'string' && x));
+  if (!skup.size) { console.error('simboli.js: popis RIJECI nije pronađen ili je prazan'); return skup; }
+  SIMBOLI = skup;
   return SIMBOLI;
 }
+const OBRAZACA_DNEVNO = 2000;     // najviše anonimnih obrazaca na dan za cijelu stranicu (zaštita od botova)
 
 /* ---------- dublje čitanje (Claude) ---------- */
 const DNEVNO = 100;               // najviše dubljih čitanja na dan za cijelu stranicu (granica troška API-ja)
@@ -107,8 +116,13 @@ export default {
       if (req.method !== 'POST') return new Response('', { status: 405, headers: { Allow: 'POST' } });
       if (Number(req.headers.get('content-length') || 0) > 4096) return new Response('', { status: 413 });
       let u = null; try { u = await req.json(); } catch (e) { return new Response('', { status: 400 }); }
-      const o = provjeri(u, await simboli(env, req));
+      const sim = await simboli(env, req);
+      if (!sim.size) return new Response('', { status: 503 });
+      const o = provjeri(u, sim);
       if (!o) return new Response('', { status: 422 });
+      const dan = new Date().toISOString().slice(0, 10);
+      const { broj } = await env.OBRASCI.prepare('INSERT INTO potrosnja (dan, broj) VALUES (?, 1) ON CONFLICT(dan) DO UPDATE SET broj = broj + 1 RETURNING broj').bind('obrazac:' + dan).first();
+      if (broj > OBRAZACA_DNEVNO) return new Response('', { status: 429, headers: { 'Retry-After': '3600' } });
       await env.OBRASCI.prepare('INSERT INTO obrasci (dan, obrazac) VALUES (?, ?)').bind(new Date().toISOString().slice(0, 10), JSON.stringify(o)).run();
       return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store', 'Access-Control-Allow-Origin': '*' } });
     }

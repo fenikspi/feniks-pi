@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS obrasci (
 );
 CREATE INDEX IF NOT EXISTS obrasci_dan ON obrasci(dan);
 
--- Dnevni brojač dubljih čitanja (Claude): samo datum i broj, granica troška. Ništa o korisniku.
+-- Dnevni brojači: dublja čitanja (ključ = datum) i anonimni obrasci (ključ = 'obrazac:' + datum). Samo datum i broj, ništa o korisniku.
 CREATE TABLE IF NOT EXISTS potrosnja (
   dan TEXT PRIMARY KEY,       -- YYYY-MM-DD
   broj INTEGER NOT NULL
