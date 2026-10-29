@@ -1,8 +1,9 @@
 /* Feniks π: računi i šifrirano usklađivanje (/api/racun/*).
    Poslužitelj nikad ne vidi lozinku ni ključ za šifriranje. Aplikacija iz lozinke na uređaju izvodi (PBKDF2 → HKDF)
    dva odvojena ključa: „provjera” (dokaz da znaš lozinku) i ključ koji otključava tvoj podatkovni ključ. Ovdje se čuvaju
-   samo: korisničko ime, sol, SHA-256 sažetak provjere, omotani (šifrirani) podatkovni ključ, šifrirani podaci, njihova
-   veličina i vrijeme. Brisanje računa stvarno briše sve retke računa (pravo na brisanje, GDPR čl. 17). */
+   samo: korisničko ime kao HMAC-SHA256 s tajnim ključem RACUN_TAJNA (čitljivog popisa imena nema nigdje), sol, SHA-256
+   sažetak provjere, omotani (šifrirani) podatkovni ključ, šifrirani podaci, njihova veličina i vrijeme. Sve je u zasebnoj
+   bazi RACUNI (feniks-racuni), odvojeno od anonimnih obrazaca. Brisanje računa stvarno briše sve retke računa (GDPR čl. 17). */
 
 const IME = /^[a-z0-9._-]{3,32}$/;
 const B64 = /^[A-Za-z0-9_-]+$/;                     // base64url bez znaka =
@@ -24,18 +25,23 @@ function b64polje(x, min, max) { return typeof x === 'string' && x.length >= min
 function sada() { return new Date().toISOString(); }
 
 // Za nepostojeće korisničko ime vraća se uvijek ista lažna sol, da se izvana ne može saznati koja imena postoje.
-async function lazna(env, ime) { return (await sha('feniks-sol:' + (env.RACUN_TAJNA || 'feniks-pi') + ':' + ime)).slice(0, 22); }
+async function lazna(env, ime) { return (await sha('feniks-sol:' + env.RACUN_TAJNA + ':' + ime)).slice(0, 22); }
+// korisničko ime u bazi: HMAC-SHA256(RACUN_TAJNA, ime); bez tajnog ključa iz baze se imena ne mogu pročitati ni pogađati
+async function imeKljuc(env, ime) {
+  const k = await crypto.subtle.importKey('raw', enc.encode(env.RACUN_TAJNA), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  return b64(new Uint8Array(await crypto.subtle.sign('HMAC', k, enc.encode('feniks-ime:' + ime))));
+}
 
 async function sesija(req, env) {
   const m = /^Bearer\s+([A-Za-z0-9_-]{40,64})$/.exec(req.headers.get('Authorization') || '');
   if (!m) return null;
-  const r = await env.OBRASCI.prepare('SELECT s.racun_id AS id, r.korisnik FROM sesije s JOIN racuni r ON r.id = s.racun_id WHERE s.token = ? AND s.istjece > ?')
+  const r = await env.RACUNI.prepare('SELECT s.racun_id AS id FROM sesije s JOIN racuni r ON r.id = s.racun_id WHERE s.token = ? AND s.istjece > ?')
     .bind(await sha(m[1]), sada()).first();
   return r ? { ...r, token: await sha(m[1]) } : null;
 }
 async function novaSesija(env, id) {
   const token = nasumicno(32), istjece = new Date(Date.now() + SESIJA_DANA * 864e5).toISOString();
-  await env.OBRASCI.prepare('INSERT INTO sesije (token, racun_id, istjece) VALUES (?, ?, ?)').bind(await sha(token), id, istjece).run();
+  await env.RACUNI.prepare('INSERT INTO sesije (token, racun_id, istjece) VALUES (?, ?, ?)').bind(await sha(token), id, istjece).run();
   return { token, istjece };
 }
 // Tijelo zahtjeva čita se najviše do granice, i kad zaglavlje content-length nedostaje (chunked prijenos).
@@ -66,13 +72,14 @@ function omotPolja(u) {   // omotani ključ: {iv, kljuc}, oboje base64url
 export async function racun(req, env, put) {
   const izvor = req.headers.get('Origin');
   if (izvor && !/^https:\/\/(www\.)?fenikspi\.com$/i.test(izvor) && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(izvor)) return odg({ greska: 'izvor' }, 403);
-  const M = req.method, db = env.OBRASCI;
+  if (!env.RACUN_TAJNA || !env.RACUNI) return odg({ greska: 'nije postavljeno' }, 503);
+  const M = req.method, db = env.RACUNI;
 
   // sol za prijavu (postoji li ime, ne otkriva se)
   if (put === 'sol' && M === 'GET') {
     const ime = String(new URL(req.url).searchParams.get('korisnik') || '').toLowerCase();
     if (!IME.test(ime)) return odg({ greska: 'ime' }, 400);
-    const r = await db.prepare('SELECT sol FROM racuni WHERE korisnik = ?').bind(ime).first();
+    const r = await db.prepare('SELECT sol FROM racuni WHERE korisnik = ?').bind(await imeKljuc(env, ime)).first();
     return odg({ sol: r ? r.sol : await lazna(env, ime) });
   }
 
@@ -86,7 +93,7 @@ export async function racun(req, env, put) {
     if (broj > NOVIH_RACUNA_DNEVNO) return odg({ greska: 'dnevna granica' }, 429);
     try {
       const r = await db.prepare(`INSERT INTO racuni (korisnik, sol, provjera, provjera_oporavka, omot, omot_oporavka, stvoren, zadnja_prijava, neuspjeha)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0) RETURNING id`).bind(u.korisnik, u.sol, await sha(u.provjera), await sha(u.provjeraOporavka),
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0) RETURNING id`).bind(await imeKljuc(env, u.korisnik), u.sol, await sha(u.provjera), await sha(u.provjeraOporavka),
         JSON.stringify(u.omot), JSON.stringify(u.omotOporavka), sada(), sada()).first();
       return odg({ ...(await novaSesija(env, r.id)), korisnik: u.korisnik }, 201);
     } catch (e) {
@@ -99,7 +106,7 @@ export async function racun(req, env, put) {
   if ((put === 'prijava' || put === 'oporavak') && M === 'POST') {
     const u = await citaj(req);
     if (!u || !IME.test(u.korisnik || '') || !b64polje(u.provjera, 43, 43)) return odg({ greska: 'neispravno' }, 400);
-    const r = await db.prepare('SELECT * FROM racuni WHERE korisnik = ?').bind(u.korisnik).first();
+    const r = await db.prepare('SELECT * FROM racuni WHERE korisnik = ?').bind(await imeKljuc(env, u.korisnik)).first();
     if (r && r.zakljucan_do && r.zakljucan_do > sada()) return odg({ greska: 'zaključano', do: r.zakljucan_do }, 429);
     const ok = r && await jednako(await sha(u.provjera), put === 'prijava' ? r.provjera : r.provjera_oporavka);
     if (!ok) {
@@ -116,10 +123,10 @@ export async function racun(req, env, put) {
       await db.prepare('UPDATE racuni SET sol = ?, provjera = ?, omot = ?, neuspjeha = 0, zakljucan_do = NULL WHERE id = ?')
         .bind(u.novaSol, await sha(u.novaProvjera), JSON.stringify(u.noviOmot), r.id).run();
       await db.prepare('DELETE FROM sesije WHERE racun_id = ?').bind(r.id).run();   // stare prijave na drugim uređajima prestaju vrijediti
-      return odg({ ...(await novaSesija(env, r.id)), korisnik: r.korisnik, omot: u.noviOmot });
+      return odg({ ...(await novaSesija(env, r.id)), korisnik: u.korisnik, omot: u.noviOmot });
     }
     await db.prepare('UPDATE racuni SET neuspjeha = 0, zakljucan_do = NULL, zadnja_prijava = ? WHERE id = ?').bind(sada(), r.id).run();
-    return odg({ ...(await novaSesija(env, r.id)), korisnik: r.korisnik, omot: JSON.parse(r.omot) });
+    return odg({ ...(await novaSesija(env, r.id)), korisnik: u.korisnik, omot: JSON.parse(r.omot) });
   }
 
   // oporavak treba omot oporavka prije nego što korisnik dokaže ključ: daje se samo uz provjeru oporavka (vidi gore),
@@ -127,7 +134,7 @@ export async function racun(req, env, put) {
   if (put === 'omot-oporavka' && M === 'POST') {
     const u = await citaj(req);
     if (!u || !IME.test(u.korisnik || '') || !b64polje(u.provjera, 43, 43)) return odg({ greska: 'neispravno' }, 400);
-    const r = await db.prepare('SELECT * FROM racuni WHERE korisnik = ?').bind(u.korisnik).first();
+    const r = await db.prepare('SELECT * FROM racuni WHERE korisnik = ?').bind(await imeKljuc(env, u.korisnik)).first();
     if (r && r.zakljucan_do && r.zakljucan_do > sada()) return odg({ greska: 'zaključano', do: r.zakljucan_do }, 429);
     if (!r || !(await jednako(await sha(u.provjera), r.provjera_oporavka))) return odg({ greska: 'pogrešno' }, 401);
     return odg({ omotOporavka: JSON.parse(r.omot_oporavka) });
@@ -173,7 +180,7 @@ export async function racun(req, env, put) {
 // Svakodnevno čišćenje (Cloudflare cron, vidi wrangler.toml): istekle prijave i računi bez prijave dulje od 3 godine,
 // zajedno s njihovim šifriranim podacima (Pravila privatnosti, odjeljak 8).
 export async function ocisti(env) {
-  const db = env.OBRASCI, sad = sada(), granica = new Date(Date.now() - 3 * 365.25 * 864e5).toISOString();
+  const db = env.RACUNI, sad = sada(), granica = new Date(Date.now() - 3 * 365.25 * 864e5).toISOString();
   await db.batch([
     db.prepare('DELETE FROM sesije WHERE istjece < ?').bind(sad),
     db.prepare('DELETE FROM podaci WHERE racun_id IN (SELECT id FROM racuni WHERE COALESCE(zadnja_prijava, stvoren) < ?)').bind(granica),
