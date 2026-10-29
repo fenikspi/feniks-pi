@@ -23,7 +23,7 @@ database_id = "7587bd83-2ce5-406b-86e0-2edb6487c8e9"
 [[d1_databases]]
 binding = "RACUNI"
 database_name = "feniks-racuni"
-database_id = "00000000-0000-0000-0000-000000000000"   # upisuje se nakon: wrangler d1 create feniks-racuni
+database_id = "3d3144fb-8896-44f9-84ec-4e554fdf440a"
 
 [observability]
 enabled = false
