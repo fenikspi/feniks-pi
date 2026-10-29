@@ -1,5 +1,5 @@
 /* Feniks π: rad bez interneta. Sprema aplikaciju u predmemoriju uređaja; podaci korisnika su u IndexedDB, ne ovdje. */
-var VERZIJA = 'feniks-app-15';
+var VERZIJA = 'feniks-app-16';
 var DATOTEKE = ['./', 'index.html', 'app.js', 'i18n.js', 'jezici/hr.js', 'jezici/en.js', 'jezici/de.js', 'jezici/it.js', 'jezici/es.js', 'jezici/fr.js', 'jezici/sl.js', 'jezici/sr.js', 'jezici/ru.js', 'jezici/uk.js',
   'jezici/karta-hr.js', 'jezici/karta-en.js', 'jezici/karta-de.js', 'jezici/karta-it.js', 'jezici/karta-es.js', 'jezici/karta-fr.js', 'jezici/karta-sl.js', 'jezici/karta-sr.js', 'jezici/karta-ru.js', 'jezici/karta-uk.js',
   'nebo.js', 'mjesto-trazi.js', 'kineski.js', 'helenisticki.js', 'citanje.js', 'prijedlozi.js', 'racun.js', 'simboli.js', 'core.js', 'asteroids.js', 'astronomy.js', 'manifest.webmanifest', 'ikona-192.png', 'ikona-512.png',
