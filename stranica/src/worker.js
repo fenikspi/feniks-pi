@@ -67,12 +67,13 @@ function apstrakt(u) {
   if (!polozaji.length) return null;
   return { jezik: u.jezik, spol: u.spol === 'm' ? 'muški' : 'ženski', bezVremena: u.bezVremena === true, polozaji, dijelovi };
 }
-function json(d, status) { return new Response(JSON.stringify(d), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } }); }
+function json(d, status) { return new Response(JSON.stringify(d), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } }); }
+const NAS_IZVOR = /^https:\/\/(www\.)?fenikspi\.com$/i;
 
 async function duboko(req, env) {
   if (req.method !== 'POST') return new Response('', { status: 405, headers: { Allow: 'POST' } });
   const izvor = req.headers.get('Origin');
-  if (izvor && !/^https:\/\/(www\.)?fenikspi\.com$/i.test(izvor)) return json({ greska: 'izvor' }, 403);
+  if (izvor && !NAS_IZVOR.test(izvor)) return json({ greska: 'izvor' }, 403);
   if (!env.ANTHROPIC_API_KEY) return json({ greska: 'nije postavljeno' }, 503);
   const t = await tijelo(req, 65536);
   if (t === null) return json({ greska: 'preveliko' }, 413);
@@ -121,6 +122,8 @@ export default {
     if (url.pathname === '/api/racun' || url.pathname.startsWith('/api/racun/')) return racun(req, env, url.pathname.slice('/api/racun/'.length));
     if (url.pathname === '/api/obrazac') {
       if (req.method !== 'POST') return new Response('', { status: 405, headers: { Allow: 'POST' } });
+      const izvor = req.headers.get('Origin');          // samo s naše stranice (kao i dublje čitanje i računi)
+      if (izvor && !NAS_IZVOR.test(izvor)) return new Response('', { status: 403 });
       const t = await tijelo(req, 4096);
       if (t === null) return new Response('', { status: 413 });
       let u = null; try { u = JSON.parse(t); } catch (e) { return new Response('', { status: 400 }); }
@@ -132,7 +135,7 @@ export default {
       const { broj } = await env.OBRASCI.prepare('INSERT INTO potrosnja (dan, broj) VALUES (?, 1) ON CONFLICT(dan) DO UPDATE SET broj = broj + 1 RETURNING broj').bind('obrazac:' + dan).first();
       if (broj > OBRAZACA_DNEVNO) return new Response('', { status: 429, headers: { 'Retry-After': '3600' } });
       await env.OBRASCI.prepare('INSERT INTO obrasci (dan, obrazac) VALUES (?, ?)').bind(new Date().toISOString().slice(0, 10), JSON.stringify(o)).run();
-      return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store', 'Access-Control-Allow-Origin': '*' } });
+      return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
     }
     return env.ASSETS.fetch(req);
   }

@@ -416,7 +416,7 @@ function ucitajDnevnik() {
 }
 document.addEventListener('click', function (e) {
   var a = e.target.closest('[data-simbol]'); if (a) { e.preventDefault(); $('#q').value = a.dataset.simbol; pokazi('biblioteka'); trazi(); return; }
-  var k = e.target.closest('[data-knjiga]'); if (k) { e.preventDefault(); K.api('/api/knjiga?putanja=' + encodeURIComponent(k.dataset.knjiga)); }
+  var k = e.target.closest('[data-knjiga]'); if (k) { e.preventDefault(); K.api('/api/knjiga', { method: 'POST', body: { putanja: k.dataset.knjiga } }); }
 });
 
 /* čitanja */

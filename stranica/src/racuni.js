@@ -20,7 +20,7 @@ async function jednako(a, b) {
   const [x, y] = await Promise.all([crypto.subtle.digest('SHA-256', enc.encode(a)), crypto.subtle.digest('SHA-256', enc.encode(b))]);
   return crypto.subtle.timingSafeEqual(x, y);
 }
-function odg(d, status = 200) { return new Response(d === null ? null : JSON.stringify(d), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } }); }
+function odg(d, status = 200) { return new Response(d === null ? null : JSON.stringify(d), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } }); }
 function b64polje(x, min, max) { return typeof x === 'string' && x.length >= min && x.length <= max && B64.test(x); }
 function sada() { return new Date().toISOString(); }
 

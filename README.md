@@ -36,6 +36,26 @@ Sve se računa na uređaju: položaji planeta (astronomy-engine), kuće po Placi
 tranziti, mijene, Sunčev i Mjesečev povratak, profekcije i pomrčine. Dnevnik se sprema u IndexedDB preglednika.
 Simbolička mašina čitanja razvija se centralno i do korisnika stiže kao paket znanja, a podaci korisnika ne putuju do nje.
 
+## Računi i usklađivanje (neobavezno)
+
+Aplikacija radi bez računa. Tko želi iste podatke na više uređaja, otvori račun korisničkim imenom i lozinkom: svi se podaci
+šifriraju **na uređaju** (PBKDF2 → HKDF → AES-256-GCM), poslužitelj dobiva samo šifrirani paket i nikad ne vidi lozinku,
+ključ ni sadržaj. Korisničko ime čuva se samo kao HMAC; nema e-adrese ni telefona. Zaboravljena lozinka vraća se jedino
+ključem za oporavak koji se prikaže jednom. Račun se može obrisati u aplikaciji (briše se sve).
+
+## Dublje čitanje
+
+Uz čitanje po pravilima moguće je zatražiti dublje čitanje koje piše Claude (Anthropic). Šalje se samo apstraktna karta
+(znakovi, kuće, aspekti) i tekst čitanja po pravilima, bez imena, datuma i mjesta; ništa se ne sprema osim dnevnog brojača.
+
+## Razvoj i testovi
+
+```sh
+cd stranica && npm install && npm test      # testovi poslužitelja (bez interneta, bez Claude API-ja)
+```
+
+Sigurnosna zaglavlja za statične datoteke su u `stranica/public/_headers`; pravila poslužitelja u `stranica/src/`.
+
 ## Licenca
 
 Feniks π je slobodan softver pod licencom **GNU GPL-3.0** (vidi `LICENSE`): smiješ ga koristiti, proučavati, mijenjati i dijeliti,

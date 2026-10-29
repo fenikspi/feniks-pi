@@ -1,14 +1,14 @@
 {
   "name": "stranica",
   "version": "1.0.0",
-  "description": "",
+  "description": "Feniks π: stranica fenikspi.com, web-aplikacija i poslužitelj (Cloudflare Worker)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "devDependencies": {
     "wrangler": "4.148.0"
   },
