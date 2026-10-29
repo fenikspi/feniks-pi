@@ -94,5 +94,6 @@ test('_headers: sigurnosna zaglavlja za statične datoteke postoje', () => {
 test('sw.js: prijevodi karte su u popisu za rad bez interneta', () => {
   const sw = readFileSync(new URL('../public/app/sw.js', import.meta.url), 'utf8');
   for (const j of ['hr', 'en', 'de', 'it', 'es', 'fr', 'sl', 'sr', 'ru', 'uk']) assert.ok(sw.includes("'jezici/karta-" + j + ".js'"), j);
-  assert.ok(sw.includes("feniks-app-14"));
+  const v = /feniks-app-(\d+)/.exec(sw);
+  assert.ok(v && +v[1] >= 15, 'verzija predmemorije se podiže uz svaku promjenu datoteka aplikacije');
 });
