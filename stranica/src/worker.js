@@ -1,7 +1,7 @@
 /* Feniks π: poslužitelj stranice. Statične datoteke poslužuje Cloudflare (assets); ovdje su samo:
    - prijem anonimnih simboličkih obrazaca, koje aplikacija šalje isključivo ako je korisnik uključio „Doprinesi anonimne obrasce”
      (prima se samo strogo provjeren apstraktni obrazac; ne sprema se IP adresa, vrijeme ni ikakav tekst korisnika);
-   - dublje čitanje preko Claudea (/api/duboko): prima apstraktnu kartu bez imena, datuma i mjesta, ništa ne sprema
+   - dublje čitanje preko Claudea (/api/duboko): prima apstraktnu kartu (znakovi, stupnjevi, kuće) bez imena, datuma, vremena i mjesta, ništa ne sprema
      osim dnevnog brojača poziva (granica troška);
    - računi i šifrirano usklađivanje (/api/racun/*, vidi racuni.js). */
 import Anthropic from '@anthropic-ai/sdk';

@@ -146,8 +146,9 @@
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
   }
 
-  // Dublje čitanje preko Claudea: poslužitelju ide samo apstraktna karta (znakovi i kuće bez stupnjeva, tekst pravila),
-  // bez imena, datuma, vremena i mjesta rođenja. Vidi /privatnost.html#dublje.
+  // Dublje čitanje preko Claudea: poslužitelju ide apstraktna karta (znakovi, stupnjevi i kuće, tekst pravila),
+  // bez imena, datuma, vremena i mjesta rođenja (Marija 29. 10.: stupnjevi ostaju, brišu se samo ime, privatni podaci i mjesto).
+  // Stupnjevi trebaju stroju simbolike: glavna planeta uz ascendent, aspekti, kritični stupnjevi. Vidi /privatnost.html#dublje.
   function aiHtml(txt, bezNaslova) {
     return (bezNaslova ? '' : '<h4>' + esc(t('nat.ai.naslov')) + '</h4>') + txt.split(/\n{2,}/).map(function (p) {
       var h = /^#+\s*(.+)$/.exec(p.trim());
@@ -157,7 +158,7 @@
   function apstraktno() {
     var div = document.createElement('div');
     return { jezik: I18n.jezik(), spol: zadnje.r.spol, bezVremena: !!zadnje.r.bezVremena,
-      polozaji: zadnje.c.tablica.map(function (x) { return { ime: String(x.ime).slice(0, 60), polozaj: String(x.polozaj).replace(/\d+\s*°\s*(\d+\s*[′'])?/g, '').replace(/\s{2,}/g, ' ').trim().slice(0, 160) }; }).slice(0, 40),
+      polozaji: zadnje.c.tablica.map(function (x) { return { ime: String(x.ime).slice(0, 60), polozaj: String(x.polozaj).replace(/\s{2,}/g, ' ').trim().slice(0, 160) }; }).slice(0, 40),
       dijelovi: zadnje.c.dijelovi.map(function (d) { div.innerHTML = d.html; return { naslov: String(d.naslov).replace(/<[^>]+>/g, '').slice(0, 120), tekst: div.textContent.trim().slice(0, 3000) }; }).slice(0, 20) };
   }
   function dubljeCitanje() {
